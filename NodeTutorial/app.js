@@ -7,10 +7,10 @@ const pg = require("pg");
 
 const pool = new pg.Pool({
     port: 5432,
-    host: '127.0.0.1',
-    user: 'postgres',
-    database: 'Schedular',
-    password: 'password'
+    host: 'lauren-server.postgres.database.azure.com',
+    user: 'admin_schedular@lauren-server',
+    database: 'schedular',
+    password: 'Password1'
 });
 
 
@@ -35,8 +35,7 @@ function newConn(socket) {
     });
     socket.on("get users", function() {
         pool.connect(function (err, result) {
-            pool.query('SELECT item_id from calendar_item', function (err, result){
-                console.log(result);
+            pool.query('SELECT * from users', function (err, result){
                 console.log(err);
                 socket.emit("send users", result);
             });

@@ -8,6 +8,7 @@
     <h1>Hello and welcome to Lauren's website</h1>
     Da da dada, dadadadada
     <p id = "handshake message"></p>
+    <p id = "user info"></p>
     <button onclick = "sendUser()">Send user</button>
     <button onclick = "getUsers()">Get users</button>
     <script src="/socket.io/socket.io.js"></script>
@@ -27,11 +28,10 @@
         socket.on("send users", function(result) {
             let html = "";
             for (let r of result.rows) {
-                console.log(r);
-                html+=r.item_id;
+                html+="Username: "+r.username+" email: "+r.email;
                 html+= "<br/>";
             }
-            document.getElementById("handshake message").innerHTML = html;
+            document.getElementById("user info").innerHTML = html;
         });
 
         function sendUser() {
