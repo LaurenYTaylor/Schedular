@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homepage</title>
+</head>
+<body>
+    <h1>Hello and welcome to Lauren's website</h1>
+    Da da dada, dadadadada
+    <p id = "handshake message"></p>
+    <button onclick = "sendUser()">Send user</button>
+    <button onclick = "getUsers()">Get users</button>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>const socket = io(); </script>
+    <script>
+        const user = {
+            name : "Lauren",
+            age : "22",
+            house : "Paddington"
+        };
+        socket.emit("handshake", "Bonjour, comment-allez vous?");
+        socket.on("handshake reply", function(message) {
+            let mess = document.getElementById("handshake message");
+            mess.innerHTML = message;
+        });
+
+        socket.on("send users", function(result) {
+            let html = "";
+            for (let r of result.rows) {
+                console.log(r);
+                html+=r.item_id;
+                html+= "<br/>";
+            }
+            document.getElementById("handshake message").innerHTML = html;
+        });
+
+        function sendUser() {
+            socket.emit("personal greeting", "My name is "+user.name);
+        }
+
+        function getUsers() {
+            socket.emit("get users");
+        }
+    </script>
+
+</body>
+</html>
