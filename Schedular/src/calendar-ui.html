@@ -12,9 +12,10 @@
 
   $(document).ready(function() {
 
-        $("#add").click(function(){
+    $("#add").click(function(){
         $("#list").append("<div class='task-drag'>" + $("#taskName").val() + "</div>")
-      })
+        $("#taskName").val("Task Name")
+    })
 
 
     /* initialize the external events
@@ -149,9 +150,6 @@
       <div id = 'list'>
         <div class='task-drag'>Task 1</div>
         <div class='task-drag'>Task 2</div>
-        <div class='task-drag'>Task 3</div>
-        <div class='task-drag'>Task 4</div>
-        <div class='task-drag'>Task 5</div>
       </div>
       <input type="text" name="task name" id="taskName" value="Task Name">
       <button type="submit" name="add" id="add">Add</button>
