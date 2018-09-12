@@ -13,10 +13,14 @@
   $(document).ready(function() {
 
 
+    $("#add").click(function(){
+        $("#list").append("<div class='fc-event'>" + $("#taskName").val() + "</div>")
+      })
     /* initialize the external events
     -----------------------------------------------------------------*/
 
-    $('#task-list .fc-event').each(function() {
+    
+      $('#task-list .fc-event').each(function() {
 
       // store data so the calendar knows to render an event upon drop
       $(this).data('event', {
@@ -32,6 +36,7 @@
       });
 
     });
+    
 
 
     /* initialize the calendar
@@ -111,19 +116,16 @@
 </style>
   <script>
     $(document).ready(function(){
-      $("#add").click(function(){
-        $("#newTask").text($("#taskName").val())
-        $("#list").append("<div class='fc-event'>Task 4</div>")
-      })
+      
     })
   </script>
 </head>
 <body>
   <div id='wrap'>
 
-    <div id='task-list'>
+    <div id="task-list">
       <h4>Task List</h4>
-      <div id="list">
+      <div id='list'>
         <div class='fc-event'>Task 1</div>
         <div class='fc-event'>Task 2</div>
         <div class='fc-event'>Task 3</div>
