@@ -16,13 +16,14 @@
     /* initialize the external events
     -----------------------------------------------------------------*/
 
-    $('#task-list .fc-event').each(function() {
+    $('#task-list .task-drag').each(function() {
 
       // store data so the calendar knows to render an event upon drop
       $(this).data('event', {
         title: $.trim($(this).text()), // use the element's text as the event title
         stick: true, // maintain when user navigates (see docs on the renderEvent method)
-        color: 'green'
+        color: 'green',
+        description: 'This is a cool event'
       });
 
       // make the event draggable using jQuery UI
@@ -48,11 +49,13 @@
       droppable: true, // this allows things to be dropped onto the calendar
       drop: function() {
         // is the "remove after drop" checkbox checked?
-        if ($('#drop-remove').is(':checked')) {
+        
           // if so, remove the element from the "Draggable Events" list
           $(this).remove();
-        }
-      }
+        
+      }, 
+
+
     });
 
 
@@ -88,7 +91,7 @@
     padding-top: 1em;
   }
 
-  #task-list .fc-event {
+  #task-list .task-drag {
     margin: 10px 0;
     cursor: pointer;
     background: red;
@@ -117,15 +120,11 @@
 
     <div id='task-list'>
       <h4>Task List</h4>
-      <div class='fc-event'>Task 1</div>
-      <div class='fc-event'>Task 2</div>
-      <div class='fc-event'>Task 3</div>
-      <div class='fc-event'>Task 4</div>
-      <div class='fc-event'>Task 5</div>
-      <p>
-        <input type='checkbox' id='drop-remove' />
-        <label for='drop-remove'>remove after drop</label>
-      </p>
+      <div class='task-drag'>Task 1</div>
+      <div class='task-drag'>Task 2</div>
+      <div class='task-drag'>Task 3</div>
+      <div class='task-drag'>Task 4</div>
+      <div class='task-drag'>Task 5</div>
     </div>
 
     <div id='calendar'></div>
