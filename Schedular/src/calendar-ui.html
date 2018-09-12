@@ -12,6 +12,10 @@
 
   $(document).ready(function() {
 
+        $("#add").click(function(){
+        $("#list").append("<div class='task-drag'>" + $("#taskName").val() + "</div>")
+      })
+
 
     /* initialize the external events
     -----------------------------------------------------------------*/
@@ -33,6 +37,25 @@
         revertDuration: 0  //  original position after the drag
       });
 
+    });
+
+        $("#add").on("click", function(){
+      $('#task-list .task-drag').each(function() {
+
+      // store data so the calendar knows to render an event upon drop
+      $(this).data('event', {
+        title: $.trim($(this).text()), // use the element's text as the event title
+        stick: true // maintain when user navigates (see docs on the renderEvent method)
+      });
+
+      // make the event draggable using jQuery UI
+      $(this).draggable({
+        zIndex: 999,
+        revert: true,      // will cause the event to go back to its
+        revertDuration: 0  //  original position after the drag
+      });
+
+    });
     });
 
 
@@ -114,25 +137,22 @@
   }
 
 </style>
-  <script>
-    $(document).ready(function(){
-      $("#add").click(function(){
-        $("#newTask").text($("#taskName").val())
-        $("#list").append("<div class='fc-event'>Task 4</div>")
-      })
-    })
-  </script>
+
 </head>
 <body>
   <div id='wrap'>
 
     <div id='task-list'>
       <h4>Task List</h4>
-      <div class='task-drag'>Task 1</div>
-      <div class='task-drag'>Task 2</div>
-      <div class='task-drag'>Task 3</div>
-      <div class='task-drag'>Task 4</div>
-      <div class='task-drag'>Task 5</div>
+      <div id = 'list'>
+        <div class='task-drag'>Task 1</div>
+        <div class='task-drag'>Task 2</div>
+        <div class='task-drag'>Task 3</div>
+        <div class='task-drag'>Task 4</div>
+        <div class='task-drag'>Task 5</div>
+      </div>
+      <input type="text" name="task name" id="taskName" value="Task Name">
+      <button type="submit" name="add" id="add">Add</button>
     </div>
 
     <div id='calendar'></div>
