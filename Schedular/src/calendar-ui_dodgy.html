@@ -18,8 +18,7 @@
       })
     /* initialize the external events
     -----------------------------------------------------------------*/
-
-    
+    $("#add").on("click", function(){
       $('#task-list .fc-event').each(function() {
 
       // store data so the calendar knows to render an event upon drop
@@ -36,6 +35,8 @@
       });
 
     });
+    });
+
     
 
 
@@ -130,7 +131,6 @@
         <div class='fc-event'>Task 2</div>
         <div class='fc-event'>Task 3</div>
         <div class='fc-event'>Task 4</div>
-        <div class='fc-event' id='newTask'>Task new</div>
       </div>
       <p>
         <input type='checkbox' id='drop-remove' />
