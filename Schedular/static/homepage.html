@@ -5,12 +5,12 @@
     <title>Homepage</title>
 </head>
 <body>
-<h1>Hello and welcome to Lauren's website</h1>
-Da da dada, dadadadada
+<h1>Welcome to Schedular</h1>
+What would you like to do?
 <p id = "handshake message"></p>
 <p id = "user info"></p>
-<button onclick = "sendUser()">Send user</button>
-<button onclick = "getUsers()">Get users</button>
+<a href = "/signin">Sign in</a>
+<a href = "/signup">Sign up</a>
 <script src="/socket.io/socket.io.js"></script>
 <script>const socket = io(); </script>
 <script>
@@ -19,28 +19,12 @@ Da da dada, dadadadada
         age : "22",
         house : "Paddington"
     };
-    socket.emit("handshake", "Bonjour, comment-allez vous?");
+    socket.emit("handshake", "Handshake COmplete");
     socket.on("handshake reply", function(message) {
         let mess = document.getElementById("handshake message");
         mess.innerHTML = message;
     });
 
-    socket.on("send users", function(result) {
-        let html = "";
-        for (let r of result.rows) {
-            html+="Username: "+r.username+" email: "+r.email;
-            html+= "<br/>";
-        }
-        document.getElementById("user info").innerHTML = html;
-    });
-
-    function sendUser() {
-        socket.emit("personal greeting", "My name is "+user.name);
-    }
-
-    function getUsers() {
-        socket.emit("get users");
-    }
 </script>
 
 </body>
