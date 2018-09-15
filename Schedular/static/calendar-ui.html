@@ -2,20 +2,40 @@
 <html>
 <head>
 <meta charset='utf-8' />
-<link href='../css/fullcalendar.min.css' rel='stylesheet' />
+<link href='../css/fullcalendar.css' rel='stylesheet' />
 <link href='../css/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src='../js/moment.min.js'></script>
 <script src='../js/jquery.min.js'></script>
 <script src='../js/jquery-ui.min.js'></script>
-<script src='../js/fullcalendar.min.js'></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.6/fullcalendar.min.js"></script>
+<!-- <script src='../static/js/fullcalendar.min.js'></script> -->
 <script>
 
+
   $(document).ready(function() {
+    console.log(window.location.pathname);
 
     $("#add").click(function(){
-        $("#list").append("<div class='task-drag'>" + $("#taskName").val() + "</div>")
-        $("#taskName").val("Task Name")
-    })
+        $("#myModal").modal();
+     
+    });
+
+    $('#Create').on('click', function() {
+      if (validateForm()){
+        $('#myModal').modal('hide')
+        $("#list").append("<div class='task-drag'>" + $('#tName').val() + "</div>");
+        $('#tName').val('');
+        $('#hiddenText').hide();
+
+      }
+    
+     });
+
+    $(".close").click(function(){
+         $("#myModal").modal("hide");
+    });
 
 
     /* initialize the external events
@@ -40,7 +60,7 @@
 
     });
 
-    $("#add").on("click", function(){
+    $("#Create").on("click", function(){
       $('#task-list .task-drag').each(function() {
 
         // store data so the calendar knows to render an event upon drop
@@ -73,19 +93,119 @@
       },
       editable: true,
       droppable: true, // this allows things to be dropped onto the calendar
+      dragRevertDuration: 0,
       drop: function() {
         // is the "remove after drop" checkbox checked?
         
           // if so, remove the element from the "Draggable Events" list
           $(this).remove();
         
-      }, 
+      },
+      eventDragStop: function( event, jsEvent, ui, view ) {
+
+        var external_events = $( "#task-list" );
+        var offset = external_events.offset();
+        offset.right = external_events.width() + offset.left;
+        offset.bottom = external_events.height() + offset.top;
+    
+     
+            // Compare
+        if (jsEvent.clientX >= offset.left
+          && jsEvent.clientY >= offset.top
+          && jsEvent.clientX <= offset.right
+          && jsEvent.clientY <= offset .bottom) { 
+            $('#calendar').fullCalendar('removeEvents', event._id); 
+    
+            var el = $( "<div class='task-drag'>" ).appendTo( "#list").text( event.title );
+            el.draggable({
+              zIndex: 999,
+              revert: true, 
+              revertDuration: 0 
+            });
+            el.data('event', { title: event.title, id :event.id, stick: true, color: 'red',
+          description: "Jump"});
+          }
+      }
+                
+        // if(isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
+        //  console.log("This problem");
+        // }
+        
+        // $('#calendar').fullCalendar('removeEvents', event._id);
+      //       var el = $( "<div class='task-drag'>" ).appendTo( "#list").text( event.title );
+      //       el.draggable({
+      //         zIndex: 999,
+      //         revert: true, 
+      //         revertDuration: 0 
+      //       });
+      //       el.data('event', { title: event.title, id :event.id, stick: true, color: 'red',
+      //     description: "Jump"});
+      //   }
+       
 
 
     });
 
 
   });
+
+  // Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("add");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+function validateForm() {
+    var x = document.forms["myForm"]["fname"].value;
+    if (x == "") {
+        $('#hiddenText').show();
+        return false;
+    }else {
+      return true;
+    }
+}
+
+
+
+
+
+
+var isEventOverDiv = function(x, y) {
+
+    var external_events = $( "#task-list" );
+    var offset = external_events.offset();
+    offset.right = external_events.width() + offset.left;
+    offset.bottom = external_events.height() + offset.top;
+
+            // Compare
+    if (x >= offset.left
+      && y >= offset.top
+      && x <= offset.right
+      && y <= offset .bottom) { return true; }
+    else {
+      return false;
+    }
+
+  }
+
+  function openCity(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+       
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+
 
 </script>
 <style>
@@ -104,7 +224,7 @@
 
   #task-list {
     float: left;
-    width: 150px;
+    width: 150x;
     padding: 0 10px;
     border: 1px solid #ccc;
     background: #eee;
@@ -114,7 +234,7 @@
   #task-list h4 {
     font-size: 16px;
     margin-top: 0;
-    padding-top: 1em;
+    /* padding-top: 1em; */
   }
 
   #task-list .task-drag {
@@ -144,21 +264,64 @@
 </head>
 <body>
   <div id='wrap'>
+    
 
-    <div id='task-list'>
-      <h4>Task List</h4>
-      <div id = 'list'>
-        <div class='task-drag'>Task 1</div>
-        <div class='task-drag'>Task 2</div>
-      </div>
-      <input type="text" name="task name" id="taskName" value="Task Name">
-      <button type="submit" name="add" id="add">Add</button>
+    <div class="tab">
+      <button class="tablinks" onclick="openCity(event, 'Ongoing')">Ongoing</button>
+      <button class="tablinks" onclick="openCity(event, 'Completed')">Completed</button>
+     
     </div>
+    <div id='Ongoing' class="tabcontent">
+      <div id='task-list'>
+        <h4>Task List</h4> 
+        <div id = 'list'>
+          <div class='task-drag'>
+              <label>Task 1</label>
+              <input type="checkbox" value="" class="chkbox">
+            </div>
+          <div class='task-drag'>
+              <label>Task 2</label>
+              <input type="checkbox" value="" class="chkbox">
+            </div>
+        </div>
+      <!-- <input type="text" name="task name" id="taskName" value="Task Name"> -->
+        <button type="submit" name="add" id="add">Add Task</button>
+      </div>
+
+    </div>
+
+    <div id='Completed' class="tabcontent">
+        <div id='task-list' >
+          <h4>Completed Task List</h4> 
+        
+        <!-- <input type="text" name="task name" id="taskName" value="Task Name"> -->
+        </div>
+  
+      </div>
+      
 
     <div id='calendar'></div>
 
     <div style='clear:both'></div>
 
+    <!-- The Modal -->
+<div id="myModal" class="modal" role="dialog">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h1>Create Task</h1>
+    <div class="hiddentext" id="hiddenText" style="display:none">Invalid Name! </div>
+    <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post"> Task Name: <input type="text" name="fname" id="tName">
+      <p></p>	<p><input type="button" id="Create" value="Create new Task "></p>
+	</form>
   </div>
+
+  </div>
+</div>
+  
+
 </body>
 </html>
+
+
