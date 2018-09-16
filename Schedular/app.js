@@ -71,6 +71,19 @@ app.get('/schedular', function(request, response) {
     response.sendFile(__dirname+'/static/calendar-ui.html');
 });
 
+// send task data
+app.get('/tasks', function(request, response){
+    let query = "SELECT description FROM todo_item";
+    //let query_string = "INSERT INTO todo_item ("
+
+    pool.query(query, function (err, result) {
+        let tasks = (result.rows)
+        console.log(tasks);
+        response.send(tasks);
+    })
+    
+});
+
 app.post('/signin', function(request, response) {
     console.log(request.body);
     authenticate(request.body.username, request.body.password, function(err, jwt) {

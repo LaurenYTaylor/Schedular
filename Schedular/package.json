@@ -11,6 +11,7 @@
     "get-dependencies": "^1.1.0",
     "jquery": "^3.3.1",
     "jsonwebtoken": "^8.3.0",
+    "loader": "^2.1.1",
     "node": "^10.9.0",
     "pg": "^7.4.3",
     "safe-buffer": "^5.1.2",
