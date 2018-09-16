@@ -15,6 +15,7 @@
 
 
   $(document).ready(function() {
+    console.log(window.location.pathname);
 
     $("#add").click(function(){
         $("#myModal").modal();
@@ -98,6 +99,8 @@
         
           // if so, remove the element from the "Draggable Events" list
           $(this).remove();
+
+      
         
       },
       eventDragStop: function( event, jsEvent, ui, view ) {
@@ -268,7 +271,7 @@ document.getElementById("defaultOpen").click();
     
 
     <div class="tab">
-      <button class="tablinks" onclick="openCity(event, 'Ongoing')">Ongoing</button>
+      <button class="tablinks" onclick="openCity(event, 'Ongoing')" id="defaultOpen">Ongoing</button>
       <button class="tablinks" onclick="openCity(event, 'Completed')">Completed</button>
      
     </div>
