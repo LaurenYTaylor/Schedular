@@ -51,7 +51,7 @@
         var description = (JSON.stringify(val))
         description = description.split('"')[3]
 
-        // append task to task list
+        // create new task with description
         $("#list").append("<div class='task-drag' id=" + key + "><label>" + description + 
           "</label> <input type='checkbox' class='chkbox'> </div>")
 
