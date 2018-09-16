@@ -22,6 +22,12 @@
      
     });
 
+    //This needs to be checked every time a task is added into the calendar
+
+    if ($("#list > div").length == 0){
+      $("#list").append("<div> No Tasks Matey, arent you lucky!</div>");
+    }
+
     $('#Create').on('click', function() {
       if (validateForm()){
         $('#myModal').modal('hide')
@@ -170,9 +176,6 @@ function validateForm() {
 
 
 
-
-
-
 var isEventOverDiv = function(x, y) {
 
     var external_events = $( "#task-list" );
@@ -238,6 +241,8 @@ var isEventOverDiv = function(x, y) {
   }
 
   #task-list .task-drag {
+    border-radius: 3.5px;
+    padding: 5px;
     margin: 10px 0;
     cursor: pointer;
     background: red;
