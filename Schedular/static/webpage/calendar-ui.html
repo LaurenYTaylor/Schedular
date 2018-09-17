@@ -15,17 +15,22 @@
 
 
   $(document).ready(function() {
-    console.log(window.location.pathname);
+    
+
+
+    
 
     $("#add").click(function(){
         $("#myModal").modal();
      
     });
 
+    
+
     $('#Create').on('click', function() {
       if (validateForm()){
         $('#myModal').modal('hide')
-        $("#list").append("<div class='task-drag'>" + $('#tName').val() + "</div>");
+        $("#list").append("<div class='task-drag'>" + $('#tName').val() + "<input type='checkbox' value='' class='chkbox'>"  + "</div>");
         $('#tName').val('');
         $('#hiddenText').hide();
 
@@ -118,13 +123,14 @@
           && jsEvent.clientY <= offset .bottom) { 
             $('#calendar').fullCalendar('removeEvents', event._id); 
     
-            var el = $( "<div class='task-drag'>" ).appendTo( "#list").text( event.title );
+            var el = $( "<div class='task-drag'>"+ event.title + "<input type='checkbox' value='' class='chkbox'>"  + "</div>" ).appendTo( "#list");
+            
             el.draggable({
               zIndex: 999,
               revert: true, 
               revertDuration: 0 
             });
-            el.data('event', { title: event.title, id :event.id, stick: true, color: 'red',
+            el.data('event', { title: event.title, id :event.title, stick: true, color: 'red',
           description: "Jump"});
           }
       }
@@ -147,9 +153,11 @@
 
 
     });
-
+openCity(event, 'Ongoing');
 
   });
+
+
 
   // Get the modal
 var modal = document.getElementById('myModal');
@@ -206,9 +214,9 @@ var isEventOverDiv = function(x, y) {
     }
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
-}
+  }
 
-document.getElementById("defaultOpen").click();
+
 
 
 </script>
@@ -221,16 +229,16 @@ document.getElementById("defaultOpen").click();
     font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
   }
 
-  #wrap {
+  /* #wrap {
     width: 1100px;
     margin: 0 auto;
   }
 
   #task-list {
     float: left;
-    width: 150x;
+    width: 100%;
+    height: 100%;
     padding: 0 10px;
-    border: 1px solid #ccc;
     background: #eee;
     text-align: left;
   }
@@ -239,9 +247,9 @@ document.getElementById("defaultOpen").click();
     font-size: 16px;
     margin-top: 0;
     /* padding-top: 1em; */
-  }
+  /* } */
 
-  #task-list .task-drag {
+  /* #task-list .task-drag {
     margin: 10px 0;
     cursor: pointer;
     background: red;
@@ -256,8 +264,8 @@ document.getElementById("defaultOpen").click();
   #task-list p input {
     margin: 0;
     vertical-align: middle;
-  }
-
+  } */ 
+  
   #calendar {
     float: right;
     width: 900px;
@@ -270,11 +278,11 @@ document.getElementById("defaultOpen").click();
   <div id='wrap'>
     
 
-    <div class="tab">
-      <button class="tablinks" onclick="openCity(event, 'Ongoing')" id="defaultOpen">Ongoing</button>
+    <div class="tabList">
+      <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Ongoing')" >Ongoing</button>
       <button class="tablinks" onclick="openCity(event, 'Completed')">Completed</button>
      
-    </div>
+    
     <div id='Ongoing' class="tabcontent">
       <div id='task-list'>
         <h4>Task List</h4> 
@@ -302,6 +310,8 @@ document.getElementById("defaultOpen").click();
         </div>
   
       </div>
+
+    </div>
       
 
     <div id='calendar'></div>
@@ -316,7 +326,7 @@ document.getElementById("defaultOpen").click();
     <span class="close">&times;</span>
     <h1>Create Task</h1>
     <div class="hiddentext" id="hiddenText" style="display:none">Invalid Name! </div>
-    <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post"> Task Name: <input type="text" name="fname" id="tName">
+    <form name="myForm"  onsubmit="return validateForm()" method="post"> Task Name: <input type="text" name="fname" id="tName">
       <p></p>	<p><input type="button" id="Create" value="Create new Task "></p>
 	</form>
   </div>
