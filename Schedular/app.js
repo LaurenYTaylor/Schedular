@@ -143,26 +143,6 @@ app.get('/schedular', function (request, response) {
 });
 
 
-io.on('connection', newConn);
-function newConn(socket) {
-    console.log("A user connected yay");
-    socket.on("handshake", function(message) {
-        console.log(message);
-        socket.emit("handshake reply", "C'est bien de vous recontrer.")
-    });
-    socket.on("personal greeting", function(message) {
-        console.log(message)
-    });
-    socket.on("get users", function() {
-        pool.connect(function (err, result) {
-            pool.query('SELECT * from users', function (err, result){
-                console.log(err);
-                socket.emit("send users", result);
-            });
-            console.log(err);
-        });
-    });
-}
 
 function handshake(request, response, next) {
     let cookie = request.cookies.jwt;

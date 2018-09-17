@@ -3,29 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <title>Homepage</title>
+    <style>
+        h1 {
+            color: cornflowerblue;
+            text-align: center;
+            font-size: 500%;
+            font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+        }
+        .signinbutton {
+            font: bold 18px "Lucida Sans";
+            text-decoration: none;
+            color: cornflowerblue;
+            padding: 10px 10px 10px 10px;
+            border-top: 2px solid #6495ed;
+            border-right: 2px solid #6495ed;
+            border-bottom: 2px solid #6495ed;
+            border-left: 2px solid #6495ed;
+            border-radius: 50px 50px;
+            position:absolute;
+            top:10px;
+            right:14px;
+         }
+        body {
+            background-image: url("clouds.jpg");
+        }
+        .signinbutton:hover {
+            background-color: #d7d7d7;
+        }
+        .signupbutton {
+            font: bold 18px "Lucida Sans";
+            text-decoration: none;
+            color: cornflowerblue;
+            padding: 10px 10px 10px 10px;
+            border-top: 2px solid #6495ed;
+            border-right: 2px solid #6495ed;
+            border-bottom: 2px solid #6495ed;
+            border-left: 2px solid #6495ed;
+            border-radius: 50px 50px;
+            position:absolute;
+            top:80px;
+            right:10px;
+        }
+        .signupbutton:hover {
+            background-color: #d7d7d7;
+        }
+    </style>
 </head>
 <body>
-<h1>Welcome to Schedular</h1>
-What would you like to do?
-<p id = "handshake message"></p>
-<p id = "user info"></p>
-<a href = "/signin">Sign in</a>
-<a href = "/signup">Sign up</a>
+<h1 class="container">Schedular</h1>
+<a href = "/signin" class ="signinbutton">Sign in</a>
+<a href = "/signup" class="signupbutton">Sign up</a>
 <script src="/socket.io/socket.io.js"></script>
 <script>const socket = io(); </script>
-<script>
-    const user = {
-        name : "Lauren",
-        age : "22",
-        house : "Paddington"
-    };
-    socket.emit("handshake", "Handshake COmplete");
-    socket.on("handshake reply", function(message) {
-        let mess = document.getElementById("handshake message");
-        mess.innerHTML = message;
-    });
 
-</script>
+
 
 </body>
 </html>
