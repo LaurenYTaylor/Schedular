@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const port = 3000;
+const port = 3001;
 const pg = require("pg");
 const bp = require("body-parser");
 const crypto = require("crypto");
@@ -69,6 +69,19 @@ app.get('/signin', function(request, response) {
 app.get('/schedular', function(request, response) {
     if(!request.user) response.redirect('/signin');
     response.sendFile(__dirname+'/static/calendar-ui.html');
+});
+
+// send task data
+app.get('/tasks', function(request, response){
+    let query = "SELECT description FROM todo_item";
+    //let query_string = "INSERT INTO todo_item ("
+
+    pool.query(query, function (err, result) {
+        let tasks = (result.rows)
+        console.log(tasks);
+        response.send(tasks);
+    })
+    
 });
 
 app.post('/signin', function(request, response) {

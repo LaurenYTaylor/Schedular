@@ -11,8 +11,10 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.6/fullcalendar.min.js"></script>
 <!-- <script src='../static/js/fullcalendar.min.js'></script> -->
-<script>
 
+
+
+<script>
 
   $(document).ready(function() {
 
@@ -20,6 +22,12 @@
         $("#myModal").modal();
      
     });
+
+    //This needs to be checked every time a task is added into the calendar
+
+    if ($("#list > div").length == 0){
+      $("#list").append("<div> No Tasks Matey, arent you lucky!</div>");
+    }
 
     $('#Create').on('click', function() {
       if (validateForm()){
@@ -37,8 +45,37 @@
     });
 
 
+
     /* initialize the external events
     -----------------------------------------------------------------*/
+    // get tasks in database and add to task list
+    $.getJSON('/tasks', function(data){
+
+      // get each task description in database
+      $.each(data, function(key, val){
+        var description = (JSON.stringify(val))
+        description = description.split('"')[3]
+
+        // create new task with description
+        $("#list").append("<div class='task-drag' id=" + key + "><label>" + description + 
+          "</label> <input type='checkbox' class='chkbox'> </div>")
+
+        // data for calendar
+        $("#" + key).data('event', {
+          title: $.trim($("#" + key).text()), // use the element's text as the event title
+          stick: true, // maintain when user navigates (see docs on the renderEvent method)
+          color: 'green',
+          description: description
+        })
+
+        // make task draggable
+        $("#" + key).draggable({
+          zIndex: 999,
+          revert: true,      // will cause the event to go back to its
+          revertDuration: 0  //  original position after the drag
+        });
+      });
+    });
 
     $('#task-list .task-drag').each(function() {
 
@@ -148,6 +185,8 @@
 
   });
 
+document.load()
+
   // Get the modal
 var modal = document.getElementById('myModal');
 
@@ -166,10 +205,6 @@ function validateForm() {
       return true;
     }
 }
-
-
-
-
 
 
 var isEventOverDiv = function(x, y) {
@@ -239,6 +274,8 @@ document.getElementById("defaultOpen").click();
   }
 
   #task-list .task-drag {
+    border-radius: 3.5px;
+    padding: 5px;
     margin: 10px 0;
     cursor: pointer;
     background: red;
@@ -276,14 +313,6 @@ document.getElementById("defaultOpen").click();
       <div id='task-list'>
         <h4>Task List</h4> 
         <div id = 'list'>
-          <div class='task-drag'>
-              <label>Task 1</label>
-              <input type="checkbox" value="" class="chkbox">
-            </div>
-          <div class='task-drag'>
-              <label>Task 2</label>
-              <input type="checkbox" value="" class="chkbox">
-            </div>
         </div>
       <!-- <input type="text" name="task name" id="taskName" value="Task Name"> -->
         <button type="submit" name="add" id="add">Add Task</button>
