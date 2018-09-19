@@ -1291,6 +1291,8 @@ be a descendant of the grid when it is being dragged.
 .fc-unthemed .fc-list-empty {
   /* theme will provide own background */
   background-color: #eee; }
+
+
   /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */
@@ -1332,7 +1334,7 @@ be a descendant of the grid when it is being dragged.
 
 .chkbox {
   /* float: right;
-  /* padding-left: 40px; 
+  padding-left: 40px; 
   font-weight: bold;
   padding-top: 1px;
   padding-bottom: 30px;
@@ -1340,19 +1342,42 @@ be a descendant of the grid when it is being dragged.
   margin-left: 200px */
   float:right;
   vertical-align: middle;
+  
 }
 
 /* Style the tab */
-.tab {
+.tabList {
+
+ 
+  float: left;
+  width: 180px;
+  height: 550px;
+
+  
+  border: 1px solid #ccc;
+  background: #eee;
+  text-align: left;
+  
+
+  /* height:100%;
   overflow: hidden;
   display:table;
   border: 1px solid #ccc;
-  background-color: #f1f1f1;
+  background-color: #f1f1f1; */
 }
 
 /* Style the buttons inside the tab */
-.tab button {
-  background-color: inherit;
+.tablinks {
+  background-color: #ccc;
+  color: white;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 11px;
+  width: 50%;
+  /* background-color: inherit;
   display:table-cell;
   float: left;
   border: none;
@@ -1360,30 +1385,35 @@ be a descendant of the grid when it is being dragged.
   outline: none;
   cursor: pointer;
   padding: 14px 16px;
-  transition: 0.3s;
+  transition: 0.3s; */
 }
 
 /* Change background color of buttons on hover */
-.tab button:hover {
+.tablinks:hover {
   background-color: #ddd;
 }
 
 /* Create an active/current tablink class */
-.tab button.active {
-  background-color: #ccc;
+.tablinks.active {
+  background-color: #ddd;
 }
 
 /* Style the tab content */
 .tabcontent {
   
   
-  padding: 0 10px;
-  border: 1px solid #ccc;
+  width: 100%;
   background: #eee;
   text-align: left;
+  padding: 50px 5px;
 
   display: none;
   border-top: none;
+}
+
+#wrap {
+  width: 1100px;
+  margin: 0 auto;
 }
 
 
