@@ -1348,6 +1348,7 @@ be a descendant of the grid when it is being dragged.
  
   float: left;
   width: 150px;
+  height: 600px;
 
   
   border: 1px solid #ccc;
