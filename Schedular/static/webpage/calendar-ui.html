@@ -16,7 +16,26 @@
 
   $(document).ready(function() {
     
+    //array used to store the tasks
+    var listofTasks = [];
 
+    //Task class
+    class Task {
+      constructor(title) {
+        //this.id = 0;
+        this.title = title;
+        //this.date = date;
+        this.stick = true;
+        this.color = 'green';
+        this.description = "This is a cool event";
+      }
+
+      //Add methods to the the task
+      print() {
+        console.log("Task status has been changed");
+      }
+    }
+    
 
     
 
@@ -25,16 +44,117 @@
      
     });
 
+    $(function() {
+    $('form').submit(function() {
+        CreatenewTask ();
+        return false;
+    });
+    });
     
+    var popTemplate = [
+      '<div class="popover" style="max-width:600px;" >',
+      '<div class="arrow"></div>',
+      '<div class="popover-header">',
+      '<button id="closepopover" type="button" class="close" aria-hidden="true">&times;</button>',
+      '<h3 class="popover-title"></h3>',
+      '</div>',
+      '<div class="popover-content"></div>',
+      '</div>'].join('');
 
-    $('#Create').on('click', function() {
+    var popoverElement;
+
+    function closePopovers() {
+      $('.popover').not(this).popover('hide');
+    }
+
+
+    $('body').on('click', function (event) {
+        // close the popover if: click outside of the popover || click on the close button of the popover
+        if (popoverElement && 
+        ((!popoverElement.is(event.target) && 
+        popoverElement.has(event.target).length === 0 && 
+        $('.popover').has(event.target).length === 0) || 
+        (popoverElement.has(event.target) && event.target.id === 'closepopover'))) {
+            ///$('.popover').popover('hide'); --> works
+            closePopovers();
+        }
+    });
+
+    function CreatenewTask () {
       if (validateForm()){
         $('#myModal').modal('hide')
-        $("#list").append("<div class='task-drag'>" + $('#tName').val() + "<input type='checkbox' value='' class='chkbox'>"  + "</div>");
+        
+        var newTask = new Task ($('#tName').val());
+        listofTasks.push(new Task ($('#tName').val()));
+        console.log(listofTasks.length);
+        $("#list").append("<div class='task-drag'><label>" + newTask.title + "</label><input type='checkbox' value='' class='chkbox'>"  + "</div>");
         $('#tName').val('');
         $('#hiddenText').hide();
 
+        
+
       }
+
+      
+
+      $('.task-drag').each(function() {
+
+    // store data so the calendar knows to render an event upon drop
+        $(this).data('event', {
+          title: $.trim($(this).text()), // use the element's text as the event title
+          stick: true, // maintain when user navigates (see docs on the renderEvent method)
+          color: 'green',
+          description: 'This is a cool event'
+        });
+
+        // make the event draggable using jQuery UI
+        $(this).draggable({
+          zIndex: 999,
+          revert: true,      // will cause the event to go back to its
+          revertDuration: 0  //  original position after the drag
+        });
+
+      });
+      return false;
+    };
+
+    
+//Create new Task and add to list
+    $('#Create').on('click', function() {
+      if (validateForm()){
+        $('#myModal').modal('hide')
+        
+        var newTask = new Task ($('#tName').val());
+        listofTasks.push(new Task ($('#tName').val()));
+        console.log(listofTasks.length);
+        $("#list").append("<div class='task-drag'><label>" + newTask.title + "</label><input type='checkbox' value='' class='chkbox'>"  + "</div>");
+        $('#tName').val('');
+        $('#hiddenText').hide();
+
+        
+
+      }
+
+      
+
+      $('.task-drag').each(function() {
+
+    // store data so the calendar knows to render an event upon drop
+        $(this).data('event', {
+          title: $.trim($(this).text()), // use the element's text as the event title
+          stick: true, // maintain when user navigates (see docs on the renderEvent method)
+          color: 'green',
+          description: 'This is a cool event'
+        });
+
+        // make the event draggable using jQuery UI
+        $(this).draggable({
+          zIndex: 999,
+          revert: true,      // will cause the event to go back to its
+          revertDuration: 0  //  original position after the drag
+        });
+
+      });
     
      });
 
@@ -48,7 +168,8 @@
 
     $('#task-list .task-drag').each(function() {
 
-      // store data so the calendar knows to render an event upon drop
+      listofTasks.push(new Task($(this).text()));
+      //store data so the calendar knows to render an event upon drop
       $(this).data('event', {
         title: $.trim($(this).text()), // use the element's text as the event title
         stick: true, // maintain when user navigates (see docs on the renderEvent method)
@@ -64,6 +185,7 @@
       });
 
     });
+
 
     $("#Create").on("click", function(){
       $('#task-list .task-drag').each(function() {
@@ -97,6 +219,7 @@
         right: 'month,agendaWeek,agendaDay'
       },
       editable: true,
+      eventDurationEditable: true,
       droppable: true, // this allows things to be dropped onto the calendar
       dragRevertDuration: 0,
       drop: function() {
@@ -107,7 +230,42 @@
 
       
         
-      },
+    },
+
+    select: function (start, end, jsEvent) {
+      closePopovers();
+      popoverElement = $(jsEvent.target);
+      $(jsEvent.target).popover({
+        title: 'the title',
+        content: "Add content",
+        template: popTemplate,
+        placement: 'auto',
+        html: 'true',
+        trigger: 'click',
+        animation: 'true',
+        container: 'body'
+      }).popover('show');
+    },
+
+    eventClick: function (calEvent, jsEvent, view) {
+        //closePopovers();
+        popoverElement = $(jsEvent.currentTarget);
+    },
+
+    eventRender: function (event, element) {
+        element.popover({
+            title: event.title,
+            content: 'the content',
+            template: popTemplate,
+            placement: 'left',
+            html: 'true',
+            trigger: 'click',
+            animation: 'true',
+            container: 'body'
+        });
+
+    },
+      
       eventDragStop: function( event, jsEvent, ui, view ) {
 
         var external_events = $( "#task-list" );
@@ -123,7 +281,7 @@
           && jsEvent.clientY <= offset .bottom) { 
             $('#calendar').fullCalendar('removeEvents', event._id); 
     
-            var el = $( "<div class='task-drag'>"+ event.title + "<input type='checkbox' value='' class='chkbox'>"  + "</div>" ).appendTo( "#list");
+            var el = $( "<div class='task-drag'><label>"+ event.title + "</label><input type='checkbox' value='' class='chkbox'>"  + "</div>" ).appendTo( "#list");
             
             el.draggable({
               zIndex: 999,
@@ -153,7 +311,7 @@
 
 
     });
-openCity(event, 'Ongoing');
+  openCity(event, 'Ongoing');
 
   });
 
@@ -249,12 +407,15 @@ var isEventOverDiv = function(x, y) {
     /* padding-top: 1em; */
   /* } */
 
-  /* #task-list .task-drag {
-    margin: 10px 0;
+  .task-drag {
+    margin: 10px 5px;
+    font-size: 10px;
+    font-weight: bold;
     cursor: pointer;
-    background: red;
+    background: rgb(103, 167, 111);
+    padding: 5px 5px;
   }
-
+  /*
   #task-list p {
     margin: 1.5em 0;
     font-size: 11px;
@@ -326,8 +487,8 @@ var isEventOverDiv = function(x, y) {
     <span class="close">&times;</span>
     <h1>Create Task</h1>
     <div class="hiddentext" id="hiddenText" style="display:none">Invalid Name! </div>
-    <form name="myForm"  onsubmit="return validateForm()" method="post"> Task Name: <input type="text" name="fname" id="tName">
-      <p></p>	<p><input type="button" id="Create" value="Create new Task "></p>
+    <form name="myForm" method="post"> Task Name: <input type="text" name="fname" id="tName">
+      <p></p>	<p><input type="submit" value="Create new Task "></p>
 	</form>
   </div>
 
