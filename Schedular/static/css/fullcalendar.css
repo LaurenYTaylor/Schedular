@@ -1291,6 +1291,8 @@ be a descendant of the grid when it is being dragged.
 .fc-unthemed .fc-list-empty {
   /* theme will provide own background */
   background-color: #eee; }
+
+
   /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */
@@ -1332,7 +1334,7 @@ be a descendant of the grid when it is being dragged.
 
 .chkbox {
   /* float: right;
-  /* padding-left: 40px; 
+  padding-left: 40px; 
   font-weight: bold;
   padding-top: 1px;
   padding-bottom: 30px;
@@ -1340,6 +1342,7 @@ be a descendant of the grid when it is being dragged.
   margin-left: 200px */
   float:right;
   vertical-align: middle;
+  
 }
 
 /* Style the tab */
@@ -1347,13 +1350,14 @@ be a descendant of the grid when it is being dragged.
 
  
   float: left;
-  width: 150px;
+  width: 180px;
+  height: 550px;
 
   
   border: 1px solid #ccc;
   background: #eee;
   text-align: left;
-  height: 100%;
+  
 
   /* height:100%;
   overflow: hidden;
@@ -1364,7 +1368,7 @@ be a descendant of the grid when it is being dragged.
 
 /* Style the buttons inside the tab */
 .tablinks {
-  background-color: #555;
+  background-color: #ccc;
   color: white;
   float: left;
   border: none;
@@ -1391,7 +1395,7 @@ be a descendant of the grid when it is being dragged.
 
 /* Create an active/current tablink class */
 .tablinks.active {
-  background-color: #ccc;
+  background-color: #ddd;
 }
 
 /* Style the tab content */
@@ -1401,6 +1405,7 @@ be a descendant of the grid when it is being dragged.
   width: 100%;
   background: #eee;
   text-align: left;
+  padding: 50px 5px;
 
   display: none;
   border-top: none;
