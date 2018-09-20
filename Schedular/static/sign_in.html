@@ -4,11 +4,71 @@
     <meta charset="UTF-8">
     <title>Sign In</title>
 </head>
+
+<style>
+        h1 {
+            color: #39517A;
+            text-align: center;
+            font-size: 500%;
+            font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+        }
+
+        body {
+            background-image: url("clouds.jpg");
+
+        }
+
+        .formbox{
+        	position: absolute;
+        	top: 32%;
+        	left:37%;
+            color: #39517A;
+            padding: 10px 10px 10px 10px;
+            border-top: 2px solid #39517A;
+            border-right: 2px solid #39517A;
+            border-bottom: 2px solid #39517A;
+            border-left: 2px solid #39517A;
+            border-radius: 50px 50px;
+            position: fixed;
+        }
+
+        .formbox2{
+        	position: absolute;
+        	top: 32%;
+        	left:48%;
+           	color: #39517A;
+            padding: 10px 10px 10px 10px;
+            border-top: 2px solid #39517A;
+            border-right: 2px solid #39517A;
+            border-bottom: 2px solid #39517A;
+            border-left: 2px solid #39517A;
+            border-radius: 50px 50px;
+            position: fixed;
+        }
+
+        .submitbutton{
+        	position: absolute;
+        	top: 32%;
+        	left: 59%;
+            color: #39517A;
+            padding: 10px 10px 10px 10px;
+            border-top: 2px solid #39517A;
+            border-right: 2px solid #39517A;
+            border-bottom: 2px solid #39517A;
+            border-left: 2px solid #39517A;
+            border-radius: 50px 50px;
+            position: fixed;
+        }
+
+
+</style>
 <body>
+
+	<h1>Sign in to Schedular</h1>
 <form method="POST" action="/signin">
-    <input type="text" placeholder="Username" name="username">
-    <input type="password" placeholder="Password" name="password">
-    <input type="submit">
+    <input class='formbox' type="text" placeholder="Username" name="username">
+    <input class = 'formbox2' type="password" placeholder="Password" name="password">
+    <input class = "submitbutton" type="submit">
 </form>
 </body>
 </html>
