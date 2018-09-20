@@ -17,7 +17,6 @@
 <script>
 
   $(document).ready(function() {
-    console.log(window.location.pathname);
 
     $("#add").click(function(){
         $("#myModal").modal();
@@ -26,6 +25,9 @@
 
     //This needs to be checked every time a task is added into the calendar
 
+    if ($("#list > div").length == 0){
+      $("#list").append("<div> No Tasks Matey, arent you lucky!</div>");
+    }
 
     $('#Create').on('click', function() {
       if (validateForm()){
@@ -56,7 +58,7 @@
 
         // create new task with description
         $("#list").append("<div class='task-drag' id=" + key + "><label>" + description + 
-          "</label> </div>")
+          "</label> <input type='checkbox' class='chkbox'> </div>")
 
         // data for calendar
         $("#" + key).data('event', {
@@ -156,7 +158,7 @@
               revert: true, 
               revertDuration: 0 
             });
-            el.data('event', { title: event.title, id :event.id, stick: true, color: '#39517A',
+            el.data('event', { title: event.title, id :event.id, stick: true, color: 'red',
           description: "Jump"});
           }
       }
@@ -179,8 +181,6 @@
 
 
     });
-
-  openCity(event,'Ongoing');
 
 
   });
@@ -240,6 +240,8 @@ var isEventOverDiv = function(x, y) {
     evt.currentTarget.className += " active";
 }
 
+document.getElementById("defaultOpen").click();
+
 
 </script>
 <style>
@@ -251,9 +253,8 @@ var isEventOverDiv = function(x, y) {
     font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
   }
 
-  /*
   #wrap {
-    width: 1400px;
+    width: 1100px;
     margin: 0 auto;
   }
 
@@ -269,19 +270,17 @@ var isEventOverDiv = function(x, y) {
   #task-list h4 {
     font-size: 16px;
     margin-top: 0;
+    /* padding-top: 1em; */
   }
-  */
-
 
   #task-list .task-drag {
     border-radius: 3.5px;
     padding: 5px;
     margin: 10px 0;
     cursor: pointer;
-    background: #39517A;
-    color: white;
+    background: red;
   }
-  /*
+
   #task-list p {
     margin: 1.5em 0;
     font-size: 11px;
@@ -292,61 +291,28 @@ var isEventOverDiv = function(x, y) {
     margin: 0;
     vertical-align: middle;
   }
-  */ 
 
   #calendar {
     float: right;
     width: 900px;
   }
 
-
 </style>
 
 </head>
-
-
 <body>
-
   <div id='wrap'>
-
-    <!-- 
     
-    <div id = 'left'>
 
     <div class="tab">
-    <button class="tablinks" onclick="openCity(event, 'Ongoing')">Ongoing</button>
-    <button class="tablinks" onclick="openCity(event, 'Completed')">Completed</button>
-    </div>
-
-    <div id='Ongoing' class="tabcontent">
-      <div id='task-list'>
-        <h4>Task List</h4> 
-        <div id = 'list'>
-        </div>
-        <button type="submit" name="add" id="add">Add Task</button>
-      </div>
-    </div>
-
-    <div id='Completed' class="tabcontent">
-      <div id='task-list' >
-        <h4>Completed Task List</h4> 
-      </div>
-    </div>
-  --> 
-
-    <div id='wrap'>
-    
-
-    <div class="tabList">
-      <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Ongoing')" >Ongoing</button>
+      <button class="tablinks" onclick="openCity(event, 'Ongoing')">Ongoing</button>
       <button class="tablinks" onclick="openCity(event, 'Completed')">Completed</button>
      
-    
+    </div>
     <div id='Ongoing' class="tabcontent">
       <div id='task-list'>
         <h4>Task List</h4> 
         <div id = 'list'>
-          
         </div>
       <!-- <input type="text" name="task name" id="taskName" value="Task Name"> -->
         <button type="submit" name="add" id="add">Add Task</button>
@@ -362,35 +328,30 @@ var isEventOverDiv = function(x, y) {
         </div>
   
       </div>
-
-    </div>
-
+      
 
     <div id='calendar'></div>
-
 
     <div style='clear:both'></div>
 
     <!-- The Modal -->
-    <div id="myModal" class="modal" role="dialog">
+<div id="myModal" class="modal" role="dialog">
 
-      <!-- Modal content -->
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <h1>Create Task</h1>
-        <div class="hiddentext" id="hiddenText" style="display:none">Invalid Name! </div>
-        <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post"> Task Name: <input type="text" name="fname" id="tName">
-        <p></p> <p><input type="button" id="Create" value="Create new Task "></p>
-        </form>
-      </div>
-
-    </div>
-
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h1>Create Task</h1>
+    <div class="hiddentext" id="hiddenText" style="display:none">Invalid Name! </div>
+    <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post"> Task Name: <input type="text" name="fname" id="tName">
+      <p></p>	<p><input type="button" id="Create" value="Create new Task "></p>
+	</form>
   </div>
 
+  </div>
+</div>
+  
 
 </body>
 </html>
-
 
 
