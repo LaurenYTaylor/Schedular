@@ -9,6 +9,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken")
 const http_cookie_parser = require("cookie-parser");
+const nodemailer = require('nodemailer');
 
 const pool = new pg.Pool({
     port: 5432,
@@ -42,26 +43,77 @@ app.get('/signup', function(request, response) {
     response.sendFile(__dirname+'/static/sign_up.html');
 });
 
+
 app.post('/signup', function(request, response) {
     let email_validation_key = crypto.randomBytes(128);
     email_validation_key = email_validation_key.toString('base64');
     console.log("validation_key: "+email_validation_key);
     bcrypt.hash(request.body.password, 10, function(err, hashed_password) {
-
-
         console.log("hpass: "+ hashed_password);
-
-
         let query_string = "INSERT INTO users (username, email, password, email_validation_key)";
         query_string += "VALUES ('"+request.body.username+"', '"+ request.body.email+"', '"+hashed_password+"', '"+email_validation_key+"')";
-
         pool.connect(function(err, result) {
             pool.query(query_string);
-            response.send("you did it.");
+            let transporter = nodemailer.createTransport({
+                service: 'hotmail',
+                auth: {
+                    user: 'lauren.y.taylor@hotmail.com',
+                    pass: 'Hotmail.com2'
+                }
+            });
+            let link = 'http://'+'localhost:'+port+"/email_validate"+"?email="+request.body.email+"&id="+email_validation_key;
+            let mailOptions = {
+                from: 'lauren.y.taylor@hotmail.com',
+                to: request.body.email,
+                subject: 'Schedular Validate Email',
+                text: 'Please go to the following link to validate your email: '+link
+            };
+            transporter.sendMail(mailOptions, function(error, info) {
+                if(error) {
+                    console.log(error);
+                } else {
+                    console.log("email sent to"+request.body.email);
+                }
+            });
+            response.redirect("/validate_email");
         });
     });
 });
 
+app.get('/email_validate', function(request, response) {
+    let url = request.query;
+    email = url.email;
+    validation_key = url.id;
+    query_string = "SELECT email_validation_key from users where email='"+email+"';";
+    pool.connect(function(err, result) {
+        pool.query(query_string, function(err, result) {
+            validation_key = validation_key.trim().replace(/ /g, "+");
+            if(result.rows[0].email_validation_key == validation_key) {
+                user_id_find = "SELECT * from users where email='"+email+"';";
+                pool.query(user_id_find, function(err, user_info_result) {
+                    authenticate(user_info_result.rows[0].username, user_info_result.rows[0].password, true, function(err, jwt) {
+                        if (jwt) {
+                            response.cookie('jwt', jwt, {maxAge: 900000});
+                            response.redirect('/schedular');
+                        }
+                        else {
+                            console.log("JWT didn't work :(")
+                            response.redirect('/signin');
+                        }
+                    });
+                });
+            } else {
+                response.redirect('/validate_email');
+            }
+        });
+
+    })
+
+});
+
+app.get('/validate_email', function(request, response) {
+    response.sendFile(__dirname+'/static/validate_email.html');
+});
 app.get('/signin', function(request, response) {
     response.sendFile(__dirname+'/static/sign_in.html');
 });
@@ -86,7 +138,7 @@ app.get('/tasks', function(request, response){
 
 app.post('/signin', function(request, response) {
     console.log(request.body);
-    authenticate(request.body.username, request.body.password, function(err, jwt) {
+    authenticate(request.body.username, request.body.password, false, function(err, jwt) {
         if(jwt) {
             response.cookie('jwt', jwt, { maxAge: 900000});
             response.redirect('/schedular');
@@ -96,12 +148,17 @@ app.post('/signin', function(request, response) {
         }
     });
 });
-function authenticate(username, password, callback) {
+function authenticate(username, password, signup, callback) {
     let query = "SELECT user_id, email, password FROM users WHERE username = '" + username + "'";
+    let match=false;
     pool.connect(function(err, result) {
         pool.query(query, async function(err, result) {
             if(result.rows.length > 0) {
-                let match = await bcrypt.compare(password, result.rows[0].password);
+                if(signup == false) {
+                    match = await bcrypt.compare(password, result.rows[0].password);
+                } else {
+                    match = (password==result.rows[0].password);
+                }
                 if(match) {
                     let user = {
                         id : result.rows[0]["user_id"],
@@ -155,8 +212,7 @@ function handshake(request, response, next) {
 
                    next();
                 });
-
-            })
+            });
         });
     }
     else next();
