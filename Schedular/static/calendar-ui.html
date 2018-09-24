@@ -25,9 +25,8 @@
     });
 
     //This needs to be checked every time a task is added into the calendar
-
-
-    $('#Create').on('click', function() {
+    $(function() {
+    $(".CreateButton").click(function() {
       if (validateForm()){
         $('#myModal').modal('hide')
         $("#list").append("<div class='task-drag'>" + $('#tName').val() + "</div>");
@@ -35,12 +34,19 @@
         $('#hiddenText').hide();
 
       }
-    
-     });
-
-    $(".close").click(function(){
-         $("#myModal").modal("hide");
+      return false;
+      // validate and process form here
     });
+  });
+
+
+  $(".close").click(function(){
+        $("#myModal").modal("hide");
+  });
+
+  $('#myModal').on('shown.bs.modal', function () {
+  $('#tName').focus();
+  });
 
 
 
@@ -380,7 +386,7 @@ var isEventOverDiv = function(x, y) {
         <h1>Create Task</h1>
         <div class="hiddentext" id="hiddenText" style="display:none">Invalid Name! </div>
         <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post"> Task Name: <input type="text" name="fname" id="tName">
-        <p></p> <p><input type="button" id="Create" value="Create new Task "></p>
+        <p></p> <p><input type="submit" class="CreateButton" id="Create" value="Create new Task "></p>
         </form>
       </div>
 
