@@ -1293,7 +1293,9 @@ be a descendant of the grid when it is being dragged.
   background-color: #eee; }
 
 
-  /* The Modal (background) */
+  /* The Modal (background) 
+  -----------------------------------------------------------------------------------*/
+
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
@@ -1345,6 +1347,9 @@ be a descendant of the grid when it is being dragged.
   
 }
 
+/*Task List
+-------------------------------------------------------------------------------------*/
+
 /* Style the tab */
 .tabList {
 
@@ -1364,6 +1369,16 @@ be a descendant of the grid when it is being dragged.
   display:table;
   border: 1px solid #ccc;
   background-color: #f1f1f1; */
+}
+
+/*Style the events in the task list*/
+#task-list .task-drag {
+  border-radius: 3.5px;
+  padding: 5px;
+  margin: 10px 0;
+  cursor: pointer;
+  background: #39517A;
+  color: white;
 }
 
 /* Style the buttons inside the tab */
@@ -1411,9 +1426,32 @@ be a descendant of the grid when it is being dragged.
   border-top: none;
 }
 
+/*Overall
+-------------------------------------------------------------------------------------*/
+
 #wrap {
   width: 1100px;
   margin: 0 auto;
 }
+
+body {
+  padding: 40px 40px;
+  text-align: center;
+  font-size: 14px;
+  font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+}
+
+
+
+/*Calendar
+--------------------------------------------------------------------------------------*/
+/*Style the calendar*/
+#calendar {
+  float: right;
+  width: 900px;
+} 
+
+
+
 
 
