@@ -1,11 +1,28 @@
+//popover complete is still somewhat buggy
+// requires 2 clicks to initialize popover after initial popover
+
+//hide popover when clicking outside of the popover
+$('html').on('click', function (e) {
+  if (!(popoverElement).is(e.target) && popoverElement.has(e.target).length === 0 && $('.popover').has(e.target).length === 0)
+      popoverElement.popover('hide');
+});
+
 $(document).ready(function() {
     console.log(window.location.pathname);
+
+    var popTemplate = [
+      '<div tabindex="0" class="popover" style="max-width:600px;">',
+      '<div class="arrow"></div>',
+      '<div class="popover-content"></div>',
+       '<div id="toggle" class="circle-loader" onclick="checkTask()"><div class="checkmark draw" onclick="myFunction()"></div></div><div id="showCompleted">Completed</div>',
+      '</div>'].join('');
 
     //Modal start appears when adding task//
     $("#add").click(function(){
         $("#myModal").modal();
      
     });
+    
 
     //This needs to be checked every time a task is added into the calendar
     $(function() {
@@ -24,7 +41,8 @@ $(document).ready(function() {
           title: $.trim($(this).text()), // use the element's text as the event title
           stick: true, // maintain when user navigates (see docs on the renderEvent method)
           color: 'green',
-          description: 'This is a cool event'
+          description: 'This is a cool event',
+          complete: false
         });
 
         // make the event draggable using jQuery UI
@@ -72,7 +90,8 @@ $(document).ready(function() {
           title: $.trim($("#" + key).text()), // use the element's text as the event title
           stick: true, // maintain when user navigates (see docs on the renderEvent method)
           color: 'green',
-          description: description
+          description: description,
+          complete: false
         })
 
         // make task draggable
@@ -91,7 +110,8 @@ $(document).ready(function() {
         title: $.trim($(this).text()), // use the element's text as the event title
         stick: true, // maintain when user navigates (see docs on the renderEvent method)
         color: 'green',
-        description: 'This is a cool event'
+        description: 'This is a cool event',
+        complete: false
       });
 
       // make the event draggable using jQuery UI
@@ -103,8 +123,7 @@ $(document).ready(function() {
 
     });
 
-
-
+    
     /* initialize the calendar
     -----------------------------------------------------------------*/
 
@@ -124,6 +143,61 @@ $(document).ready(function() {
           $(this).remove();
         
       },
+
+      //When mouse hovers over
+      eventMouseover: function(calEvent, jsEvent) {
+        popoverElement = $(jsEvent.currentTarget);
+        element = calEvent;
+      },
+
+      //on EventClick
+      eventClick: function (calEvent, jsEvent, view) {
+        //closePopovers();
+        popoverElement = $(jsEvent.currentTarget);
+        element = calEvent;
+      },
+
+      /*Triggered when an event is being rendered*/
+      eventRender: function(event,jsEvent){
+        if(!event.complete){
+          //popover properties
+          jsEvent.popover({
+            
+            html: true,
+            content: event.title,
+            template: popTemplate,
+            animation: true,
+            container:'body',
+            //trigger:'manual'
+          });
+
+          
+
+          //Use the code below if popover trigger is hover 
+          //.on("mouseenter", function () { 
+          //   var _this = this;
+          //   $(this).popover("show");
+          //   $(".popover").on("mouseleave", function () {
+          //         $(_this).popover("hide");
+          //   });
+          
+          // }).on("mouseleave", function () {
+          //   var _this = this;
+          //   setTimeout(function () {
+          //     if (!$(".popover:hover").length) {
+          //       $(_this).popover("hide");
+          //     }
+          //   }, 300);
+          // });
+        }else {
+          jsEvent.fadeTo(0, 0.5);
+        }
+      
+      },
+
+
+
+
       eventDragStop: function( event, jsEvent, ui, view ) {
 
         var external_events = $( "#task-list" );
@@ -150,7 +224,8 @@ $(document).ready(function() {
               id :event.id, 
               stick: true, 
               color: 'green',
-              description: "Jump"
+              description: "Jump",
+              complete: false
             });
           }
       }
@@ -162,6 +237,13 @@ $(document).ready(function() {
   });
 
 document.load()
+
+
+//Holds the jquery object
+var popoverElement;
+
+//Holds the event object
+var element;
 
   // Get the modal
 var modal = document.getElementById('myModal');
@@ -183,6 +265,41 @@ function validateForm() {
       return true;
     }
 }
+
+
+
+
+
+$('wrap').on('click','#toggle',function (e) {
+	console.log(element);
+  $(".circle-loader").toggleClass("load-complete");
+  $(".checkmark").toggle();
+  $("#showCompleted").slideToggle('slow', 	taskCompleted());
+});
+
+//Mark the task as complete
+function checkTask(){
+  $(".circle-loader").toggleClass("load-complete");
+  $(".checkmark").toggle();
+  $("#showCompleted").slideToggle('fast',taskCompleted());
+}
+//Change properties of the event when the task is completed
+function taskCompleted() {
+  setTimeout(function() {
+    $('.popover').not(this).popover('hide');
+    popoverElement.popover('destroy');
+  }, 1200);
+    element.editable = false;
+    element.complete = true;
+    popoverElement.fadeTo('slow', 0.5);
+}
+
+function closePopovers() {
+  $('.popover').not(this).popover('hide');
+}
+
+
+
 
 //Checks if the task being dragged is in the proximity of the the task list//
 var isEventOverDiv = function(x, y) {
@@ -216,4 +333,6 @@ var isEventOverDiv = function(x, y) {
     }
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
-}
+  }
+
+  
