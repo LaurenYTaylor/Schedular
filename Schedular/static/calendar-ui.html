@@ -18,6 +18,10 @@
 
 <body>
 
+  <form>
+  <button type ="submit" class = "submitbutton">Sign Out</button>
+  </form>
+  
   <div id='wrap'>
     <div class="tabList">
       <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Ongoing')" >Ongoing</button>
@@ -60,7 +64,19 @@
         <h1>Create Task</h1>
         <div class="hiddentext" id="hiddenText" style="display:none">Invalid Name! </div>
         <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post"> Task Name: <input type="text" name="fname" id="tName">
-        <p></p> <p><input type="submit" class="CreateButton" id="Create" value="Create new Task "></p>
+        <p></p> 
+
+        Task Duration: <input type ="text" name="duration" id="dury">
+        <p></p>
+        Category: <select name="category" id = "category">
+          <option value="University">University</option>
+          <option value="Chores">Chores</option>
+          <option value="Work">Work</option>
+          <option value ="Other"> Other </option> 
+        </select>
+
+
+        <p><input type="submit" class="CreateButton" id="Create" value="Create new Task "></p>
         </form>
       </div>
 
