@@ -1,0 +1,11 @@
+extends ../layout
+
+block head
+    link(href='/css/button.css', rel='stylesheet')
+
+block vars
+    - var title = "Sign Up"
+    - var action = "/signup"
+
+block body
+    include _signupform

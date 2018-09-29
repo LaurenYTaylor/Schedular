@@ -1,0 +1,10 @@
+extends ../layout
+
+block head
+    link(href='../css/button.css', rel='stylesheet')
+block vars
+    - var title = "Sign In"
+    - var action = "/signin"
+
+block body
+    include _signinform

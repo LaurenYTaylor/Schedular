@@ -1,0 +1,12 @@
+extends ../layout
+
+block vars
+    - var title = "Welcome to Schedular"
+
+block head
+    link(rel="stylesheet" href="../css/button.css")
+
+block body
+    h1 #{title}
+    a(href='/signin', class='signbutton') Sign In
+    a(href='/signup', class='signbutton') Sign Up
