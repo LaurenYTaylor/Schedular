@@ -195,7 +195,7 @@ app.get('/validate_email', function(request, response) {
 
 app.get('/schedular', function(request, response) {
     if(!request.user) response.redirect('/signin');
-    response.sendFile(__dirname+'/static/calendar-ui.html');
+    response.sendFile(__dirname+'/static/webpage/calendar-ui1.html');
 });
 
 app.get('/signout', function(request, response) {
@@ -220,6 +220,13 @@ app.get('/tasks', function(request, response){
         response.send(tasks);
     })
     
+});
+
+io.on('connection', function(socket) {
+    console.log('user connected');
+    socket.on('task_added', function(data) {
+        console.log(data);
+    });
 });
 
 http.listen(port, () => console.log("Listening on port " + port));

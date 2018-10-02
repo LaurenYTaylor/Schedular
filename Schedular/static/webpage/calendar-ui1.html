@@ -10,6 +10,8 @@
 <script src='../js/jquery-ui.min.js'></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.6/fullcalendar.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>var socket = io(); </script>
 <!-- <script src='../static/js/fullcalendar.min.js'></script> -->
 
 
@@ -35,7 +37,7 @@
         $("#list").append("<div class='task-drag'>" + $('#tName').val() + "</div>");
         $('#tName').val('');
         $('#hiddenText').hide();
-
+        socket.emit('task_added', 'a task');
       }
     
      });
