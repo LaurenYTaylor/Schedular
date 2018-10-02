@@ -195,7 +195,7 @@ app.get('/validate_email', function(request, response) {
 
 app.get('/schedular', function(request, response) {
     if(!request.user) response.redirect('/signin');
-    response.sendFile(__dirname+'/static/webpage/calendar-ui1.html');
+    response.sendFile(__dirname+'/static/calendar-ui.html');
 });
 
 app.get('/signout', function(request, response) {
