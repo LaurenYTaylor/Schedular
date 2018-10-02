@@ -1,15 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Sign Up</title>
+    <title>Homepage</title>
+    <style>
+        /* Center content start */
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: inherit;
+        }
+        /* Center content end */
+
+        h1 {
+            color: #fff;
+            text-align: center;
+            font-size: 400%;
+            letter-spacing: 5px;
+            font-weight: 300;
+            font-family: "Roboto", sans-serif;
+            margin: 2%;
+        }
+
+        .signinbutton {
+            padding: 25px 45px;
+            font-size: 1.8rem;
+            font-family: "Roboto", sans-serif;
+            background: #2F5597;
+            border: 0;
+            display: inline-block;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            background-image: url("harbour.jpg");
+            overflow: hidden;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .signupbutton {
+            padding: 23px 43px;
+            font-size: 1.8rem;
+            font-family: "Roboto", sans-serif;
+            border: solid 2px #2F5597;
+            display: inline-block;
+            text-decoration: none;
+            color: #fff;
+            backround: none;
+            max-width: 13%;
+        }
+
+        .signupbutton:hover,
+        .signinbutton:hover,
+        .submit-btn:hover {
+            background-color: #d7d7d7;
+            color: #000;
+            cursor: pointer;
+        }
+        /* Form styling begins here*/
+
+        .flex-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .center-block {
+            margin-right: auto;
+            margin-left: auto;
+            width: 30%;
+        }
+
+        .flex-container-row {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: horizontal;
+            -webkit-box-direction: normal;
+            -ms-flex-flow: row nowrap;
+            flex-flow: row wrap;
+        }
+
+        form {
+            width: 100%;
+            max-width: 85rem;
+            font-size: 1.8em;
+            font-weight: normal;
+            line-height: 1.2222em;
+        }
+
+        form > div:last-child {
+            justify-content: space-around;
+        }
+
+        input,
+        textarea,
+        a {
+            flex-grow: 1;
+            margin: 1rem 2%;
+            padding: 1.1rem 1.5rem;
+            border: 2px solid #2F5597;
+
+            -webkit-transition: background .2s;
+            transition: background .2s;
+        }
+
+        .back {
+            flex-grow:0;
+        }
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus {
+            background-color: #20262E;
+            color: white;
+        }
+
+        .submit-btn {
+            font-size: 1.8rem;
+            font-family: "Roboto", sans-serif;
+            background: #2F5597;
+            border: 0;
+            max-width: 35%;
+            color: #fff;
+            box-sizing: border-box;
+            flex-grow: 0;
+        }
+        /* Form styling ends here*/
+    </style>
 </head>
+
 <body>
-<form method="POST" action="/signup">
-    <input type="text" placeholder="Username" name="username"><br/>
-    <input type="text" placeholder="Email" name="email"><br/>
-    <input type="password" placeholder="Password" name="password"><br/>
-    <input type="submit">
-</form>
+<div class="container">
+    <h1>Sign Up</h1>
+    <div class="wrapper">
+        <form class="center-block" method="POST" action="/signup">
+            <div class="flex-container-row">
+                <input type="text" placeholder="Username" required="true" ame="username"> </div>
+            <div class="flex-container-row">
+                <input type="email" required="true" placeholder="Email" name="username" /> </div>
+            <div class="flex-container-row">
+                <input type="password" required="true" placeholder="Password" name="password" /> </div>
+            <div class="flex-container-row">
+                <input type="submit" class="submit-btn"> <a href="homepage.html" class="signupbutton back">Back</a> </div>
+        </form>
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+</script>
 </body>
+
 </html>
