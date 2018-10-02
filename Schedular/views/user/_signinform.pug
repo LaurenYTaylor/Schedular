@@ -2,7 +2,8 @@ h1 #{title}
 
 p #{error}
 
-form(method='POST', action=action)
-    input.form-control(type='username', placeholder = 'Username' name = 'username' value=username)
-    input.form-control(type='password', placeholder = 'Password' name = 'password' value=password)
-    button.btn.btn-primary(type='submit') #{title}
+div.container
+    form(method='POST', action=action)
+        input.formbox(type='username', placeholder = 'Username' name = 'username' value=username)
+        input.formbox2(type='password', placeholder = 'Password' name = 'password' value=password)
+        button.btn.submitbutton(type='submit' class = 'submitbutton') #{title}

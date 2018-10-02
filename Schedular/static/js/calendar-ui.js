@@ -40,6 +40,8 @@ $(document).ready(function() {
         $('#hiddenText').hide();
 
         newTask = {name:taskName, duration: dury, category:category};
+
+        socket.emit('task_added', newTask);
         allEvents.push(newTask);
       }
 

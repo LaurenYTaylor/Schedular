@@ -1,0 +1,92 @@
+
+h1 {
+    color: #39517A;
+    text-align: center;
+    font-size: 500%;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+p {
+    color: #39517A; 
+    text-align: center;
+    font-size: 100%;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.container {
+    text-align: center;
+}
+
+.signinbutton {
+    font: bold 18px "Lucida Sans";
+    text-decoration: none;
+    color: #39517A;
+    padding: 10px 10px 10px 10px;
+    border-top: 2px solid #39517A;
+    border-right: 2px solid #39517A;
+    border-bottom: 2px solid #39517A;
+    border-left: 2px solid #39517A;
+    border-radius: 50px 50px;
+    position: fixed;
+    left: 42%;
+ }
+.signinbutton:hover {
+    background-color: #d7d7d7;
+}
+.signupbutton {
+    font: bold 18px "Lucida Sans";
+    text-decoration: none;
+    color: #39517A;
+    padding: 10px 10px 10px 10px;
+    border-top: 2px solid #39517A;
+    border-right: 2px solid #39517A;
+    border-bottom: 2px solid #39517A;
+    border-left: 2px solid #39517A;
+    border-radius: 50px 50px;
+    position:fixed;
+    left: 50%;
+}
+.signupbutton:hover {
+    background-color: #d7d7d7;
+}
+
+.formbox{
+    color: #39517A;
+    padding: 10px 10px 10px 10px;
+    border-top: 2px solid #39517A;
+    border-right: 2px solid #39517A;
+    border-bottom: 2px solid #39517A;
+    border-left: 2px solid #39517A;
+    border-radius: 50px 50px;
+}
+
+.formbox2{
+    color: #39517A;
+    padding: 10px 10px 10px 10px;
+    border-top: 2px solid #39517A;
+    border-right: 2px solid #39517A;
+    border-bottom: 2px solid #39517A;
+    border-left: 2px solid #39517A;
+    border-radius: 50px 50px;
+}
+
+.signupform {
+    color: #39517A;
+    padding: 10px 10px 10px 10px;
+    border-top: 2px solid #39517A;
+    border-right: 2px solid #39517A;
+    border-bottom: 2px solid #39517A;
+    border-left: 2px solid #39517A;
+    border-radius: 50px 50px;
+}
+
+.submitbutton{
+    color: #39517A;
+    padding: 10px 10px 10px 10px;
+    border-top: 2px solid #39517A;
+    border-right: 2px solid #39517A;
+    border-bottom: 2px solid #39517A;
+    border-left: 2px solid #39517A;
+    border-radius: 50px 50px;
+    position: fixed;
+}
