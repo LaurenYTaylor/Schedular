@@ -1465,4 +1465,25 @@ body {
             position: fixed;
         }
 
+/* Header
+--------------------------------------------------------------------------------------*/
+/*Style the header */
 
+.topnav {
+  background-color: #34362C;
+  padding:10px;
+  margin-bottom: 50px;
+  overflow: hidden;
+}
+
+.title {
+  color: #fff;
+}
+
+.signout-btn {
+  float:right;
+}
+
+.rightalign {
+  text-align: right;
+}
