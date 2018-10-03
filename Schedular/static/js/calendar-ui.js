@@ -7,6 +7,8 @@ $('html').on('click', function (e) {
       popoverElement.popover('hide');
 });
 
+allEvents = []; 
+
 $(document).ready(function() {
     console.log(window.location.pathname);
 
@@ -28,19 +30,28 @@ $(document).ready(function() {
     $(function() {
     $(".CreateButton").click(function() {
       if (validateForm()){
+
+        taskName = $('#tName').val();
+        dury = $('#dury').val();
+        category = $("#category").val();
         $('#myModal').modal('hide')
-        $("#list").append("<div class='task-drag'>" + $('#tName').val() + "</div>");
+        $("#list").append("<div class='task-drag'>" + taskName + "</div>");
         $('#tName').val('');
         $('#hiddenText').hide();
 
+        newTask = {name:taskName, duration: dury, category:category};
+        allEvents.push(newTask);
       }
       $("#task-list .task-drag" ).each(function() {
 
+        name = $(this).text(); 
+        colour = getColour(name);
+
         // store data so the calendar knows to render an event upon drop
         $(this).data('event', {
-          title: $.trim($(this).text()), // use the element's text as the event title
+          title: name, // use the element's text as the event title
           stick: true, // maintain when user navigates (see docs on the renderEvent method)
-          color: 'green',
+          color: colour,
           description: 'This is a cool event',
           complete: false
         });
@@ -335,3 +346,34 @@ var isEventOverDiv = function(x, y) {
     evt.currentTarget.className += " active";
   }
   
+  function getColour(name2){
+
+    var arrayLength = allEvents.length;
+        colour = "blue";
+        for (var i = 0; i < arrayLength; i++) {
+          if(name2 == allEvents[i].name){
+            time = "0"+allEvents[i].duration + ":00:00";
+            category = allEvents[i].category;
+
+            if (category == "University"){
+              colour = "Blue";
+            }
+            else if(category == "Chores"){
+              colour = "Yellow";
+            }
+            else if (category == "Work"){
+              colour = "Black";
+            }
+            else{
+              colour = "grey";
+            }
+          
+          }
+
+        }
+
+        return colour; 
+
+
+
+  }
