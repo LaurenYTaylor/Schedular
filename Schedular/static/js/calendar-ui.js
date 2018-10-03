@@ -42,10 +42,12 @@ $(document).ready(function() {
         newTask = {name:taskName, duration: dury, category:category};
         allEvents.push(newTask);
       }
+      //Gets each task from the task list. 
       $("#task-list .task-drag" ).each(function() {
 
         name = $(this).text(); 
         colour = getColour(name);
+        time = getTimeFunction(name);
 
         // store data so the calendar knows to render an event upon drop
         $(this).data('event', {
@@ -53,7 +55,8 @@ $(document).ready(function() {
           stick: true, // maintain when user navigates (see docs on the renderEvent method)
           color: colour,
           description: 'This is a cool event',
-          complete: false
+          complete: false,
+          duration: time 
         });
 
         // make the event draggable using jQuery UI
@@ -96,13 +99,18 @@ $(document).ready(function() {
         $("#list").append("<div class='task-drag' id=" + key + "><label>" + description + 
           "</label> </div>")
 
+        name = $.trim($("#" + key).text());
+        time = getTimeFunction(name);
+
         // data for calendar
         $("#" + key).data('event', {
-          title: $.trim($("#" + key).text()), // use the element's text as the event title
+          title: name, // use the element's text as the event title
           stick: true, // maintain when user navigates (see docs on the renderEvent method)
           color: 'green',
           description: description,
-          complete: false
+          complete: false,
+          duration: time
+          
         })
 
         // make task draggable
@@ -114,15 +122,21 @@ $(document).ready(function() {
       });
     });
 
+    //Get each task from the task list. 
+
     $('#task-list .task-drag').each(function() {
+
+      name = $.trim($(this).text());
+      time = getTimeFunction(name);
 
       // store data so the calendar knows to render an event upon drop
       $(this).data('event', {
-        title: $.trim($(this).text()), // use the element's text as the event title
+        title: name, // use the element's text as the event title
         stick: true, // maintain when user navigates (see docs on the renderEvent method)
         color: 'green',
         description: 'This is a cool event',
-        complete: false
+        complete: false,
+        duration:time
       });
 
       // make the event draggable using jQuery UI
@@ -230,13 +244,17 @@ $(document).ready(function() {
               revert: true, 
               revertDuration: 0 
             });
+
+            colour = getColour(event.title);
+            time = getTimeFunction(event.title);
             el.data('event', { 
               title: event.title, 
               id :event.id, 
               stick: true, 
-              color: 'green',
+              color: colour,
               description: "Jump",
-              complete: false
+              complete: false,
+              duration: time
             });
           }
       }
@@ -374,6 +392,22 @@ var isEventOverDiv = function(x, y) {
 
         return colour; 
 
+  }
 
+    function getTimeFunction(name2){
+
+    var arrayLength = allEvents.length;
+
+        time = "01:00:00";
+       
+        for (var i = 0; i < arrayLength; i++) {
+          if(name2 == allEvents[i].name){
+            time = "0"+allEvents[i].duration + ":00:00";   
+          
+          }
+
+        }
+
+        return time; 
 
   }
