@@ -4,9 +4,12 @@ block vars
     - var title = "Welcome to Schedular"
 
 block head
-    link(rel="stylesheet" href="../css/signin.css")
+    link(rel="stylesheet" href="../css/bobsignin.css")
 
 block body
-    h1 #{title}
-    a(href='/signin', class='signinbutton') Sign In
-    a(href='/signup', class='signupbutton') Sign Up
+    div.container
+        h1 #{title}
+        div.ctr
+            div.flex-item
+                a(href='/signin', class='signinbutton') Sign In
+                a(href='/signup', class='signupbutton') Sign Up
