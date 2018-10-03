@@ -1,191 +1,203 @@
 
-         .ctr {
-           
-            text-align: center;
-        }
+ .ctr {
+   
+    text-align: center;
+}
 
-        .flex-item + .flex-item {
-            margin-left: 2%;
-        }
+.flex-item + .flex-item {
+    margin-left: 2%;
+}
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            height: inherit;
-        }
-        /* Center content end */
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: inherit;
+}
+/* Center content end */
 
-        h1 {
-            color: #34362C;
-            text-align: center;
-            font-size: 400%;
-            letter-spacing: 5px;
-            font-weight: 300;
-            font-family: "Roboto", sans-serif;f
-            margin: 2%;
-        }
+h1 {
+    color: #34362C;
+    text-align: center;
+    font-size: 400%;
+    letter-spacing: 5px;
+    font-weight: 300;
+    font-family: "Roboto", sans-serif;f
+    margin: 2%;
+}
 
-        p {
-            text-align: center;
-            color: #34362C;
-            font-family: "Roboto", sans-serif;
-        }
+p {
+    text-align: center;
+    color: #34362C;
+    font-family: "Roboto", sans-serif;
+}
 
-        .signinbutton {
-            padding: 25px 45px;
-            font-size: 1.8rem;
-            font-family: "Roboto", sans-serif;
-            background: #34362C;
-            border: 0;
-            display: inline-block;
-            text-decoration: none;
-            color: #fff;
-        }
-
-
-
-        .signupbutton {
-            padding: 23px 43px;
-            font-size: 1.8rem;
-            font-family: "Roboto", sans-serif;
-            border: solid 2px #34362C;
-            display: inline-block;
-            text-decoration: none;
-            color: #fff;
-            backround: none;
-            max-width: 13%;
-        }
-
-        .signupbutton:hover,
-        .signinbutton:hover,
-        .submit-btn:hover{
-            cursor: pointer;
-            color: #fff;
-            background-color: #34362C;
-
-        }
-        /* Form styling begins here*/
-
-        .flex-row {
-            display: flex;
-            margin-bottom: 10px;
-        }
-
-        .wrapper {
-            width: 100%;
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .center-block {
-            margin-right: auto;
-            margin-left: auto;
-            width: 30%;
-        }
-
-        .flex-container-row {
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-orient: horizontal;
-            -webkit-box-direction: normal;
-            -ms-flex-flow: row nowrap;
-            flex-flow: row wrap;
-        }
-
-        form {
-            width: 100%;
-            max-width: 85rem;
-            font-size: 1.8em;
-            font-weight: normal;
-            line-height: 1.2222em;
-        }
-
-        form > div:last-child {
-            justify-content: space-around;
-        }
-
-        input,
-        textarea, .back {
-            flex-grow: 1;
-            margin: 1rem 2%;
-            padding: 1.1rem 1.5rem;
-            border: 2px solid #34362C;
-
-            -webkit-transition: background .2s;
-            transition: background .2s;
-        }
+.signinbutton {
+    padding: 25px 45px;
+    font-size: 1.8rem;
+    font-family: "Roboto", sans-serif;
+    background: #34362C;
+    border: 0;
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+}
 
 
 
-        input:focus,
-        textarea:focus,
-        select:focus {
-            outline: none;
-        }
+.signupbutton {
+    padding: 23px 43px;
+    font-size: 1.8rem;
+    font-family: "Roboto", sans-serif;
+    border: solid 2px #34362C;
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    backround: none;
+    max-width: 13%;
+}
 
-        input:focus,
-        textarea:focus {
-            background-color: #20262E;
-            color: white;
-        }
+.signupbutton:hover,
+.signinbutton:hover,
+.submit-btn:hover{
+    cursor: pointer;
+    color: #fff;
+    background-color: #34362C;
 
-        .txt {
-            color: white;
-            font-size: 16px;
-            font-family: "Roboto", sans-serif;
-        }
+}
+/* Form styling begins here*/
 
-        .forgotpw {
-            text-decoration: none;
-            color: white;
-            margin: 1rem;
-            font-size: 16px;
-            font-family: "Roboto", sans-serif;
+.flex-row {
+    display: flex;
+    margin-bottom: 10px;
+}
 
-        }
+.wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
 
-        .forgotpw:hover {
-            text-decoration: underline;
-        }
+.center-block {
+    margin-right: auto;
+    margin-left: auto;
+    width: 30%;
+}
 
-        .flex-container-row div {
-            width: 35%;
-        }
+.flex-container-row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row nowrap;
+    flex-flow: row wrap;
+}
 
-        .flex-container-row.links {
-            display: flex;
-            flex-wrap: nowrap;
-            flex-direction: row;
-            justify-content: center;
-        }
-        .submit-btn {
-            margin: 1rem 2%;
-            padding: 1.1rem 1.5rem;
-            border: 2px solid #34362C;
-            min-width: 46%;
-        }
+form {
+    width: 100%;
+    max-width: 85rem;
+    font-size: 1.8em;
+    font-weight: normal;
+    line-height: 1.2222em;
+}
 
-        .back {
-            font-family: "Roboto", sans-serif;
-            text-align: center;
-            color: white;
-            font-size: 12px;
-            background: none;
-            border: 0;
-            text-decoration: none;
-            color: #fff;
-            margin: 1rem 2%;
-            padding: 1.1rem 1.5rem;
-            border: 2px solid #fff;
+form > div:last-child {
+    justify-content: space-around;
+}
 
-        }
+input,
+textarea, .back {
+    flex-grow: 1;
+    margin: 1rem 2%;
+    padding: 1.1rem 1.5rem;
+    border: 2px solid #34362C;
 
-        .back:hover {
-            color:#34362C;
-            background-color: #fff;
-            border: 2px solid #34362C;
-        }
+    -webkit-transition: background .2s;
+    transition: background .2s;
+}
+
+
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+}
+
+input:focus,
+textarea:focus {
+    background-color: #20262E;
+    color: white;
+}
+
+.txt {
+    color: white;
+    font-size: 16px;
+    font-family: "Roboto", sans-serif;
+}
+
+.forgotpw {
+    text-decoration: none;
+    color: white;
+    margin: 1rem;
+    font-size: 16px;
+    font-family: "Roboto", sans-serif;
+
+}
+
+.forgotpw:hover {
+    text-decoration: underline;
+}
+
+.flex-container-row div {
+    width: 35%;
+}
+
+.flex-container-row.links {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: center;
+}
+.submit-btn {
+    margin: 1rem 2%;
+    padding: 1.1rem 1.5rem;
+    border: 2px solid #34362C;
+    min-width: 46%;
+}
+
+.back {
+    font-family: "Roboto", sans-serif;
+    text-align: center;
+    color: white;
+    font-size: 12px;
+    background: none;
+    border: 0;
+    text-decoration: none;
+    color: #fff;
+    margin: 1rem 2%;
+    padding: 1.1rem 1.5rem;
+    border: 2px solid #fff;
+
+}
+
+.back:hover {
+    color:#34362C;
+    background-color: #fff;
+    border: 2px solid #34362C;
+}
+
+.topnav {
+    background-color: #333;
+    overflow: hidden;
+}
+
+.signout-btn {
+    margin: 1rem 2%;
+    padding: 1.1rem 1.5rem;
+    border: 2px solid #34362C;
+    min-width: 46%;
+} 
