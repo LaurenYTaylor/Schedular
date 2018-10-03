@@ -1531,14 +1531,14 @@ body {
     transition: background .2s;
 }
 
-.taskform-btn{
+.CreateButton{
     margin: 1rem 2%;
     padding: 1.1rem 1.5rem;
     border: 2px solid #34362C;
     min-width: 20%;
 }
 
-.taskform-btn:hover {
+.CreateButton:hover {
     cursor: pointer;
     color: #fff;
     background-color: #34362C;
