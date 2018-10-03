@@ -40,51 +40,20 @@ $(document).ready(function() {
         $('#hiddenText').hide();
 
         newTask = {name:taskName, duration: dury, category:category};
-
-        socket.emit('task_added', newTask);
         allEvents.push(newTask);
       }
-
       $("#task-list .task-drag" ).each(function() {
 
-        name = "Hey";
-        name2 = $(this).text(); 
-        time = "04:00:00";
-        colour = "grey"; 
-
-        var arrayLength = allEvents.length;
-        for (var i = 0; i < arrayLength; i++) {
-          if(name2 == allEvents[i].name){
-           time = "0"+allEvents[i].duration + ":00:00";
-           category = allEvents[i].category;
-
-           if (category == "University"){
-            colour = "Blue";
-           }
-           else if(category == "Chores"){
-            colour = "Yellow";
-           }
-           else if (category == "Work"){
-            colour = "Black";
-           }
-
-           else{
-            colour = "grey";
-           }
-          
-          }
-
-        }
-
+        name = $(this).text(); 
+        colour = getColour(name);
 
         // store data so the calendar knows to render an event upon drop
         $(this).data('event', {
-          title: name2, // use the element's text as the event title
+          title: name, // use the element's text as the event title
           stick: true, // maintain when user navigates (see docs on the renderEvent method)
           color: colour,
           description: 'This is a cool event',
-          complete: false,
-          duration: time
+          complete: false
         });
 
         // make the event draggable using jQuery UI
@@ -146,6 +115,7 @@ $(document).ready(function() {
     });
 
     $('#task-list .task-drag').each(function() {
+
       // store data so the calendar knows to render an event upon drop
       $(this).data('event', {
         title: $.trim($(this).text()), // use the element's text as the event title
@@ -312,10 +282,10 @@ function validateForm() {
 
 
 $('wrap').on('click','#toggle',function (e) {
-	console.log(element);
+  console.log(element);
   $(".circle-loader").toggleClass("load-complete");
   $(".checkmark").toggle();
-  $("#showCompleted").slideToggle('slow', 	taskCompleted());
+  $("#showCompleted").slideToggle('slow',   taskCompleted());
 });
 
 //Mark the task as complete
@@ -375,5 +345,35 @@ var isEventOverDiv = function(x, y) {
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
   }
-
   
+  function getColour(name2){
+
+    var arrayLength = allEvents.length;
+        colour = "blue";
+        for (var i = 0; i < arrayLength; i++) {
+          if(name2 == allEvents[i].name){
+            time = "0"+allEvents[i].duration + ":00:00";
+            category = allEvents[i].category;
+
+            if (category == "University"){
+              colour = "Blue";
+            }
+            else if(category == "Chores"){
+              colour = "Yellow";
+            }
+            else if (category == "Work"){
+              colour = "Black";
+            }
+            else{
+              colour = "grey";
+            }
+          
+          }
+
+        }
+
+        return colour; 
+
+
+
+  }
