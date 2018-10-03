@@ -9,8 +9,9 @@
 <script src='../js/jquery.min.js'></script>
 <script src='../js/jquery-ui.min.js'></script>
 <script src='../js/calendar-ui.js'></script>
+<script src='../js/fullcalendar.min.js'></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.6/fullcalendar.min.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.6/fullcalendar.min.js"></script> -->
 <script src="/socket.io/socket.io.js"></script>
 <script>const socket = io(); </script>
 <link href='../css/popover.css' rel='stylesheet' />
@@ -23,9 +24,11 @@
   
 
   <div class="topnav">
-    <h1 class= "title">Schedular</h1>
-    <a href = "/signout" class="signout-btn">Sign Out</a> 
+      <div class="title">Schedular</div>
+      <a href = "/signout" class = "signout">Sign Out</a>
+
   </div>
+  
   
   <div id='wrap'>
     <div class="tabList">

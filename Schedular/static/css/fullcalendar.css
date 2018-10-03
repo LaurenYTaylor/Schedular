@@ -1474,10 +1474,13 @@ body {
   padding:10px;
   margin-bottom: 50px;
   overflow: hidden;
-}
 
+}
 .title {
   color: #fff;
+  display: inline;
+  text-align: center;
+  position: fixed;
 }
 
 .signout-btn {
@@ -1487,6 +1490,15 @@ body {
 
 .signout-btn:hover {
   background-color: #fff;
+}
+
+.signout {
+  color: #fff;
+  padding-left: 1100px;
+}
+
+.signout:hover {
+  color: #fff;
 }
 
 .rightalign {
