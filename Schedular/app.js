@@ -26,6 +26,7 @@ app.use(bp.urlencoded({extended: true}));
 app.use(http_cookie_parser());
 app.use(handshake);
 
+
 function redirectToSchedular(request, response, next) {
     if(request.user) {
         return response.redirect('/schedular');
@@ -51,6 +52,12 @@ function authenticate(username, password, signup, callback) {
                         email : result.rows[0]["email"]
                     };
                     createSession(user, callback);
+                    io.set('authorization', function(handshake, callback) {
+                        handshake.id=user.id;
+                        handshake.name=user.name;
+                        handshake.email=user.email;
+                        callback(null, true);
+                    });
                 } else {
                     callback(new Error("password"));
                 }
@@ -195,12 +202,10 @@ app.get('/validate_email', function(request, response) {
 
 app.get('/schedular', function(request, response) {
     if(!request.user) response.redirect('/signin');
-    response.sendFile(__dirname+'/static/webpage/calendar-ui1.html');
+    response.sendFile(__dirname+'/static/calendar-ui.html');
 });
 
 app.get('/signout', function(request, response) {
-    console.log(request.user);
-    console.log(query_string);
     pool.connect(function(err, client) {
         pool.query(query_string, function(err, result) {
             client.release();
@@ -213,21 +218,29 @@ app.get('/signout', function(request, response) {
 // send task data
 app.get('/tasks', function(request, response){
     let query = "SELECT description FROM todo_item WHERE user_id="+request.user.id;
-    //let query_string = "INSERT INTO todo_item ("
 
     pool.query(query, function (err, result) {
-        let tasks = (result.rows)
+        let tasks = (result.rows);
         response.send(tasks);
     })
     
 });
 
-io.on('connection', function(socket) {
-    console.log('user connected');
-    socket.on('task_added', function(data) {
-        console.log(data);
+app.post('/new_task', function(request, response) {
+    let query_string = "INSERT INTO todo_item (user_id, num_hours, category, completed, description) ";
+    let item = request.body;
+    let description=item.name;
+    let category=item.category;
+    let numHours=item.duration;
+    query_string += "VALUES ("+request.user.id+", "+ numHours+", '"+category+"', 'false', '"+description+"');";
+    pool.connect(function(err, client) {
+      pool.query(query_string, function(err, result) {
+        client.release();
+      });
     });
 });
+
+
 
 http.listen(port, () => console.log("Listening on port " + port));
 

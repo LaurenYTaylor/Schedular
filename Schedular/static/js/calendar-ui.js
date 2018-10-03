@@ -29,23 +29,33 @@ $(document).ready(function() {
     //This needs to be checked every time a task is added into the calendar
     $(function() {
     $(".CreateButton").click(function() {
-      if (validateForm()){
+      if (validateForm()) {
 
-        taskName = $('#tName').val();
-        dury = $('#dury').val();
-        category = $("#category").val();
-        $('#myModal').modal('hide')
-        $("#list").append("<div class='task-drag'>" + taskName + "</div>");
-        $('#tName').val('');
-        $('#hiddenText').hide();
+          taskName = $('#tName').val();
+          dury = $('#dury').val();
+          category = $("#category").val();
+          $('#myModal').modal('hide')
+          $("#list").append("<div class='task-drag'>" + taskName + "</div>");
+          $('#tName').val('');
+          $('#hiddenText').hide();
 
-        newTask = {name:taskName, duration: dury, category:category};
-        allEvents.push(newTask);
+          newTask = {name: taskName, duration: dury, category: category};
+          allEvents.push(newTask);
+          $.ajax(
+              {
+                  url: "http://localhost:3000/new_task",
+                  async: true,
+                  type: "POST",
+                  data: newTask,
+                  success: function (result) {
+                      console.log("successfully added");
+                  }
+              });
       }
 
       $("#task-list .task-drag" ).each(function() {
 
-        name = "Hey";
+        //name = "Hey";
         name2 = $(this).text(); 
         time = "04:00:00";
         colour = "grey"; 
@@ -275,7 +285,7 @@ $(document).ready(function() {
 
   });
 
-document.load()
+document.load();
 
 
 //Holds the jquery object
