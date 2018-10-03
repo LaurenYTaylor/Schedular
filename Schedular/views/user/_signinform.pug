@@ -3,7 +3,12 @@ h1 #{title}
 p #{error}
 
 div.container
-    form(method='POST', action=action)
-        input.formbox(type='username', placeholder = 'Username' name = 'username' value=username)
-        input.formbox2(type='password', placeholder = 'Password' name = 'password' value=password)
-        button.btn.submitbutton(type='submit' class = 'submitbutton') #{title}
+    div.wrapper
+        form(method='POST', action=action, class = 'center-block')
+            div.flex-container-row
+                input.formbox(type='username', placeholder = 'Username' name = 'username' value=username)
+            div.flex-container-row
+                input.formbox2(type='password', placeholder = 'Password' name = 'password' value=password)
+            div.flex-container-row
+                button.btn.submit-btn(type='submit' class = 'submitbutton') #{title}
+                a(href='/', class='back') Back
