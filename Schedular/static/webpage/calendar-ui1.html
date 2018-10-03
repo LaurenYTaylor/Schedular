@@ -37,6 +37,9 @@
         $("#list").append("<div class='task-drag'>" + $('#tName').val() + "</div>");
         $('#tName').val('');
         $('#hiddenText').hide();
+
+        socket.emit('task_added', 'a task');
+
       }
     
      });

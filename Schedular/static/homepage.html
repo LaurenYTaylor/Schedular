@@ -1,61 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Homepage</title>
     <style>
+        /* Center content start */
+
+        .ctr {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flex-item + .flex-item {
+            margin-left: 2%;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: inherit;
+        }
+        /* Center content end */
+
         h1 {
-            color: #39517A;
+            color: #fff;
             text-align: center;
-            font-size: 500%;
-            font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+            font-size: 900%;
+            letter-spacing: 5px;
+            font-weight: 300;
+            font-family: "Roboto", sans-serif;
+            margin: 2%;
         }
 
         .signinbutton {
-            font: bold 18px "Lucida Sans";
+            padding: 25px 45px;
+            font-size: 1.8rem;
+            font-family: "Roboto", sans-serif;
+            background: #2F5597;
+            border: 0;
+            display: inline-block;
             text-decoration: none;
-            color: #39517A;
-            padding: 10px 10px 10px 10px;
-            border-top: 2px solid #39517A;
-            border-right: 2px solid #39517A;
-            border-bottom: 2px solid #39517A;
-            border-left: 2px solid #39517A;
-            border-radius: 50px 50px;
-            position: fixed;
-            left: 43%;
-         }
-        body {
-            background-image: url("clouds.jpg");
+            color: #fff;
         }
-        .signinbutton:hover {
-            background-color: #d7d7d7;
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            background-image: url("harbour.jpg");
+            overflow: hidden;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-size: cover;
         }
         .signupbutton {
-            font: bold 18px "Lucida Sans";
+            padding: 24px 44px;
+            font-size: 1.8rem;
+            font-family: "Roboto", sans-serif;
+            border: solid 1px #2F5597;
+            display: inline-block;
             text-decoration: none;
-            color: #39517A;
-            padding: 10px 10px 10px 10px;
-            border-top: 2px solid #39517A;
-            border-right: 2px solid #39517A;
-            border-bottom: 2px solid #39517A;
-            border-left: 2px solid #39517A;
-            border-radius: 50px 50px;
-            position:fixed;
-            left: 49%;
+            color: #fff;
+            backround: none;
         }
-        .signupbutton:hover {
+
+        .signupbutton:hover,
+        .signinbutton:hover {
             background-color: #d7d7d7;
+            color: #000;
         }
     </style>
 </head>
+
 <body>
-<h1>Schedular</h1>
-<a href = "/signin" class ="signinbutton">Sign in</a>
-<a href = "/signup" class="signupbutton">Sign up</a>
+<div class="container">
+    <h1>Schedular</h1>
+    <div class="ctr">
+        <div class="flex-item"> <a href="/signin" class="signinbutton">Log in</a> </div>
+        <div class="flex-item"> <a href="/signup" class="signupbutton">Sign up</a> </div>
+    </div>
+</div>
 <script src="/socket.io/socket.io.js"></script>
-<script>const socket = io(); </script>
-
-
-
+<script>
+    const socket = io();
+</script>
 </body>
+
 </html>

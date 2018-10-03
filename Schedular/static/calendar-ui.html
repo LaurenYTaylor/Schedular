@@ -9,8 +9,9 @@
 <script src='../js/jquery.min.js'></script>
 <script src='../js/jquery-ui.min.js'></script>
 <script src='../js/calendar-ui.js'></script>
+<script src='../js/fullcalendar.min.js'></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.6/fullcalendar.min.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.6/fullcalendar.min.js"></script> -->
 <script src="/socket.io/socket.io.js"></script>
 <script>const socket = io(); </script>
 <link href='../css/popover.css' rel='stylesheet' />
@@ -19,9 +20,16 @@
 
 
 <body>
+<div>
+  
 
-  <a href = "/signout" class ="submitbutton">Sign Out</a>
+  <div class="topnav">
+      <div class="title">Schedular</div>
+      <a href = "/signout" class = "signout">Sign Out</a>
 
+  </div>
+  
+  
   <div id='wrap'>
     <div class="tabList">
       <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Ongoing')" >Ongoing</button>
@@ -51,6 +59,7 @@
 
     </div>
     <div id='calendar'></div>
+    
 
 
     <div style='clear:both'></div>
@@ -63,17 +72,23 @@
         <span class="close">&times;</span>
         <h1>Create Task</h1>
         <div class="hiddentext" id="hiddenText" style="display:none">Invalid Name! </div>
-        <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post"> Task Name: <input type="text" name="fname" id="tName">
+        <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post"> 
+        <div class='formtext'>
+        <input type="text" name="fname" id="tName" class='taskform-input' placeholder="Task Name">
+        </div>
         <p></p> 
-
-        Task Duration: <input type ="text" name="duration" id="dury">
+        <div class='formtext'>
+        <input type ="text" name="duration" id="dury" class='taskform-input' placeholder="Task Duration">
+        </div>
         <p></p>
+        <div class="task-dropdown">
         Category: <select name="category" id = "category">
           <option value="University">University</option>
           <option value="Chores">Chores</option>
           <option value="Work">Work</option>
           <option value ="Other"> Other </option> 
         </select>
+        </div>
 
 
         <p><input type="submit" class="CreateButton" id="Create" value="Create new Task "></p>
@@ -84,9 +99,10 @@
 
   </div>
 
-
+</div>
 </body>
 </html>
+
 
 
 
