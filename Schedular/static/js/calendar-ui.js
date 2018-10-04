@@ -2,14 +2,24 @@
 // requires 2 clicks to initialize popover after initial popover
 
 //hide popover when clicking outside of the popover
+
+
+//global variable to determine if user is dragging
+var dragging = false;
+
 $('html').on('click', function (e) {
   if (!(popoverElement).is(e.target) && popoverElement.has(e.target).length === 0 && $('.popover').has(e.target).length === 0)
       popoverElement.popover('hide');
 });
 
+
+
 allEvents = []; 
 
 $(document).ready(function() {
+
+
+
     console.log(window.location.pathname);
 
     var popTemplate = [
@@ -24,6 +34,23 @@ $(document).ready(function() {
         $("#myModal").modal();
      
     });
+
+    $(document).on('mouseenter', '.task-drag', function(){
+      $(this).find("#removeBin").css('visibility', 'visible');
+      
+    });
+
+    $(document).on('mouseleave', '.task-drag', function(){
+      $(this).find("#removeBin").css('visibility', 'hidden');
+      
+    });
+
+    $(document).on('click', '#removeBin', function(){
+      $(this).parent().remove();
+      
+    });
+
+    
     
 
     //This needs to be checked every time a task is added into the calendar
@@ -35,7 +62,7 @@ $(document).ready(function() {
           dury = $('#dury').val();
           category = $("#category").val();
           $('#myModal').modal('hide')
-          $("#list").append("<div class='task-drag'>" + taskName + "</div>");
+          $("#list").append("<div class='task-drag'><label>" + taskName + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>");
           $('#tName').val('');
           $('#hiddenText').hide();
 
@@ -133,7 +160,7 @@ $(document).ready(function() {
 
         // create new task with description
         $("#list").append("<div class='task-drag' id=" + key + "><label>" + description + 
-          "</label> </div>")
+          "</label>" + "<img src='../rubbish-bin.png'  id='removeBin' ></div>")
 
         // data for calendar
         $("#" + key).data('event', {
@@ -194,10 +221,14 @@ $(document).ready(function() {
       },
 
       //When mouse hovers over
-      eventMouseover: function(calEvent, jsEvent) {
-        popoverElement = $(jsEvent.currentTarget);
-        element = calEvent;
+      
+
+      eventDragStart: function( event, jsEvent, ui, view ) { 
+        dragging = true;
       },
+
+     
+
 
       //on EventClick
       eventClick: function (calEvent, jsEvent, view) {
@@ -246,23 +277,32 @@ $(document).ready(function() {
 
 
 
-
+      //function fires when event is finished dragging
       eventDragStop: function( event, jsEvent, ui, view ) {
-
-        var external_events = $( "#task-list" );
+        dragging = false;
+        
+        var external_events = $( ".tabList" );
         var offset = external_events.offset();
         offset.right = external_events.width() + offset.left;
-        offset.bottom = external_events.height() + offset.top;
-    
+        offset.bottom = external_events.height() + external_events.position().top;
+        console.log("external height" + external_events.height());  
+        console.log("offset down:" +offset.bottom)
+        console.log("offset right:" +offset.right);
+        console.log("offset up:" + external_events.position().top);
+        console.log("offset left:" +offset.left);
+        console.log("jsEvent.clientX:" + jsEvent.pageX);
+        console.log("jsEvent.clientY:" + jsEvent.pageY);
+
      
             // Compare
-        if (jsEvent.clientX >= offset.left
-          && jsEvent.clientY >= offset.top
-          && jsEvent.clientX <= offset.right
-          && jsEvent.clientY <= offset .bottom) { 
+        if (jsEvent.pageX >= offset.left
+          && jsEvent.pageY >= external_events.position().top
+          && jsEvent.pageX <= offset.right
+          && jsEvent.pageY <= offset.bottom
+         ) { 
             $('#calendar').fullCalendar('removeEvents', event._id); 
     
-            var el = $( "<div class='task-drag'>" ).appendTo( "#list").text( event.title );
+            var el = $( "<div class='task-drag'><label>"+event.title + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>").appendTo( "#list");
             el.draggable({
               zIndex: 999,
               revert: true, 
@@ -319,6 +359,7 @@ function validateForm() {
 
 
 
+
 $('wrap').on('click','#toggle',function (e) {
 	console.log(element);
   $(".circle-loader").toggleClass("load-complete");
@@ -362,7 +403,9 @@ var isEventOverDiv = function(x, y) {
     if (x >= offset.left
       && y >= offset.top
       && x <= offset.right
-      && y <= offset .bottom) { return true; }
+      && y <= offset .bottom) {
+        alert("Inside");
+        return true; }
     else {
       return false;
     }
