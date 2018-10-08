@@ -22,7 +22,7 @@ h1 {
     font-size: 400%;
     letter-spacing: 5px;
     font-weight: 300;
-    font-family: "Roboto", sans-serif;f
+    font-family: "Roboto", sans-serif;
     margin: 2%;
 }
 
@@ -52,7 +52,7 @@ p {
     border: solid 2px #34362C;
     display: inline-block;
     text-decoration: none;
-    color: #fff;
+    color: #34362c;
     backround: none;
     max-width: 13%;
 }
