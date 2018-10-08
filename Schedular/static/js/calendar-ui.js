@@ -93,6 +93,23 @@ $(document).ready(function() {
 
     $(document).on('click', '#removeBin', function(){
       $(this).parent().remove();
+
+      let description = $(this).parent()[0].innerText;
+      for (var i = 0; i < allEvents.length; i++) {
+          if (description == allEvents[i].name) {
+              allEvents.splice(i, 1);
+          }
+      }
+     $.ajax(
+      {
+        url: "http://localhost:3000/delete_task",
+        async: true,
+        type: "POST",
+        data: {descript: description},
+        success: function (result) {
+        console.log("successfully deleted");
+        }
+      });
     });
 
     $(document).on('click', '.editTask', function(){
@@ -101,7 +118,6 @@ $(document).ready(function() {
      
       $('#editName').val(element.title);
       //Add the rest of the task options eg. duration,priority, Due Date
-     
 
     });
     
@@ -374,8 +390,28 @@ $(document).ready(function() {
       droppable: true, // this allows things to be dropped onto the calendar
       dragRevertDuration: 0,
       drop: function() {
+          let event_name = $(this)[0].innerText;
+          let time = '';
+          let category='';
+          console.log($(this).parent());
+          for (var i = 0; i < allEvents.length; i++) {
+              if (event_name == allEvents[i].name) {
+                  time = "0" + allEvents[i].duration + ":00:00";
+                  category = allEvents[i].category;
+              }
+          }
+          event = {name: event_name, duration: time, cat: category};
+          $.ajax(
+              {
+                  url: "http://localhost:3000/new_cal_task",
+                  async: true,
+                  type: "POST",
+                  data: event,
+                  success: function (result) {
+                      console.log("successfully added calendar task");
+                  }
+              });
         // is the "remove after drop" checkbox checked?
-        
           // if so, remove the element from the "Draggable Events" list
           $(this).remove();
         

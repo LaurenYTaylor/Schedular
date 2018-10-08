@@ -136,35 +136,56 @@ app.get('/signup', redirectToSchedular, function(request, response) {
 app.post('/signup', function(request, response) {
     let email_validation_key = crypto.randomBytes(128);
     email_validation_key = email_validation_key.toString('base64');
-    bcrypt.hash(request.body.password, 10, function(err, hashed_password) {
-        let query_string = "INSERT INTO users (username, email, password, email_validation_key)";
-        query_string += "VALUES ('"+request.body.username+"', '"+ request.body.email+"', '"+hashed_password+"', '"+email_validation_key+"')";
-        pool.connect(function(err, result) {
-            pool.query(query_string);
-            let transporter = nodemailer.createTransport({
-                service: 'hotmail',
-                auth: {
-                    user: 'lauren.y.taylor@hotmail.com',
-                    pass: 'Hotmail.com2'
-                }
-            });
-            let link = 'http://'+'localhost:'+port+"/email_validate"+"?email="+request.body.email+"&id="+email_validation_key;
-            let mailOptions = {
-                from: 'lauren.y.taylor@hotmail.com',
-                to: request.body.email,
-                subject: 'Schedular Validate Email',
-                text: 'Please go to the following link to validate your email: '+link
-            };
-            transporter.sendMail(mailOptions, function(error, info) {
-                if(error) {
-                    console.log(error);
-                } else {
-                    console.log("email sent to"+request.body.email);
-                }
-            });
-            response.redirect("/validate_email");
+    let username_check_query = "SELECT * FROM users WHERE username='"+request.body.username+"';";
+    let email_check_query = "SELECT * FROM users WHERE email='"+request.body.email+"';";
+    pool.connect(function(err, client) {
+        pool.query(username_check_query, function (err, result) {
+            if (result.rows.length > 0) {
+                response.render(__dirname + '/views/user/sign_up.pug', {
+                    'error': 'This username has been taken. Please try again.'
+                });
+            } else {
+                pool.query(email_check_query, function(err, result) {
+                    if(result.rows.length>0) {
+                        response.render(__dirname+'/views/user/sign_up.pug', {
+                            'error': 'An account already exists with this email. Please try again.'
+                        });
+                    } else {
+                        bcrypt.hash(request.body.password, 10, function(err, hashed_password) {
+                            let query_string = "INSERT INTO users (username, email, password, email_validation_key)";
+                            query_string += "VALUES ('"+request.body.username+"', '"+ request.body.email+"', '"+hashed_password+"', '"+email_validation_key+"')";
+                                pool.query(query_string, function(err, result) {
+                                    let transporter = nodemailer.createTransport({
+                                        service: 'hotmail',
+                                        auth: {
+                                            user: 'lauren.y.taylor@hotmail.com',
+                                            pass: 'Hotmail.com2'
+                                        }
+                                    });
+                                    let link = 'http://'+'localhost:'+port+"/email_validate"+"?email="+request.body.email+"&id="+email_validation_key;
+                                    let mailOptions = {
+                                        from: 'lauren.y.taylor@hotmail.com',
+                                        to: request.body.email,
+                                        subject: 'Schedular Validate Email',
+                                        text: 'Please go to the following link to validate your email: '+link
+                                    };
+                                    transporter.sendMail(mailOptions, function(error, info) {
+                                        if(error) {
+                                            console.log(error);
+                                        } else {
+                                            console.log("email sent to "+request.body.email);
+                                        }
+                                    });
+                                    response.redirect("/validate_email");
+                            });
+                        });
+                    }
+                });
+            }
+            client.release();
         });
     });
+
 });
 
 app.get('/email_validate', function(request, response) {
@@ -172,15 +193,19 @@ app.get('/email_validate', function(request, response) {
     let email = url.email;
     let validation_key = url.id;
     let query_string = "SELECT email_validation_key from users where email='"+email+"';";
-    pool.connect(function(err, result) {
+    pool.connect(function(err, client) {
         pool.query(query_string, function(err, result) {
             validation_key = validation_key.trim().replace(/ /g, "+");
             if(result.rows[0].email_validation_key == validation_key) {
-                let user_id_find = "SELECT * from users where email='"+email+"';";
+                let user_id_find = "SELECT * FROM users WHERE email='"+email+"';";
                 pool.query(user_id_find, function(err, user_info_result) {
-                    authenticate(user_info_result.rows[0].username, user_info_result.rows[0].password, true, function(err, jwt) {
+                    authenticate(user_info_result.rows[0].username, user_info_result.rows[0].password,
+                        true, function(err, jwt) {
                         if (jwt) {
                             response.cookie('jwt', jwt, {maxAge: 864000000});
+                            let validated_true_query = "UPDATE users SET validated='true' WHERE user_id="+
+                                user_info_result.rows[0].user_id+";";
+                            pool.query(validated_true_query);
                             response.redirect('/schedular');
                         } else {
                             console.log("JWT didn't work :(");
@@ -192,7 +217,7 @@ app.get('/email_validate', function(request, response) {
                 response.redirect('/validate_email');
             }
         });
-
+        client.release();
     });
 });
 
@@ -240,7 +265,23 @@ app.post('/new_task', function(request, response) {
     });
 });
 
+app.post('/delete_task', function(request, response) {
+    let query_string = "DELETE FROM todo_item WHERE user_id="+request.user.id+" AND description='"+request.body.descript+"';";
+     pool.connect(function(err, client) {
+        pool.query(query_string, function(err, result) {
+            client.release();
+        });
+    });
+});
 
+app.post('/new_cal_task', function (request, response) {
+    let query_string = "INSERT INTO calendar_item (user_id, num_hours, category, completed, description) ";
+    let item = request.body;
+    let description=item.name;
+    let category=item.category;
+    let numHours=item.duration;
+    console.log(item);
+});
 
 http.listen(port, () => console.log("Listening on port " + port));
 
