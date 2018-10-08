@@ -47,6 +47,22 @@ $(document).ready(function() {
 
     $(document).on('click', '#removeBin', function(){
       $(this).parent().remove();
+      let description = $(this).parent()[0].innerText;
+      for (var i = 0; i < allEvents.length; i++) {
+          if (description == allEvents[i].name) {
+              allEvents.splice(i, 1);
+          }
+      }
+     $.ajax(
+        {
+            url: "http://localhost:3000/delete_task",
+            async: true,
+            type: "POST",
+            data: {descript: description},
+            success: function (result) {
+                console.log("successfully deleted");
+            }
+        });
       
     });
 

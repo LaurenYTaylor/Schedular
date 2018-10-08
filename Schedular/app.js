@@ -240,7 +240,14 @@ app.post('/new_task', function(request, response) {
     });
 });
 
-
+app.post('/delete_task', function(request, response) {
+    let query_string = "DELETE FROM todo_item WHERE user_id="+request.user.id+" AND description='"+request.body.descript+"';";
+     pool.connect(function(err, client) {
+        pool.query(query_string, function(err, result) {
+            client.release();
+        });
+    });
+});
 
 http.listen(port, () => console.log("Listening on port " + port));
 
