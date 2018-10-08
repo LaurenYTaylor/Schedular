@@ -4,26 +4,40 @@ Styling the popover and the added animation to the task completion
   
 */
 .popover {
-    padding: 30px;
-    text-align: center;
+    height: 70px;
+    width: 250px;
+    position: relative;
+    padding: 10px;
+    
   }
   
   .popover-content {
     font-size: 30px;
     font-weight: bold;
+    
+    
+  }
+
+  .popover label {
+    position: absolute;
+
+  }
+
+  .popOptions {
+    display: flex;
+    float: right;
   }
   
+  /* 2.5/7= 0.357 */
   .circle-loader {
-    margin-bottom: 3.5em;
+    
     border: 1px solid rgba(0, 0, 0, 0.2);
-    border-left-color: #5cb85c;
-    animation: loader-spin 1.2s infinite linear;
     position: relative;
-    display: inline-block;
+    
     vertical-align: top;
     border-radius: 50%;
-    width: 7em;
-    height: 7em;
+    width: 2.5em;
+    height: 2.5em;
   }
   
   .load-complete {
@@ -31,6 +45,20 @@ Styling the popover and the added animation to the task completion
     animation: none;
     border-color: #5cb85c;
     transition: border 500ms ease-out;
+  }
+  
+  .checkmarkoverlay {
+    opacity: 0.5;
+    height: 1.25em;
+    width: 0.625em;
+    transform-origin: left top;
+    border-right: 3px solid rgba(0, 0, 0, 0.2);
+    border-top: 3px solid rgba(0, 0, 0, 0.2);
+    content: "";
+    left: 0.625em;
+    top: 1.25em;
+    position: absolute;
+    transform: scaleX(-1) rotate(135deg);
   }
   
   .checkmark {
@@ -44,14 +72,14 @@ Styling the popover and the added animation to the task completion
   }
   .checkmark:after {
     opacity: 1;
-    height: 3.5em;
-    width: 1.75em;
+    height: 1.25em;
+    width: 0.625em;
     transform-origin: left top;
     border-right: 3px solid #5cb85c;
     border-top: 3px solid #5cb85c;
     content: "";
-    left: 1.75em;
-    top: 3.5em;
+    left: 0.625em;
+    top: 1.25em;
     position: absolute;
   }
   
@@ -71,28 +99,20 @@ Styling the popover and the added animation to the task completion
     }
     20% {
       height: 0;
-      width: 1.75em;
+      width: 0.625em;
       opacity: 1;
     }
     40% {
-      height: 3.5em;
-      width: 1.75em;
+      height: 1.25em;
+      width: 0.625em;
       opacity: 1;
     }
     100% {
-      height: 3.5em;
-      width: 1.75em;
+      height: 1.25em;
+      width: 0.625em;
       opacity: 1;
     }
   }
-  button:focus {
-    outline: none;
-  }
-  
-  button {
-    background: transparent;
-  }
-  
   #showCompleted {
     display:none;
     color: #5cb85c;
