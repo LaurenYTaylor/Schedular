@@ -147,6 +147,8 @@ $(document).ready(function() {
           $('#tName').val('');
           $('#hiddenText').hide();
 
+          alert(priority);
+
           newTask = {name: taskName, duration: dury, category: category, priority: priority, dueDate: dueDate};
           allEvents.push(newTask);
           $.ajax(
