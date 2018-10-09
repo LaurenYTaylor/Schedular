@@ -140,12 +140,14 @@ $(document).ready(function() {
           taskName = $('#tName').val();
           dury = $('#dury').val();
           category = $("#category").val();
+          priority = $('#priority').val();
+          dueDate = $('#dueDate').val();
           $('#myModal').modal('hide')
           $("#list").append("<div class='task-drag'><label>" + taskName + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>");
           $('#tName').val('');
           $('#hiddenText').hide();
 
-          newTask = {name: taskName, duration: dury, category: category};
+          newTask = {name: taskName, duration: dury, category: category, priority: priority, dueDate: dueDate};
           allEvents.push(newTask);
           $.ajax(
               {
