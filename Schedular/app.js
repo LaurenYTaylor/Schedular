@@ -244,6 +244,7 @@ app.get('/signout', function(request, response) {
 app.get('/tasks', function(request, response){
     let query = "SELECT description FROM todo_item WHERE user_id="+request.user.id;
 
+
     pool.query(query, function (err, result) {
         let tasks = (result.rows);
         response.send(tasks);
@@ -252,12 +253,14 @@ app.get('/tasks', function(request, response){
 });
 
 app.post('/new_task', function(request, response) {
-    let query_string = "INSERT INTO todo_item (user_id, num_hours, category, completed, description) ";
+    let query_string = "INSERT INTO todo_item (user_id, num_hours, category, completed, description, due_date, priority) ";
     let item = request.body;
     let description=item.name;
     let category=item.category;
     let numHours=item.duration;
-    query_string += "VALUES ("+request.user.id+", "+ numHours+", '"+category+"', 'false', '"+description+"');";
+    let dueDate = item.dueDate;
+    let priority = item.priority;
+    query_string += "VALUES ("+request.user.id+", "+ numHours+", '"+category+"', 'false', '"+description+"', '" + dueDate + "', '" + priority +"');";
     pool.connect(function(err, client) {
       pool.query(query_string, function(err, result) {
         client.release();
