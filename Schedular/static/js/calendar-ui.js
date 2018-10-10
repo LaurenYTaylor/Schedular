@@ -224,7 +224,7 @@ $(document).ready(function() {
 
   //Activate textfield when modal is shown//
   $('#myModal').on('shown.bs.modal', function () {
-  $('#tName').focus();
+    $('#tName').focus();
   });
 
   $(function() {
@@ -330,6 +330,11 @@ $(document).ready(function() {
       $('#sublist').append($('#subtask').val() + "<input type='checkbox'><br>");
 
   })
+  // toggle subtask list display
+  $(document).on('click', '#tasklabel', function(){
+    $('#sublist').toggleClass('hidden')
+    
+  })
 
     /* initialize the external events
     -----------------------------------------------------------------*/
@@ -342,10 +347,10 @@ $(document).ready(function() {
         description = description.split('"')[3]
 
         // create new task with description
-        $("#list").append("<div class='task-drag' id=" + key + "><label>" + description + 
-          "</label>" + "<img src='../rubbish-bin.png'  id='removeBin' >" +
-          "<div id='sublist'></div><input type=text id='subtask' placeHolder='Subtask'>" + 
-          "<input type='submit' id='addSub' value='add'></div>")
+        $("#list").append("<div class='task-drag' id=" + key + "><label id='tasklabel'>" + description + 
+          "</label>" + "<img src='../rubbish-bin.png'  id='removeBin' ><div id='sublist' class='hidden'>"+
+          "<input type=text id='subtask' placeHolder='Subtask'>" + 
+          "<input type='submit' id='addSub' value='add'></div></div>")
 
         // data for calendar
         $("#" + key).data('event', {
