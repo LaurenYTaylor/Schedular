@@ -242,11 +242,12 @@ app.get('/signout', function(request, response) {
 
 // send task data
 app.get('/tasks', function(request, response){
-    let query = "SELECT description FROM todo_item WHERE user_id="+request.user.id;
+    let query = "SELECT * FROM todo_item WHERE user_id="+request.user.id;
 
 
     pool.query(query, function (err, result) {
         let tasks = (result.rows);
+        console.log(tasks);
         response.send(tasks);
     })
     
