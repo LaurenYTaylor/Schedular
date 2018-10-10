@@ -7,9 +7,23 @@
 //global variable to determine if user is dragging
 var dragging = false;
 
+//e.target -object that is clicked on
+//popoverElement - event that contains the popover
 $('html').on('click', function (e) {
-  if (!(popoverElement).is(e.target) && popoverElement.has(e.target).length === 0 && $('.popover').has(e.target).length === 0)
-      popoverElement.popover('hide');
+  console.log(e.target);
+  console.log(popoverElement);
+
+
+
+  //if object clicked is not the popover object hide the popover
+  //if the popover itself is clicked on do not close the popover
+  if (!(popoverElement).is(e.target) &&
+      popoverElement.has(e.target).length === 0 &&
+      $('.popover').has(e.target).length === 0){
+        popoverElement.popover('hide'); 
+  }
+
+  
 });
 
 
@@ -19,21 +33,53 @@ allEvents = [];
 $(document).ready(function() {
 
 
+  $(function(){
+    $('#datetimepicker1').datetimepicker();
+    
+    
+  });
+  
+  $("#datetimepicker1").on("dp.change", function() { 
+    $("#datetimepicker1").data("DateTimePicker").hide(); 
+  });
 
-    console.log(window.location.pathname);
+
+
+
+    // var date_input=$('input[name="date"]'); //our date input has the name "date"
+    // var options={
+    //   format: 'mm/dd/yyyy',
+    //   todayHighlight: true,
+    //   autoclose: true,
+    // };
+    // date_input.datepicker(options);
 
     var popTemplate = [
       '<div tabindex="0" class="popover" style="max-width:600px;">',
       '<div class="arrow"></div>',
       '<div class="popover-content"></div>',
-       '<div id="toggle" class="circle-loader" onclick="checkTask()"><div class="checkmark draw" onclick="myFunction()"></div></div><div id="showCompleted">Completed</div>',
-      '</div>'].join('');
+      '<label>you</label>',
+      '<span class="popOptions">',
+      '<button class="fileContainer">',
+      'Add Files',
+      '<input type="file"/>',
+      '</button>',
+      '<button class="editTask">Edit</button>',
+      '<div class="circle-loader">',
+      '<div class = "checkmarkoverlay"></div>',
+      '<div class="checkmark draw"></div>',
+      '</div></span>',
+      //  '<div id="toggle" class="circle-loader" onclick="checkTask()"><div class="checkmark draw" ></div></div><div id="showCompleted">Completed</div>',
+       '</div>'].join('');
 
     //Modal start appears when adding task//
     $("#add").click(function(){
         $("#myModal").modal();
      
     });
+
+
+
 
     $(document).on('mouseenter', '.task-drag', function(){
       $(this).find("#removeBin").css('visibility', 'visible');
@@ -47,6 +93,7 @@ $(document).ready(function() {
 
     $(document).on('click', '#removeBin', function(){
       $(this).parent().remove();
+
       let description = $(this).parent()[0].innerText;
       for (var i = 0; i < allEvents.length; i++) {
           if (description == allEvents[i].name) {
@@ -54,16 +101,32 @@ $(document).ready(function() {
           }
       }
      $.ajax(
-        {
-            url: "http://localhost:3000/delete_task",
-            async: true,
-            type: "POST",
-            data: {descript: description},
-            success: function (result) {
-                console.log("successfully deleted");
-            }
-        });
-      
+      {
+        url: "http://localhost:3000/delete_task",
+        async: true,
+        type: "POST",
+        data: {descript: description},
+        success: function (result) {
+        console.log("successfully deleted");
+        }
+      });
+    });
+
+    $(document).on('click', '.editTask', function(){
+      $('.popover').popover('hide');
+      $("#editModal").modal();
+     
+      $('#editName').val(element.title);
+      //Add the rest of the task options eg. duration,priority, Due Date
+
+    });
+    
+
+
+
+    $(document).on('click', '.circle-loader', function(){
+      $(this).toggleClass('load-complete');
+      $(this).find(".checkmark").toggle('fast',taskCompleted());
     });
 
     
@@ -77,12 +140,16 @@ $(document).ready(function() {
           taskName = $('#tName').val();
           dury = $('#dury').val();
           category = $("#category").val();
+          priority = $('#priority').val();
+          dueDate = $('#dueDate').val();
           $('#myModal').modal('hide')
           $("#list").append("<div class='task-drag'><label>" + taskName + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>");
           $('#tName').val('');
           $('#hiddenText').hide();
 
-          newTask = {name: taskName, duration: dury, category: category};
+          alert(priority);
+
+          newTask = {name: taskName, duration: dury, category: category, priority: priority, dueDate: dueDate};
           allEvents.push(newTask);
           $.ajax(
               {
@@ -147,6 +214,104 @@ $(document).ready(function() {
 
       });
       return false;
+      // validate and process form here
+    });
+  });
+
+
+  //Close modal when close button is pressed//
+  $(".close").click(function(){
+        $("#myModal").modal("hide");
+  });
+
+  //Activate textfield when modal is shown//
+  $('#myModal').on('shown.bs.modal', function () {
+  $('#tName').focus();
+  });
+
+  $(function() {
+    $(".editButton").click(function() {
+      element.title = $('#editName').val();
+      console.log(element.title);
+      $('#editModal').modal("hide");
+      $('#calendar').fullCalendar('updateEvent', element);
+    
+
+      // if (validateForm()) {
+
+      //     taskName = $('#tName').val();
+      //     dury = $('#dury').val();
+      //     category = $("#category").val();
+      //     $('#myModal').modal('hide')
+      //     $("#list").append("<div class='task-drag'><label>" + taskName + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>");
+      //     $('#tName').val('');
+      //     $('#hiddenText').hide();
+
+      //     newTask = {name: taskName, duration: dury, category: category};
+      //     allEvents.push(newTask);
+      //     $.ajax(
+      //         {
+      //             url: "http://localhost:3000/new_task",
+      //             async: true,
+      //             type: "POST",
+      //             data: newTask,
+      //             success: function (result) {
+      //                 console.log("successfully added");
+      //             }
+      //         });
+      // }
+
+      // $("#task-list .task-drag" ).each(function() {
+
+      //   //name = "Hey";
+      //   name2 = $(this).text(); 
+      //   time = "04:00:00";
+      //   colour = "grey"; 
+
+      //   var arrayLength = allEvents.length;
+      //   for (var i = 0; i < arrayLength; i++) {
+      //     if(name2 == allEvents[i].name){
+      //      time = "0"+allEvents[i].duration + ":00:00";
+      //      category = allEvents[i].category;
+
+      //      if (category == "University"){
+      //       colour = "Blue";
+      //      }
+      //      else if(category == "Chores"){
+      //       colour = "Yellow";
+      //      }
+      //      else if (category == "Work"){
+      //       colour = "Black";
+      //      }
+
+      //      else{
+      //       colour = "grey";
+      //      }
+          
+      //     }
+
+      //   }
+
+
+      //   // store data so the calendar knows to render an event upon drop
+      //   $(this).data('event', {
+      //     title: name2, // use the element's text as the event title
+      //     stick: true, // maintain when user navigates (see docs on the renderEvent method)
+      //     color: colour,
+      //     description: 'This is a cool event',
+      //     complete: false,
+      //     duration: time
+      //   });
+
+      //   // make the event draggable using jQuery UI
+      //   $(this).draggable({
+      //     zIndex: 999,
+      //     revert: true,      // will cause the event to go back to its
+      //     revertDuration: 0  //  original position after the drag
+      //   });
+
+      // });
+      // return false;
       // validate and process form here
     });
   });
@@ -274,6 +439,8 @@ $(document).ready(function() {
 
       eventDragStart: function( event, jsEvent, ui, view ) { 
         dragging = true;
+        $('.popover').popover('hide');
+
       },
 
      
@@ -284,16 +451,19 @@ $(document).ready(function() {
         //closePopovers();
         popoverElement = $(jsEvent.currentTarget);
         element = calEvent;
+        
+     
       },
 
       /*Triggered when an event is being rendered*/
       eventRender: function(event,jsEvent){
         if(!event.complete){
           //popover properties
+
           jsEvent.popover({
             
             html: true,
-            content: event.title,
+            content: popTemplate,
             template: popTemplate,
             animation: true,
             container:'body',
@@ -409,28 +579,31 @@ function validateForm() {
 
 
 
-$('wrap').on('click','#toggle',function (e) {
-	console.log(element);
-  $(".circle-loader").toggleClass("load-complete");
-  $(".checkmark").toggle();
-  $("#showCompleted").slideToggle('slow', 	taskCompleted());
-});
+// $('wrap').on('click','#toggle',function (e) {
+//   console.log(element);
+//   alert('yes');
+//   $(".circle-loader").toggleClass("load-complete");
+//   $(".checkmark").toggle();
+//   $("#showCompleted").slideToggle('slow', 	taskCompleted());
+// });
 
 //Mark the task as complete
-function checkTask(){
-  $(".circle-loader").toggleClass("load-complete");
-  $(".checkmark").toggle();
-  $("#showCompleted").slideToggle('fast',taskCompleted());
-}
+// function checkTask(){
+//   $(".circle-loader").toggleClass("load-complete");
+//   $(".checkmark").toggle();
+//   $("#showCompleted").slideToggle('fast',taskCompleted());
+// }
 //Change properties of the event when the task is completed
 function taskCompleted() {
   setTimeout(function() {
     $('.popover').not(this).popover('hide');
     popoverElement.popover('destroy');
-  }, 1200);
+  }, 800);
+
     element.editable = false;
     element.complete = true;
     popoverElement.fadeTo('slow', 0.5);
+    $('#calendar').fullCalendar('updateEvent', element);
 }
 
 function closePopovers() {

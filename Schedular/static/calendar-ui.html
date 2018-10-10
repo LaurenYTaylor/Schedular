@@ -4,17 +4,21 @@
 <meta charset='utf-8' />
 <link href='../css/fullcalendar.css' rel='stylesheet' />
 <link href='../css/fullcalendar.print.min.css' rel='stylesheet' media='print' />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
 <script src='../js/moment.min.js'></script>
 <script src='../js/jquery.min.js'></script>
 <script src='../js/jquery-ui.min.js'></script>
 <script src='../js/calendar-ui.js'></script>
 <script src='../js/fullcalendar.min.js'></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src= "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href='../css/popover.css' rel='stylesheet' />
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.6/fullcalendar.min.js"></script> -->
 <script src="/socket.io/socket.io.js"></script>
 <script>const socket = io(); </script>
-<link href='../css/popover.css' rel='stylesheet' />
+
 <!-- <script src='../static/js/fullcalendar.min.js'></script> -->
 
   <link href='../css/header.css' rel='stylesheet' />
@@ -74,26 +78,104 @@
         <span class="close">&times;</span>
         <h1>Create Task</h1>
         <div class="hiddentext" id="hiddenText" style="display:none">Invalid Name! </div>
-        <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post"> 
-        <div class='formtext'>
-        <input type="text" name="fname" id="tName" class='taskform-input' placeholder="Task Name">
-        </div>
-        <p></p> 
-        <div class='formtext'>
-        <input type ="text" name="duration" id="dury" class='taskform-input' placeholder="Task Duration">
-        </div>
-        <p></p>
-        <div class="task-dropdown">
-        Category: <select name="category" id = "category">
-          <option value="University">University</option>
-          <option value="Chores">Chores</option>
-          <option value="Work">Work</option>
-          <option value ="Other"> Other </option> 
-        </select>
-        </div>
+          <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post"> 
+            <div class='formtext'>
+              <input type="text" name="fname" id="tName" class='taskform-input' placeholder="Task Name">
+            </div>
+            <p></p> 
+            <div class='formtext'>
+              <input type ="text" name="duration" id="dury" class='taskform-input' placeholder="Task Duration">
+            </div>
+            <p></p>
+            <div class="task-dropdown">
+              Category: <select name="category" id = "category">
+                <option value="University">University</option>
+                <option value="Chores">Chores</option>
+                <option value="Work">Work</option>
+                <option value ="Other"> Other </option> 
+              </select>
+            </div>
+            <p></p>
+            <div class="task-dropdown">
+              Priority: <select name="priority" id = "priority">
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </select>
+            </div>
+            <p></p>
+            <div class="formtext">
+                Due Date:
+                <br/>
+                
+                <div class='input-group date' style="text-align: center;" id='datetimepicker1' >
+                  <input type='text' class="form-control"  id='dueDate'/>
+                  <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
+               </div>
+               
+              
+             
+            </div>
 
 
-        <p><input type="submit" class="CreateButton" id="Create" value="Create new Task "></p>
+            <p><input type="submit" class="CreateButton" id="Create" value="Create new Task "></p>
+        </form>
+      </div>
+
+    </div>
+
+    <div id="editModal" class="modal" role="dialog">
+
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h1>Edit Task</h1>
+        <div class="hiddentext" id="hiddenText" style="display:none">Invalid Name! </div>
+          <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post"> 
+            <div class='formtext'>
+              <input type="text" name="fname" id="editName" class='taskform-input'>
+            </div>
+            <p></p> 
+            <div class='formtext'>
+              <input type ="text" name="duration" id="dury" class='taskform-input' placeholder="Task Duration">
+            </div>
+            <p></p>
+            <div class="task-dropdown">
+              Category: <select name="category" id = "category">
+                <option value="University">University</option>
+                <option value="Chores">Chores</option>
+                <option value="Work">Work</option>
+                <option value ="Other"> Other </option> 
+              </select>
+            </div>
+            <p></p>
+            <div class="task-dropdown">
+              Priority: <select name="priority" id = "priority">
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </select>
+            </div>
+            <p></p>
+            <div class="formtext">
+                Due Date:
+                <br/>
+                
+                <div class='input-group date' style="text-align: center;" id='datetimepicker1' >
+                  <input type='text' class="form-control"  />
+                  <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
+               </div>
+               
+              
+             
+            </div>
+
+
+            <p><input type="submit" class="editButton" id="Create" value="Edit Task "></p>
         </form>
       </div>
 
