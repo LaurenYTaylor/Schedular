@@ -1477,57 +1477,7 @@ body {
             position: fixed;
         }
 
-/* Header
---------------------------------------------------------------------------------------*/
-/*Style the header */
 
-.topnav {
-  background-color: #34362C;
-  padding:10px;
-  margin-bottom: 50px;
-  overflow: hidden;
-
-}
-.title {
-  color: #fff;
-  display: inline;
-  text-align: center;
-  position: fixed;
-}
-
-.signout-btn {
-  float:right;
-  color: #fff;
-}
-
-.signout-btn:hover {
-  background-color: #fff;
-}
-
-.signout {
-  color: #fff;
-  padding-left: 1100px;
-}
-
-.signout:hover {
-  color: #fff;
-}
-
-.rightalign {
-  text-align: right;
-}
-
-.background {
-  background-color: #e1e9e8;
-}
-
-.calendar-background {
-  background-color: #fff;
-}
-
-
-/* Header
---------------------------------------------------------------------------------------*/
 /*Style the header */
 
 .newtaskform {
