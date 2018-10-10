@@ -584,7 +584,7 @@ TODO: more distinction between this file and common.css
 .fc-unthemed .fc-divider,
 .fc-unthemed .fc-popover .fc-header,
 .fc-unthemed .fc-list-heading td {
-  background: #eee; }
+  background: #ddd; }
 
 .fc-unthemed .fc-popover .fc-header .fc-close {
   color: #666; }
@@ -1267,7 +1267,7 @@ be a descendant of the grid when it is being dragged.
 
 .fc-unthemed .fc-list-empty {
   /* theme will provide own background */
-  background-color: #eee; }
+  background-color: #ddd; }
 
 
   /* The Modal (background)
@@ -1337,8 +1337,8 @@ be a descendant of the grid when it is being dragged.
   height: 550px;
 
 
-  border: 1px solid #ccc;
-  background: #eee;
+  border: 0px solid #ccc;
+  background: #ddd;
   text-align: left;
 
 
@@ -1375,13 +1375,13 @@ be a descendant of the grid when it is being dragged.
 
 /* Style the buttons inside the tab */
 .tablinks {
-  background-color: #ccc;
+  background-color: #444444;
   color: white;
   float: left;
   border: none;
   outline: none;
   cursor: pointer;
-  padding: 14px 16px;
+  padding: 19px 20px;
   font-size: 11px;
   width: 50%;
   /* background-color: inherit;
@@ -1392,17 +1392,20 @@ be a descendant of the grid when it is being dragged.
   outline: none;
   cursor: pointer;
   padding: 14px 16px;
-  transition: 0.3s; */
+  */
+    transition: 0.3s;
 }
 
 /* Change background color of buttons on hover */
 .tablinks:hover {
-  background-color: #ddd;
+  background-color: #eee;
+    color: black;
 }
 
 /* Create an active/current tablink class */
 .tablinks.active {
   background-color: #ddd;
+    color: black;
 }
 
 /* Style the tab content */
@@ -1410,7 +1413,7 @@ be a descendant of the grid when it is being dragged.
 
 
   width: 100%;
-  background: #eee;
+  background: #ddd;
   text-align: left;
   padding: 50px 5px;
 
