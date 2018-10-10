@@ -399,18 +399,31 @@ $(document).ready(function() {
       editable: true,
       droppable: true, // this allows things to be dropped onto the calendar
       dragRevertDuration: 0,
-      drop: function() {
+      drop: function(date) {
+
+          console.log(date.format());
+          var start = date.format();
+          var defaultDuration = moment.duration($('#calendar').fullCalendar('option','defaultTimedEventDuration'));
+          var end = date.clone().add(defaultDuration);
+          console.log(end.format());
+
           let event_name = $(this)[0].innerText;
           let time = '';
           let category='';
-          console.log($(this).parent());
+          let startTime='';
+          let endTime='';
           for (var i = 0; i < allEvents.length; i++) {
               if (event_name == allEvents[i].name) {
-                  time = "0" + allEvents[i].duration + ":00:00";
+                  console.log(allEvents[i]);
+                  time = allEvents[i].duration;
                   category = allEvents[i].category;
+                  startTime = allEvents[i].start;
+                  endTime=allEvents[i].end;
+
               }
           }
-          event = {name: event_name, duration: time, cat: category};
+          let event = {name: event_name, duration: time, cat: category, start: startTime, end: endTime};
+          console.log(event);
           $.ajax(
               {
                   url: "http://localhost:3000/new_cal_task",

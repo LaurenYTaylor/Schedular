@@ -13,9 +13,9 @@ const nodemailer = require('nodemailer');
 
 const pool = new pg.Pool({
     port: 5432,
-    host: 'lauren-server.postgres.database.azure.com',
-    user: 'admin_schedular@lauren-server',
-    database: 'schedular',
+    host: 'sched-server.postgres.database.azure.com',
+    user: 'admin_schedular@sched-server',
+    database: 'schedular_db',
     password: 'Password1'
 });
 const secret_key = "VQPBypb1-sGPPm4ol-ujCXE6rc-8v7dtEf5-fCragJdu-tenmf7vR-U2AsEET4-PU6Bs8QG";
@@ -283,6 +283,8 @@ app.post('/new_cal_task', function (request, response) {
     let description=item.name;
     let category=item.category;
     let numHours=item.duration;
+    let start=item.start;
+    let end=item.end;
     console.log(item);
 });
 
