@@ -1383,6 +1383,10 @@ be a descendant of the grid when it is being dragged.
   color: white;
 }
 
+#subtask {
+  color: black;
+}
+
 #removeBin {
   position: absolute;
   vertical-align: middle;

@@ -79,8 +79,6 @@ $(document).ready(function() {
     });
 
 
-
-
     $(document).on('mouseenter', '.task-drag', function(){
       $(this).find("#removeBin").css('visibility', 'visible');
       
@@ -143,11 +141,12 @@ $(document).ready(function() {
           priority = $('#priority').val();
           dueDate = $('#dueDate').val();
           $('#myModal').modal('hide')
-          $("#list").append("<div class='task-drag'><label>" + taskName + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>");
+          $("#list").append("<div class='task-drag'><label>" + taskName + 
+            "</label><img src='../rubbish-bin.png'  id='removeBin' >" +
+          "<div id='sublist'></div><input type=text id='subtask' placeHolder='Subtask'>" + 
+          "<input type='submit' id='addSub' value='add'></div>");
           $('#tName').val('');
           $('#hiddenText').hide();
-
-          alert(priority);
 
           newTask = {name: taskName, duration: dury, category: category, priority: priority, dueDate: dueDate};
           allEvents.push(newTask);
@@ -217,7 +216,6 @@ $(document).ready(function() {
       // validate and process form here
     });
   });
-
 
   //Close modal when close button is pressed//
   $(".close").click(function(){
@@ -324,10 +322,14 @@ $(document).ready(function() {
 
   //Activate textfield when modal is shown//
   $('#myModal').on('shown.bs.modal', function () {
-  $('#tName').focus();
+    $('#tName').focus();
   });
 
+  $(document).on('click', '#addSub', function(){
+      //alert($('#subtask').val());
+      $('#sublist').append($('#subtask').val() + "<input type='checkbox'><br>");
 
+  })
 
     /* initialize the external events
     -----------------------------------------------------------------*/
@@ -341,7 +343,9 @@ $(document).ready(function() {
 
         // create new task with description
         $("#list").append("<div class='task-drag' id=" + key + "><label>" + description + 
-          "</label>" + "<img src='../rubbish-bin.png'  id='removeBin' ></div>")
+          "</label>" + "<img src='../rubbish-bin.png'  id='removeBin' >" +
+          "<div id='sublist'></div><input type=text id='subtask' placeHolder='Subtask'>" + 
+          "<input type='submit' id='addSub' value='add'></div>")
 
         // data for calendar
         $("#" + key).data('event', {
@@ -379,6 +383,8 @@ $(document).ready(function() {
       });
 
     });
+
+
 
     
     /* initialize the calendar
@@ -508,7 +514,9 @@ $(document).ready(function() {
          ) { 
             $('#calendar').fullCalendar('removeEvents', event._id); 
     
-            var el = $( "<div class='task-drag'><label>"+event.title + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>").appendTo( "#list");
+            var el = $( "<div class='task-drag'><label>"+event.title + "</label><img src='../rubbish-bin.png'  id='removeBin' >" +
+          "<div id='sublist'></div><input type=text id='subtask' placeHolder='Subtask'>" + 
+          "<input type='submit' id='addSub' value='add'></div>").appendTo( "#list");
             el.draggable({
               zIndex: 999,
               revert: true, 
@@ -635,5 +643,7 @@ var isEventOverDiv = function(x, y) {
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
   }
+
+
 
   
