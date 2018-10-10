@@ -1,10 +1,9 @@
 
 .title {
-
-	font-family: "Roboto", sans-serif;
-
+	font-family: "Helvetica Neue", sans-serif;
 	color: white;
-	text-align: center;
+	position: absolute;
+    text-align: center;
 	font-size: 40px;}
 }
 
@@ -14,7 +13,10 @@ body {
 }
 
 .topnav {
+	padding:10px;
 	background-color: #22385b;
+	margin-bottom: 20px;
+	overflow: hidden;
 }
 
 .topnav a {
