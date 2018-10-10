@@ -333,17 +333,20 @@ $(document).ready(function() {
     -----------------------------------------------------------------*/
     // get tasks in database and add to task list
     $.getJSON('/tasks', function(data){
-
       // get each task description in database
       $.each(data, function(key, val){
-        var description = (JSON.stringify(val))
-        description = description.split('"')[3]
-
+        if(val.in_calendar==true) {
+            return;
+        }
+        console.log(val);
+        let description = val.description;
+        let newTask = {name: description, duration: val.num_hours, category: val.category, priority: val.priority, dueDate: val.due_date};
+        allEvents.push(newTask);
         // create new task with description
         $("#list").append("<div class='task-drag' id=" + key + "><label>" + description + 
           "</label>" + "<img src='../rubbish-bin.png'  id='removeBin' ></div>")
 
-        // data for calendar
+          // data for calendar
         $("#" + key).data('event', {
           title: $.trim($("#" + key).text()), // use the element's text as the event title
           stick: true, // maintain when user navigates (see docs on the renderEvent method)
@@ -360,6 +363,27 @@ $(document).ready(function() {
         });
       });
     });
+
+    // get each calendar item description in database
+    $.getJSON('/load_cal_items', function(data){
+        let calendarEvents=[];
+        $.each(data, function(key, val){
+            let date = val.yyyymmdd;
+            let date_split = date.split();
+            let timeless_date = date_split[0];
+            let start_date = timeless_date+'T'+val.start_time;
+            let end_date = timeless_date+'T'+val.end_time;
+            let newEvent = {
+                title: val.description,
+                id: val.item_id,
+                start: start_date,
+                end: end_date
+            };
+            calendarEvents.push(newEvent);
+        });
+        $('#calendar').fullCalendar('renderEvents', calendarEvents, 'stick');
+    });
+
 
     $('#task-list .task-drag').each(function() {
       // store data so the calendar knows to render an event upon drop
@@ -394,30 +418,22 @@ $(document).ready(function() {
       droppable: true, // this allows things to be dropped onto the calendar
       dragRevertDuration: 0,
       drop: function(date) {
-
-          console.log(date.format());
-          var start = date.format();
-          var defaultDuration = moment.duration($('#calendar').fullCalendar('option','defaultTimedEventDuration'));
-          var end = date.clone().add(defaultDuration);
-          console.log(end.format());
-
           let event_name = $(this)[0].innerText;
-          let time = '';
-          let category='';
-          let startTime='';
-          let endTime='';
+          var category;
+          var duration_ms;
+          var startTime;
+          var endTime;
           for (var i = 0; i < allEvents.length; i++) {
               if (event_name == allEvents[i].name) {
-                  console.log(allEvents[i]);
-                  time = allEvents[i].duration;
+                  let time = allEvents[i].duration;
                   category = allEvents[i].category;
-                  startTime = allEvents[i].start;
-                  endTime=allEvents[i].end;
+                  startTime = date.format();
+                  duration_ms = time*60*60*1000;
+                  endTime = date.clone().add(duration_ms).format();
 
               }
           }
-          let event = {name: event_name, duration: time, cat: category, start: startTime, end: endTime};
-          console.log(event);
+          let event = {name: event_name, duration: duration_ms, cat: category, start: startTime, end: endTime};
           $.ajax(
               {
                   url: "http://localhost:3000/new_cal_task",

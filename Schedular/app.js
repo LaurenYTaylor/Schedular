@@ -242,13 +242,23 @@ app.get('/signout', function(request, response) {
 
 // send task data
 app.get('/tasks', function(request, response){
-    let query = "SELECT description FROM todo_item WHERE user_id="+request.user.id;
+    let query = "SELECT * FROM todo_item WHERE user_id="+request.user.id;
 
     pool.query(query, function (err, result) {
         let tasks = (result.rows);
         response.send(tasks);
     })
     
+});
+
+// send task data
+app.get('/load_cal_items', function(request, response){
+    let query = "SELECT * FROM calendar_item WHERE user_id="+request.user.id;
+    pool.query(query, function (err, result) {
+        let cal_items = (result.rows);
+        response.send(cal_items);
+    })
+
 });
 
 app.post('/new_task', function(request, response) {
@@ -275,14 +285,42 @@ app.post('/delete_task', function(request, response) {
 });
 
 app.post('/new_cal_task', function (request, response) {
-    let query_string = "INSERT INTO calendar_item (user_id, num_hours, category, completed, description) ";
+    let query_string = "INSERT INTO calendar_item (user_id, description, yyyymmdd, num_hours, start_time, end_time, category) ";
     let item = request.body;
     let description=item.name;
-    let category=item.category;
-    let numHours=item.duration;
+    let category=item.cat;
+    let numHours=2;
+    if(item.duration) {
+        numHours=item.duration/(60*60*1000);
+    }
     let start=item.start;
     let end=item.end;
-    console.log(item);
+    let start_split = start.split('T');
+    let end_split = end.split('T');
+    let date=start_split[0];
+    let startTime=9;
+    let endTime=startTime+numHours;
+    startTime="'0"+startTime+':00:00'+"'";
+    if(endTime<10) {
+        endTime="'0"+endTime.toString()+':00:00'+"'";
+    } else {
+        endTime="'"+endTime.toString()+':00:00'+"'";
+    }
+    if(start_split[1]) {
+        startTime="'"+start_split[1]+"'";
+        endTime="'"+end_split[1]+"'";
+    }
+
+    query_string+="VALUES ("+request.user.id+", '"+ description+"', '"+date+"', " +
+        ""+numHours+", "+startTime+", " +endTime+", '"+category+"');";
+    let update_string = "UPDATE todo_item SET in_calendar='true' WHERE user_id="+
+        request.user.id+" AND description='"+description+"';";
+
+    pool.connect(function(err, client) {
+        pool.query(query_string);
+        pool.query(update_string);
+        client.release();
+    });
 });
 
 http.listen(port, () => console.log("Listening on port " + port));
