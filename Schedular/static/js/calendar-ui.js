@@ -140,11 +140,27 @@ $(document).ready(function() {
           priority = $('#priority').val();
           dueDate = $('#dueDate').val();
           $('#myModal').modal('hide')
-          $("#list").append("<div class='task-drag'><label id='tasklabel'>" + taskName + 
-            "</label><img src='../rubbish-bin.png'  id='removeBin' >" +
-            "<div id='sublist' class='hidden'>"+
-            "<input type=text id='subtask' placeHolder='Subtask'>" + 
-            "<input type='submit' id='addSub' value='add'></div></div>");
+
+
+          if(category == "University") {
+              $("#list").append("<div class='task-drag' style='background: #6578a0'><label>" + taskName + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>");
+          }else if(category =="Work"){
+              $("#list").append("<div class='task-drag' style='background: #84b79d'><label>" + taskName + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>");
+          }else if(category =="Fun"){
+              $("#list").append("<div class='task-drag' style='background: #c3c60b'><label>" + taskName + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>");
+          }else if(category =="Chores"){
+              $("#list").append("<div class='task-drag' style='background: #e5a190'><label>" + taskName + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>");
+          }else if(category =="Hobby"){
+              $("#list").append("<div class='task-drag' style='background: #c18fe8'><label>" + taskName + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>");
+          }else if(category =="Other"){
+              $("#list").append("<div class='task-drag' style='background: grey'><label>" + taskName + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>");
+          }
+
+          // $("#list").append("<div class='task-drag'><label id='tasklabel'>" + taskName +
+          //   "</label><img src='../rubbish-bin.png'  id='removeBin' >" +
+          //   "<div id='sublist' class='hidden'>"+
+          //   "<input type=text id='subtask' placeHolder='Subtask'>" +
+          //   "<input type='submit' id='addSub' value='add'></div></div>");
           $('#tName').val('');
           $('#hiddenText').hide();
 
@@ -623,20 +639,26 @@ function draggable_task(allEvents) {
        time = "0"+allEvents[i].duration + ":00:00";
        category = allEvents[i].category;
 
-       if (category == "University"){
-        colour = "Blue";
-       }
-       else if(category == "Chores"){
-        colour = "Yellow";
-       }
-       else if (category == "Work"){
-        colour = "Black";
-       }
+          if (category == "University"){
+              colour = "#6578a0"; /*blue*/
+          }
+          else if(category == "Work"){
+              colour = "#84b79d"; /*green*/
+          }
+          else if (category == "Fun"){
+              colour = "#c3c60b"; /*yellow*/
+          }
+          else if (category == "Chores"){
+              colour = "#e5a190"; /*orange*/
+          }
+          else if (category == "Hobby"){
+              colour = "#c18fe8"; /*purple*/
+          }
+          else{
+              colour = "grey";
+          }
 
-       else{
-        colour = "grey";
-       }
-      
+
       }
 
     }

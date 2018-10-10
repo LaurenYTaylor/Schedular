@@ -1270,7 +1270,7 @@ be a descendant of the grid when it is being dragged.
   background-color: #eee; }
 
 
-  /* The Modal (background) 
+  /* The Modal (background)
   -----------------------------------------------------------------------------------*/
 
 .modal {
@@ -1294,7 +1294,7 @@ be a descendant of the grid when it is being dragged.
   padding: 20px;
   border: 1px solid #888;
   width: 800px;
- 
+
 }
 
 /* The Close Button */
@@ -1314,7 +1314,7 @@ be a descendant of the grid when it is being dragged.
 
 .chkbox {
   /* float: right;
-  padding-left: 40px; 
+  padding-left: 40px;
   font-weight: bold;
   padding-top: 1px;
   padding-bottom: 30px;
@@ -1322,7 +1322,7 @@ be a descendant of the grid when it is being dragged.
   margin-left: 200px */
   float:right;
   vertical-align: middle;
-  
+
 }
 
 /*Task List
@@ -1331,16 +1331,16 @@ be a descendant of the grid when it is being dragged.
 /* Style the tab */
 .tabList {
 
- 
+
   float: left;
   width: 180px;
   height: 550px;
 
-  
+
   border: 1px solid #ccc;
   background: #eee;
   text-align: left;
-  
+
 
   /* height:100%;
   overflow: hidden;
@@ -1350,16 +1350,17 @@ be a descendant of the grid when it is being dragged.
 }
 
 /*Style the events in the task list*/
-#task-list .task-drag {
-  
-  border-radius: 3.5px;
+
+
+#task-list .task-drag{
+  border-radius: 1.5px;
   padding: 5px;
   margin: 10px 0;
   cursor: pointer;
   background: #39517A;
   color: white;
 }
-/*matchcolor*/
+
 
 
 #removeBin {
@@ -1368,7 +1369,7 @@ be a descendant of the grid when it is being dragged.
   right:10px;
   background-repeat: no-repeat;
   height: 17px;
-  visibility: hidden; 
+  visibility: hidden;
   /* display:none;  */
 }
 
@@ -1406,8 +1407,8 @@ be a descendant of the grid when it is being dragged.
 
 /* Style the tab content */
 .tabcontent {
-  
-  
+
+
   width: 100%;
   background: #eee;
   text-align: left;
@@ -1440,7 +1441,7 @@ body {
 #calendar {
   float: right;
   width: 900px;
-} 
+}
 
 .submitbutton{
           position: absolute;
@@ -1479,7 +1480,7 @@ body {
     margin: 1rem 2%;
     padding: 1.1rem 1.5rem;
     border: 2px solid #34362C;
-    
+
     -webkit-transition: background .2s;
     transition: background .2s;
 }

@@ -43,13 +43,13 @@
     <div class="tabList">
       <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Ongoing')" >Ongoing</button>
       <button class="tablinks" onclick="openCity(event, 'Completed')">Completed</button>
-     
-    
+
+
     <div id='Ongoing' class="tabcontent">
       <div id='task-list'>
-        <h4>Task List</h4> 
+        <h4>Task List</h4>
         <div id = 'list'>
-          
+
         </div>
       <!-- <input type="text" name="task name" id="taskName" value="Task Name"> -->
         <button type="submit" name="add" id="add">Add Task</button>
@@ -59,16 +59,16 @@
 
     <div id='Completed' class="tabcontent">
         <div id='task-list' >
-          <h4>Completed Task List</h4> 
-        
+          <h4>Completed Task List</h4>
+
         <!-- <input type="text" name="task name" id="taskName" value="Task Name"> -->
         </div>
-  
+
       </div>
 
     </div>
     <div id='calendar'></div>
-    
+
 
 
     <div style='clear:both'></div>
@@ -81,11 +81,11 @@
         <span class="close">&times;</span>
         <h1>Create Task</h1>
         <div class="hiddentext" id="hiddenText" style="display:none">Invalid Name! </div>
-          <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post"> 
+          <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post">
             <div class='formtext'>
               <input type="text" name="fname" id="tName" class='taskform-input' placeholder="Task Name">
             </div>
-            <p></p> 
+            <p></p>
             <div class='formtext'>
               <input type ="text" name="duration" id="dury" class='taskform-input' placeholder="Task Duration">
             </div>
@@ -93,9 +93,11 @@
             <div class="task-dropdown">
               Category: <select name="category" id = "category">
                 <option value="University">University</option>
-                <option value="Chores">Chores</option>
                 <option value="Work">Work</option>
-                <option value ="Other"> Other </option> 
+                <option value="Fun">Fun</option>
+                <option value="Chores">Chores</option>
+                <option value="Hobby">Hobby</option>
+                <option value="Other">Other</option>
               </select>
             </div>
             <p></p>
@@ -110,16 +112,16 @@
             <div class="formtext">
                 Due Date:
                 <br/>
-                
+
                 <div class='input-group date' style="text-align: center;" id='datetimepicker1' >
                   <input type='text' class="form-control"  id='dueDate'/>
                   <span class="input-group-addon">
                   <span class="glyphicon glyphicon-calendar"></span>
                   </span>
                </div>
-               
-              
-             
+
+
+
             </div>
 
 
@@ -136,11 +138,11 @@
         <span class="close">&times;</span>
         <h1>Edit Task</h1>
         <div class="hiddentext" id="hiddenText" style="display:none">Invalid Name! </div>
-          <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post"> 
+          <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post">
             <div class='formtext'>
               <input type="text" name="fname" id="editName" class='taskform-input'>
             </div>
-            <p></p> 
+            <p></p>
             <div class='formtext'>
               <input type ="text" name="duration" id="dury" class='taskform-input' placeholder="Task Duration">
             </div>
@@ -148,9 +150,11 @@
             <div class="task-dropdown">
               Category: <select name="category" id = "category">
                 <option value="University">University</option>
-                <option value="Chores">Chores</option>
                 <option value="Work">Work</option>
-                <option value ="Other"> Other </option> 
+                <option value="Fun">Fun</option>
+                <option value="Chores">Chores</option>
+                <option value="Hobby">Hobby</option>
+                <option value="Other">Other</option>
               </select>
             </div>
             <p></p>
@@ -165,16 +169,16 @@
             <div class="formtext">
                 Due Date:
                 <br/>
-                
+
                 <div class='input-group date' style="text-align: center;" id='datetimepicker1' >
                   <input type='text' class="form-control"  />
                   <span class="input-group-addon">
                   <span class="glyphicon glyphicon-calendar"></span>
                   </span>
                </div>
-               
-              
-             
+
+
+
             </div>
 
 
