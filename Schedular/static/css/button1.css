@@ -1,0 +1,32 @@
+
+.button {
+    background-color: #a5a5a5;
+    border: none;
+    color: white;
+
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+
+    margin: 4px 2px;
+    cursor: pointer;
+
+}
+
+.button1 {
+    background-color: #a5a5a5;
+    color: black;
+    border: 0px solid #4CAF50;
+    font-size: 18px;
+    padding: 30px 47px;
+    transition: 0.5s;
+}
+
+.button1:hover {
+    background-color: grey;
+    color: white;
+}
+                                                                                                                                                                                                                                                                                                                                                           <button class="button button5">Black</button>
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                 </body>
+                                                                                                                                                                                                                                                                                                                                                                                                                                   </html>

@@ -1359,8 +1359,13 @@ be a descendant of the grid when it is being dragged.
   cursor: pointer;
   background: #39517A;
   color: white;
+    transition: 0.16s;
 }
 
+#task-list .task-drag:hover {
+
+    color: #fcffb5;
+}
 
 
 #removeBin {
@@ -1370,6 +1375,7 @@ be a descendant of the grid when it is being dragged.
   background-repeat: no-repeat;
   height: 17px;
   visibility: hidden;
+
   /* display:none;  */
 }
 
@@ -1384,15 +1390,6 @@ be a descendant of the grid when it is being dragged.
   padding: 19px 20px;
   font-size: 11px;
   width: 50%;
-  /* background-color: inherit;
-  display:table-cell;
-  float: left;
-  border: none;
-
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  */
     transition: 0.3s;
 }
 
