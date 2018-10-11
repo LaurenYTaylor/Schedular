@@ -1,0 +1,16 @@
+:root {
+    --transition-time: 0.4s
+}
+
+.pretty-submit {
+    width:100%;
+    padding: 8px 0;
+    border: none;
+    background: #ddd;
+    transition: background var(--transition-time), color var(--transition-time);
+}
+
+.pretty-submit:hover {
+    background: #444444;
+    color: white;
+}

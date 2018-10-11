@@ -2,9 +2,8 @@
 .title {
 	font-family: "Helvetica Neue", sans-serif;
 	color: white;
-	position: absolute;
-    text-align: center;
-	font-size: 40px;}
+    text-align: left;
+	font-size: 40px;
 }
 
 body {
@@ -13,16 +12,17 @@ body {
 }
 
 .topnav {
+	display: flex;
+	justify-content: space-between;
 	padding:10px;
 	background-color: #22385b;
 	margin-bottom: 20px;
-	overflow: hidden;
+	text-align: right;
 }
 
 .topnav a {
-	float: right;
+	display: block;
 	color: #f2f2f2;
-	text-align: center;
 	padding: 14px 16px;
 	text-decoration: none;
 	font-size: 17px;

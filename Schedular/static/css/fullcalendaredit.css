@@ -1331,15 +1331,10 @@ be a descendant of the grid when it is being dragged.
 /* Style the tab */
 .tabList {
 
-
-  float: left;
-  width: 180px;
-  height: 550px;
-
-
+  width: 200px;
   border: 0px solid #ccc;
-  background: #ddd;
   text-align: left;
+  display: block;
 
 
   /* height:100%;
@@ -1347,6 +1342,18 @@ be a descendant of the grid when it is being dragged.
   display:table;
   border: 1px solid #ccc;
   background-color: #f1f1f1; */
+}
+
+/* Style the tab content */
+.tabcontent {
+
+
+  width: 100%;
+  text-align: left;
+  padding: 50px 5px;
+
+  display: block;
+  border-top: none;
 }
 
 /*Style the events in the task list*/
@@ -1375,15 +1382,18 @@ be a descendant of the grid when it is being dragged.
 
 /* Style the buttons inside the tab */
 .tablinks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: #444444;
   color: white;
   float: left;
   border: none;
   outline: none;
   cursor: pointer;
-  padding: 19px 20px;
   font-size: 11px;
   width: 50%;
+  height: 54.586px;
   /* background-color: inherit;
   display:table-cell;
   float: left;
@@ -1408,32 +1418,25 @@ be a descendant of the grid when it is being dragged.
     color: black;
 }
 
-/* Style the tab content */
-.tabcontent {
 
-
-  width: 100%;
-  background: #ddd;
-  text-align: left;
-  padding: 50px 5px;
-
-  display: none;
-  border-top: none;
-}
 
 /*Overall
 -------------------------------------------------------------------------------------*/
 
 #wrap {
-  width: 1100px;
-  margin: 0 auto;
+  position: absolute;
+  display: flex;
+  top:100px; right:0; bottom: 0; left: 0;
 }
 
 body {
-  padding: 40px 40px;
   text-align: center;
   font-size: 14px;
   font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+}
+
+html, body {
+  height:100%;
 }
 
 
@@ -1442,12 +1445,12 @@ body {
 --------------------------------------------------------------------------------------*/
 /*Style the calendar*/
 #calendar {
-  float: right;
-  width: 900px;
+  width: 100%;
+  margin-right:20px;
+  margin-left:10px;
 }
 
 .submitbutton{
-          position: absolute;
           top: 10%;
           left: 1%;
             color: #39517A;
@@ -1457,7 +1460,6 @@ body {
             border-bottom: 2px solid #39517A;
             border-left: 2px solid #39517A;
             border-radius: 50px 50px;
-            position: fixed;
         }
 
 
