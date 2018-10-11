@@ -14,8 +14,8 @@
 }
 
 .button1 {
-    background-color: #a5a5a5;
-    color: black;
+    background-color: #22385b;
+    color: white;
     border: 0px solid #4CAF50;
     font-size: 18px;
     padding: 30px 47px;
@@ -23,7 +23,7 @@
 }
 
 .button1:hover {
-    background-color: grey;
+    background-color: #3b62a0;
     color: white;
 }
                                                                                                                                                                                                                                                                                                                                                            <button class="button button5">Black</button>

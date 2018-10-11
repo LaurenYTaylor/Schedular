@@ -1427,7 +1427,7 @@ be a descendant of the grid when it is being dragged.
 }
 
 body {
-  padding: 40px 40px;
+  padding: 0px 0px;
   text-align: center;
   font-size: 14px;
   font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
@@ -1472,14 +1472,14 @@ body {
 .taskform-input {
     width: 500px;
     max-width: 85rem;
-    font-size: 12px;
+    font-size: 15px;
     font-weight: normal;
     text-align: center;
     line-height: 1.2222em;
     flex-grow: 1;
     margin: 1rem 2%;
     padding: 1.1rem 1.5rem;
-    border: 2px solid #34362C;
+    border: 0.15px solid #34362C;
 
     -webkit-transition: background .2s;
     transition: background .2s;
@@ -1488,14 +1488,17 @@ body {
 .CreateButton{
     margin: 1rem 2%;
     padding: 1.1rem 1.5rem;
-    border: 2px solid #34362C;
+    border: 0px solid #34362C;
+  background-color: #22385b;
+  color: #fff;
     min-width: 20%;
 }
 
 .CreateButton:hover {
     cursor: pointer;
     color: #fff;
-    background-color: #34362C;
+    background-color: #3b62a0;
+  transition: 0.3s;
 }
 
 .task-dropdown {
@@ -1505,17 +1508,17 @@ body {
 }
 
 .task-dropdown select {
-  background: transparent;
+  background: #d6d6d6;
   font-size: 12px;
   font-weight: normal;
   text-align: center;
   line-height: 1.2222em;
   margin: 1rem 2%;
   padding: 1.1rem 1.5rem;
-  border: 2px solid #34362C;
+  border: 0px solid #34362C;
   width: 500px;
-  -webkit-appearance: none;
-  -webkit-border-radius: 0px;
+  -webkit-appearance: media-fullscreen-button;
+  -webkit-border-radius: 5px;
   text-align-last: center;
 }
 
