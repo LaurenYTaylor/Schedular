@@ -57,25 +57,43 @@ $(document).ready(function() {
     var popTemplate = [
       '<div tabindex="0" class="popover" style="max-width:600px;">',
       '<div class="arrow"></div>',
-      '<div class="popover-content"></div>',
+      //'<div class="popover-content"></div>',
+      '<div class="popHeader">',
       '<label>you</label>',
       '<span class="popOptions">',
       '<button class="fileContainer">',
       'Add Files',
-      '<input type="file"/>',
+      '<input id="addFile" type="file"/>',
       '</button>',
       '<button class="editTask">Edit</button>',
       '<div class="circle-loader">',
       '<div class = "checkmarkoverlay"></div>',
       '<div class="checkmark draw"></div>',
       '</div></span>',
-      //  '<div id="toggle" class="circle-loader" onclick="checkTask()"><div class="checkmark draw" ></div></div><div id="showCompleted">Completed</div>',
+      '</div>',
+      '<br/><br/>',
+      '<ul class="file-list">File List</ul>',
        '</div>'].join('');
 
     //Modal start appears when adding task//
     $("#add").click(function(){
         $("#myModal").modal();
      
+    });
+
+   
+
+
+    //Adds file list to popovers
+    $(document).on('change', '#addFile', function(e){
+      var fileName = e.target.files[0].name;
+      var currentPopover = $(this).closest('.popover');
+      currentPopover.find('ul.file-list').append('<li><a>' +fileName+ '</a></li>');
+      if (currentPopover.find('ul.file-list').children('li').length >0){
+        currentPopover.find('ul.file-list').show();
+      }
+
+      
     });
 
 
@@ -158,7 +176,6 @@ $(document).ready(function() {
           }          $('#tName').val('');
           $('#hiddenText').hide();
 
-          alert(priority);
 
           newTask = {name: taskName, duration: dury, category: category, priority: priority, dueDate: dueDate};
           allEvents.push(newTask);

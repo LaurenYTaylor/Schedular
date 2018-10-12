@@ -1054,6 +1054,8 @@ NOTE: use percentage font sizes or else old IE chokes
   z-index: 1;
   /* scope inner z-index's */ }
 
+ 
+
 .fc-time-grid .fc-bgevent {
   /* background events always span full width */
   left: 0;
