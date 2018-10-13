@@ -4,7 +4,7 @@ Styling the popover and the added animation to the task completion
   
 */
 .popover {
-    height: 70px;
+    height: auto;
     width: 250px;
     position: relative;
     padding: 10px;
@@ -116,4 +116,15 @@ Styling the popover and the added animation to the task completion
   #showCompleted {
     display:none;
     color: #5cb85c;
+  }
+
+  ul.file-list{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: none;
+  }
+
+  ul.file-list li{
+    cursor:pointer;
   }
