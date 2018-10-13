@@ -28,7 +28,9 @@ $('html').on('click', function (e) {
 
 
 
-allEvents = []; 
+allEvents = [];
+calendarEvents=[];
+justDragged=[]
 
 $(document).ready(function() {
 
@@ -369,7 +371,6 @@ $(document).ready(function() {
         if(val.in_calendar==true) {
             return;
         }
-        console.log(val);
         let description = val.description;
         let newTask = {name: description, duration: val.num_hours, category: val.category, priority: val.priority, dueDate: val.due_date};
         allEvents.push(newTask);
@@ -397,7 +398,6 @@ $(document).ready(function() {
 
     // get each calendar item description in database
     $.getJSON('/load_cal_items', function(data){
-        let calendarEvents=[];
         $.each(data, function(key, val){
             let date = val.yyyymmdd;
             let date_split = date.split();
@@ -504,20 +504,53 @@ $(document).ready(function() {
 
       /*Triggered when an event is being rendered*/
       eventRender: function(event,jsEvent){
-        if(!event.complete){
-          //popover properties
+        if(!event.complete) {
+            //popover properties
 
-          jsEvent.popover({
-            
-            html: true,
-            content: popTemplate,
-            template: popTemplate,
-            animation: true,
-            container:'body',
-            //trigger:'manual'
-          });
+            jsEvent.popover({
 
-          
+                html: true,
+                content: popTemplate,
+                template: popTemplate,
+                animation: true,
+                container: 'body',
+                //trigger:'manual'
+            });
+            let dragEvent=event;
+            if (justDragged.length > 0 && justDragged[0].id == dragEvent.id) {
+                let newStart = dragEvent.start._d.toISOString().split('.', 1)[0];
+                let newEnd = dragEvent.end._d.toISOString().split('.', 1)[0];
+                let eventData = {
+                    name: justDragged[0].title,
+                    start: newStart,
+                    end: newEnd,
+                    oldStart: justDragged[0].start,
+                    oldEnd: justDragged[0].end
+                };
+                if (newStart != justDragged[0].start || newEnd != justDragged[0].end) {
+                    $.ajax(
+                        {
+                            url: "http://localhost:3000/update_cal_task",
+                            async: true,
+                            type: "POST",
+                            data: eventData,
+                            success: function (result) {
+                                console.log("successfully updated calendar task");
+                            }
+                        });
+                    let i = calendarEvents.indexOf(justDragged[0]);
+                    calendarEvents.splice(i, 1);
+                    let newCalEvent = {
+                        name: justDragged[0].name,
+                        duration: justDragged[0].duration,
+                        cat: justDragged[0].cat,
+                        start: newStart,
+                        end: newEnd
+                    };
+                    calendarEvents.push(newCalEvent);
+                    justDragged.pop();
+                }
+            }
 
           //Use the code below if popover trigger is hover 
           //.on("mouseenter", function () { 
@@ -546,7 +579,11 @@ $(document).ready(function() {
       //function fires when event is finished dragging
       eventDragStop: function( event, jsEvent, ui, view ) {
         dragging = false;
-        
+        for (let i=0; i<calendarEvents.length; i++) {
+            if(calendarEvents[i].title==event.title && calendarEvents[i].start==event.start._i) {
+                justDragged.push(calendarEvents[i]);
+            }
+        }
         var external_events = $( ".tabList" );
         var offset = external_events.offset();
         offset.right = external_events.width() + offset.left;
