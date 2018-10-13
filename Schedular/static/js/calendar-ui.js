@@ -504,7 +504,7 @@ $(document).ready(function() {
 
       /*Triggered when an event is being rendered*/
       eventRender: function(event,jsEvent){
-        if(!event.complete) {
+          if(!event.complete) {
             //popover properties
 
             jsEvent.popover({
@@ -588,23 +588,30 @@ $(document).ready(function() {
         var offset = external_events.offset();
         offset.right = external_events.width() + offset.left;
         offset.bottom = external_events.height() + external_events.position().top;
-        console.log("external height" + external_events.height());  
-        console.log("offset down:" +offset.bottom)
-        console.log("offset right:" +offset.right);
-        console.log("offset up:" + external_events.position().top);
-        console.log("offset left:" +offset.left);
-        console.log("jsEvent.clientX:" + jsEvent.pageX);
-        console.log("jsEvent.clientY:" + jsEvent.pageY);
 
-     
             // Compare
         if (jsEvent.pageX >= offset.left
           && jsEvent.pageY >= external_events.position().top
           && jsEvent.pageX <= offset.right
           && jsEvent.pageY <= offset.bottom
-         ) { 
-            $('#calendar').fullCalendar('removeEvents', event._id); 
-    
+         ) {
+            for(let i=0; i<calendarEvents.length; i++) {
+                if(calendarEvents[i].id===event.id) {
+                    let description=calendarEvents[i].title;
+                    $.ajax(
+                        {
+                            url: "http://localhost:3000/remove_cal_task",
+                            async: true,
+                            type: "POST",
+                            data: {description: description},
+                            success: function (result) {
+                                console.log("successfully removed calendar task");
+                            }
+                        });
+                    calendarEvents.splice(i, 1);
+                }
+            }
+            $('#calendar').fullCalendar('removeEvents', event._id);
             var el = $( "<div class='task-drag'><label>"+event.title + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>").appendTo( "#list");
             el.draggable({
               zIndex: 999,
@@ -698,7 +705,7 @@ function closePopovers() {
 
 
 //Checks if the task being dragged is in the proximity of the the task list//
-var isEventOverDiv = function(x, y) {
+function isEventOverDiv(x, y) {
 
     var external_events = $( "#task-list" );
     var offset = external_events.offset();
