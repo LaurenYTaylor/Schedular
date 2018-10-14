@@ -323,5 +323,38 @@ app.post('/new_cal_task', function (request, response) {
     });
 });
 
+app.post('/update_cal_task', function(request, response) {
+    let start_split = request.body.start.split('T');
+    let end_split = request.body.end.split('T');
+    let old_start_split = request.body.oldStart.split('T');
+    let date=start_split[0];
+    let start_time=start_split[1];
+    let end_time=end_split[1];
+    let old_start_date = old_start_split[0];
+    let old_start_time=old_start_split[1];
+    let query_string = "UPDATE calendar_item SET start_time='"+start_time+
+        "', end_time='"+end_time+"', yyyymmdd='"+date+"' WHERE description='"+
+        request.body.name+"' AND start_time='"+old_start_time+"' AND yyyymmdd='"+
+    old_start_date+"' AND user_id="+request.user.id+";";
+    pool.connect(function(err, client) {
+        pool.query(query_string);
+        client.release();
+    });
+});
+
+app.post('/remove_cal_task', function(request, response) {
+    let description = request.body.description;
+    let delete_string = "DELETE FROM calendar_item WHERE description='"+description+"' AND user_id="+request.user.id+";";
+    let update_string = "UPDATE todo_item SET in_calendar='"+false+"' WHERE user_id="+request.user.id+" AND description='"+
+        description+"';"
+    pool.connect(function(err, client) {
+        pool.query(delete_string);
+        pool.query(update_string);
+        client.release();
+    });
+});
+
+
+
 http.listen(port, () => console.log("Listening on port " + port));
 

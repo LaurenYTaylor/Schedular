@@ -697,6 +697,7 @@ $(document).ready(function() {
             //   revert: true, 
             //   revertDuration: 0 
             // });
+
             el.data('event', { 
               title: event.title, 
               id :event.id, 
