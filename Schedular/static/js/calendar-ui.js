@@ -484,7 +484,7 @@ $(document).ready(function() {
       items: ".task-drag",
       opacity: .6,
       placeholder: 'placeholder',
-      revert: "invalid",//  250, //          
+               
       helper:   'clone',
       update: function(event, ui) {
         console.log($( "#list" ).sortable( "toArray" ));
