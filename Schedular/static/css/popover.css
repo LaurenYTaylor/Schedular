@@ -128,3 +128,9 @@ Styling the popover and the added animation to the task completion
   ul.file-list li{
     cursor:pointer;
   }
+
+  #Notes textarea{
+    width: 100%;
+    height: auto;
+    resize: none;
+  }

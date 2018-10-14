@@ -75,7 +75,13 @@ $(document).ready(function() {
       '</div></span>',
       '</div>',
       '<br/><br/>',
-      '<ul class="file-list">File List</ul>',
+      '<ul class="file-list">',
+      '<h4>File List</h4>',
+      '</ul>',
+      '<div id="Notes">',
+      '<h4>Notes</h4>',
+      '<textarea rows="4" cols="50"></textarea>',
+      '</div>',
        '</div>'].join('');
 
     //Modal start appears when adding task//
