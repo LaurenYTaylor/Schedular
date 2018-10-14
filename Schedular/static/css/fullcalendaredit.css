@@ -1359,7 +1359,6 @@ be a descendant of the grid when it is being dragged.
   cursor: pointer;
   background: #39517A;
   color: white;
-
 }
 
 #task-list .task-drag:hover {
