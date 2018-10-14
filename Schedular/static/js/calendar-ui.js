@@ -38,6 +38,7 @@ $(document).ready(function() {
     
     
   });
+
   
   $("#datetimepicker1").on("dp.change", function() { 
     $("#datetimepicker1").data("DateTimePicker").hide(); 
@@ -54,12 +55,14 @@ $(document).ready(function() {
     // };
     // date_input.datepicker(options);
 
+
+    //This is the popover code that gets displayed when a event is clicked on
     var popTemplate = [
       '<div tabindex="0" class="popover" style="max-width:600px;">',
       '<div class="arrow"></div>',
       //'<div class="popover-content"></div>',
       '<div class="popHeader">',
-      '<label>you</label>',
+      '<label id=popLabel></label>',
       '<span class="popOptions">',
       '<button class="fileContainer">',
       'Add Files',
@@ -84,7 +87,9 @@ $(document).ready(function() {
    
 
 
-    //Adds file list to popovers
+    //Adds file labels to the file list when 
+    //user adds files to a particular task
+    //TO DO: The files added need to be linked to the database
     $(document).on('change', '#addFile', function(e){
       var fileName = e.target.files[0].name;
       var currentPopover = $(this).closest('.popover');
@@ -98,18 +103,27 @@ $(document).ready(function() {
 
 
 
-
+    //eventlistener to displays bin icon when the mouse
+    //hovers overs a task in the task list
     $(document).on('mouseenter', '.task-drag', function(){
-      $(this).find("#removeBin").css('visibility', 'visible');
+      
+      $(this).find("#removeBin1").css('display', 'inline-block');
       
     });
 
+
+    //eventlistener that hides the bin icon when the mouse
+    // leaves the the task  
     $(document).on('mouseleave', '.task-drag', function(){
-      $(this).find("#removeBin").css('visibility', 'hidden');
+      $(this).find("#removeBin1").css('display', 'none');
       
     });
 
-    $(document).on('click', '#removeBin', function(){
+    
+
+    //eventlistener that fires when user clicks on the bin icon
+    //This removes the task from the interface and the database
+    $(document).on('click', '#removeBin1', function(){
       $(this).parent().remove();
 
       let description = $(this).parent()[0].innerText;
@@ -130,6 +144,11 @@ $(document).ready(function() {
       });
     });
 
+
+    //eventlistener for when editing a task when the edit
+    // button is pressed
+    //TO DO: make changes to other properties of the task 
+    //TO DO: changes to be edited in the database
     $(document).on('click', '.editTask', function(){
       $('.popover').popover('hide');
       $("#editModal").modal();
@@ -141,7 +160,8 @@ $(document).ready(function() {
     
 
 
-
+    //eventlistener for when completing the task
+    //toggles status to complete
     $(document).on('click', '.circle-loader', function(){
       $(this).toggleClass('load-complete');
       $(this).find(".checkmark").toggle('fast',taskCompleted());
@@ -162,23 +182,26 @@ $(document).ready(function() {
           dueDate = $('#dueDate').val();
           $('#myModal').modal('hide')
           if(category == "University") {
-              $("#list").append("<div class='task-drag' style='background: #6578a0'><label>" + taskName + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>");
+              
+              $("#list").append("<div class='task-drag' id='" + taskName +"' style='background: #6578a0'><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
           }else if(category =="Work"){
-              $("#list").append("<div class='task-drag' style='background: #84b79d'><label>" + taskName + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>");
+              $("#list").append("<div class='task-drag' style='background: #84b79d'><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
           }else if(category =="Fun"){
-              $("#list").append("<div class='task-drag' style='background: #c3c60b'><label>" + taskName + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>");
+              $("#list").append("<div class='task-drag' style='background: #c3c60b'><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
           }else if(category =="Chores"){
-              $("#list").append("<div class='task-drag' style='background: #e5a190'><label>" + taskName + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>");
+              $("#list").append("<div class='task-drag' style='background: #e5a190'><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
           }else if(category =="Hobby"){
-              $("#list").append("<div class='task-drag' style='background: #c18fe8'><label>" + taskName + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>");
+              $("#list").append("<div class='task-drag' style='background: #c18fe8'><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
           }else if(category =="Other"){
-              $("#list").append("<div class='task-drag' style='background: grey'><label>" + taskName + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>");
+              $("#list").append("<div class='task-drag' style='background: grey'><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
           }          $('#tName').val('');
           $('#hiddenText').hide();
+          $("#list").sortable('refresh');
 
 
           newTask = {name: taskName, duration: dury, category: category, priority: priority, dueDate: dueDate};
           allEvents.push(newTask);
+          
           $.ajax(
               {
                   url: "http://localhost:3000/new_task",
@@ -237,11 +260,11 @@ $(document).ready(function() {
         });
 
         // make the event draggable using jQuery UI
-        $(this).draggable({
-          zIndex: 999,
-          revert: true,      // will cause the event to go back to its
-          revertDuration: 0  //  original position after the drag
-        });
+        // $(this).draggable({
+        //   zIndex: 999,
+        //   revert: true,      // will cause the event to go back to its
+        //   revertDuration: 0  //  original position after the drag
+        // });
 
       });
       return false;
@@ -363,77 +386,90 @@ $(document).ready(function() {
     /* initialize the external events
     -----------------------------------------------------------------*/
     // get tasks in database and add to task list
-    $.getJSON('/tasks', function(data){
-      // get each task description in database
-      $.each(data, function(key, val){
-        if(val.in_calendar==true) {
-            return;
-        }
-        console.log(val);
-        let description = val.description;
-        let newTask = {name: description, duration: val.num_hours, category: val.category, priority: val.priority, dueDate: val.due_date};
-        allEvents.push(newTask);
-        // create new task with description
-        $("#list").append("<div class='task-drag' id=" + key + "><label>" + description + 
-          "</label>" + "<img src='../rubbish-bin.png'  id='removeBin' ></div>")
+  $.getJSON('/tasks', function(data){
+    // get each task description in database
+    $.each(data, function(key, val){
+      if(val.in_calendar==true) {
+          return;
+      }
+      console.log(val);
+      let description = val.description;
+      let newTask = {name: description, duration: val.num_hours, category: val.category, priority: val.priority, dueDate: val.due_date};
+      allEvents.push(newTask);
+      // create new task with description
+      $("#list").append("<div class='task-drag' id=" + key + "><label>" + description + 
+        "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>")
 
-          // data for calendar
-        $("#" + key).data('event', {
-          title: $.trim($("#" + key).text()), // use the element's text as the event title
-          stick: true, // maintain when user navigates (see docs on the renderEvent method)
-          color: 'green',
-          description: description,
-          complete: false
-        })
-
-        // make task draggable
-        $("#" + key).draggable({
-          zIndex: 999,
-          revert: true,      // will cause the event to go back to its
-          revertDuration: 0  //  original position after the drag
-        });
-      });
-    });
-
-    // get each calendar item description in database
-    $.getJSON('/load_cal_items', function(data){
-        let calendarEvents=[];
-        $.each(data, function(key, val){
-            let date = val.yyyymmdd;
-            let date_split = date.split();
-            let timeless_date = date_split[0];
-            let start_date = timeless_date+'T'+val.start_time;
-            let end_date = timeless_date+'T'+val.end_time;
-            let newEvent = {
-                title: val.description,
-                id: val.item_id,
-                start: start_date,
-                end: end_date
-            };
-            calendarEvents.push(newEvent);
-        });
-        $('#calendar').fullCalendar('renderEvents', calendarEvents, 'stick');
-    });
-
-
-    $('#task-list .task-drag').each(function() {
-      // store data so the calendar knows to render an event upon drop
-      $(this).data('event', {
-        title: $.trim($(this).text()), // use the element's text as the event title
+        // data for calendar
+      $("#" + key).data('event', {
+        title: $.trim($("#" + key).text()), // use the element's text as the event title
         stick: true, // maintain when user navigates (see docs on the renderEvent method)
         color: 'green',
-        description: 'This is a cool event',
+        description: description,
         complete: false
-      });
+      })
 
-      // make the event draggable using jQuery UI
-      $(this).draggable({
+      // make task draggable
+      $("#" + key).draggable({
         zIndex: 999,
         revert: true,      // will cause the event to go back to its
         revertDuration: 0  //  original position after the drag
       });
-
     });
+  });
+
+    // get each calendar item description in database
+  $.getJSON('/load_cal_items', function(data){
+      let calendarEvents=[];
+      $.each(data, function(key, val){
+          let date = val.yyyymmdd;
+          let date_split = date.split();
+          let timeless_date = date_split[0];
+          let start_date = timeless_date+'T'+val.start_time;
+          let end_date = timeless_date+'T'+val.end_time;
+          let newEvent = {
+              title: val.description,
+              id: val.item_id,
+              start: start_date,
+              end: end_date
+          };
+          calendarEvents.push(newEvent);
+      });
+      $('#calendar').fullCalendar('renderEvents', calendarEvents, 'stick');
+  });
+
+  $('#list').sortable(
+    {
+      items: ".task-drag",
+      opacity: .6,
+      placeholder: 'placeholder',
+      revert: "invalid",//  250, //          
+      helper:   'clone',
+      update: function(event, ui) {
+        console.log($( "#list" ).sortable( "toArray" ));
+    }
+  });
+
+
+
+  $('#task-list .task-drag').each(function() {
+    // store data so the calendar knows to render an event upon drop
+    $(this).data('event', {
+      title: $.trim($(this).text()), // use the element's text as the event title
+      stick: true, // maintain when user navigates (see docs on the renderEvent method)
+      color: 'green',
+      description: 'This is a cool event',
+      complete: false
+    });
+
+    // make the event draggable using jQuery UI
+    $(this).draggable({
+      zIndex: 999,
+      revert: true,      // will cause the event to go back to its
+      revertDuration: 0  //  original position after the drag
+    });
+
+  });
 
     
     /* initialize the calendar
@@ -464,20 +500,21 @@ $(document).ready(function() {
 
               }
           }
+
           let event = {name: event_name, duration: duration_ms, cat: category, start: startTime, end: endTime};
+          
           $.ajax(
-              {
-                  url: "http://localhost:3000/new_cal_task",
-                  async: true,
-                  type: "POST",
-                  data: event,
-                  success: function (result) {
-                      console.log("successfully added calendar task");
-                  }
-              });
-        // is the "remove after drop" checkbox checked?
-          // if so, remove the element from the "Draggable Events" list
+            {
+              url: "http://localhost:3000/new_cal_task",
+              async: true,
+              type: "POST",
+              data: event,
+              success: function (result) {
+                  console.log("successfully added calendar task");
+            }
+          });
           $(this).remove();
+          // $('#calendar').fullCalendar('renderEvent', event, true);  
         
       },
 
@@ -551,13 +588,7 @@ $(document).ready(function() {
         var offset = external_events.offset();
         offset.right = external_events.width() + offset.left;
         offset.bottom = external_events.height() + external_events.position().top;
-        console.log("external height" + external_events.height());  
-        console.log("offset down:" +offset.bottom)
-        console.log("offset right:" +offset.right);
-        console.log("offset up:" + external_events.position().top);
-        console.log("offset left:" +offset.left);
-        console.log("jsEvent.clientX:" + jsEvent.pageX);
-        console.log("jsEvent.clientY:" + jsEvent.pageY);
+ 
 
      
             // Compare
@@ -568,12 +599,12 @@ $(document).ready(function() {
          ) { 
             $('#calendar').fullCalendar('removeEvents', event._id); 
     
-            var el = $( "<div class='task-drag'><label>"+event.title + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>").appendTo( "#list");
-            el.draggable({
-              zIndex: 999,
-              revert: true, 
-              revertDuration: 0 
-            });
+            var el = $( "<div class='task-drag'><label>"+event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>").appendTo( "#list");
+            // el.draggable({
+            //   zIndex: 999,
+            //   revert: true, 
+            //   revertDuration: 0 
+            // });
             el.data('event', { 
               title: event.title, 
               id :event.id, 
@@ -582,7 +613,9 @@ $(document).ready(function() {
               description: "Jump",
               complete: false
             });
+            $("#list").sortable('refresh');
           }
+          
       }
     });
 

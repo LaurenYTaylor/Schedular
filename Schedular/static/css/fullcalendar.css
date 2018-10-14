@@ -1375,8 +1375,8 @@ be a descendant of the grid when it is being dragged.
 }
 
 /*Style the events in the task list*/
-#task-list .task-drag {
-  
+#list .task-drag {
+  position: relative;
   border-radius: 3.5px;
   padding: 5px;
   margin: 10px 0;
@@ -1385,16 +1385,29 @@ be a descendant of the grid when it is being dragged.
   color: white;
 }
 
+#sortable-1 { list-style-type: none; margin: 0; 
+  padding: 0; width: 25%; }
+#sortable-1 li { margin: 0 3px 3px 3px; padding: 0.4em; 
+  padding-left: 1.5em; font-size: 17px; height: 16px; }
+.default {
+  background: #cedc98;
+  border: 1px solid #DDDDDD;
+  color: #333333;
+}
 
 
-#removeBin {
-  position: absolute;
+
+.task-drag img:hover {
+  /* float:right;  
+  width: 15px; */
+  /* position: absolute;
   vertical-align: middle;
-  right:10px;
-  background-repeat: no-repeat;
-  height: 17px;
-  visibility: hidden; 
-  /* display:none;  */
+  right:10px; 
+  max-width:15spx;
+  max-height:15px;
+  width: auto;
+  height: auto; */
+  /* display: none; */
 }
 
 /* Style the buttons inside the tab */
