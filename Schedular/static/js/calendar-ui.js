@@ -28,11 +28,16 @@ $('html').on('click', function (e) {
 
 
 
+
+
 allEvents = [];
 calendarEvents=[];
 justDragged=[]
 
 $(document).ready(function() {
+
+  //Task List is displayed on default
+  document.getElementById("defaultOpen").click();
 
 
   $(function(){
@@ -160,7 +165,7 @@ $(document).ready(function() {
       $("#editModal").modal();
      
       $('#editName').val(element.title);
-      //Add the rest of the task options eg. duration,priority, Due Date
+      //Add the rest of the task options eg. duration,repeat, Due Date
 
     });
     
@@ -184,7 +189,7 @@ $(document).ready(function() {
           taskName = $('#tName').val();
           dury = $('#dury').val();
           category = $("#category").val();
-          priority = $('#priority').val();
+          repeat = $('#repeat').val();
           dueDate = $('#dueDate').val();
           $('#myModal').modal('hide')
           if(category == "University") {
@@ -205,7 +210,7 @@ $(document).ready(function() {
           $("#list").sortable('refresh');
 
 
-          newTask = {name: taskName, duration: dury, category: category, priority: priority, dueDate: dueDate};
+          newTask = {name: taskName, duration: dury, category: category, repeat: repeat, dueDate: dueDate};
           allEvents.push(newTask);
           
           $.ajax(
@@ -402,7 +407,7 @@ $(document).ready(function() {
             return;
         }
         let description = val.description;
-        let newTask = {name: description, duration: val.num_hours, category: val.category, priority: val.priority, dueDate: val.due_date};
+        let newTask = {name: description, duration: val.num_hours, category: val.category, repeat: val.repeat, dueDate: val.due_date};
         allEvents.push(newTask);
         // create new task with description
         $("#list").append("<div class='task-drag' id=" + key + "><label>" + description + 
@@ -721,7 +726,6 @@ $(document).ready(function() {
       
     });
 
-  openCity(event,'Ongoing');
 
 
 });
