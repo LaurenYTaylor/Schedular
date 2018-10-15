@@ -227,10 +227,10 @@ $(document).ready(function() {
           //$("#list").sortable('refresh');
 
           $("#task-list .task-drag").each(function () {
-              let id = $(this).data.taskid;
+              let id = $(this)[0].dataset.taskid;
               let name = $(this).text();
-              time = "04:00:00";
-              colour = "grey";
+              let time = "04:00:00";
+              let colour = "grey";
 
               var arrayLength = allEvents.length;
               for (var i = 0; i < arrayLength; i++) {
