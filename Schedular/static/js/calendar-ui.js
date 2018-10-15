@@ -95,7 +95,29 @@ $(document).ready(function() {
      
     });
 
-   
+    //Modal start when adding Category
+    $("#addCat").click(function(){
+        $("#catModal").modal();
+    })
+
+    $(function() {
+        $('.catCreate').click(function() {
+            data = $('#catName').val()
+            $('#catModal').modal('hide')
+            $.ajax(
+                {
+                  url: "http://localhost:3000/add_categories",
+                  async: true,
+                  type: "POST",
+                  data: data,
+                  success: function (result) {
+                    console.log("successfully added");
+                  }
+            });
+        });
+        return false;
+    });
+
 
 
     //Adds file labels to the file list when 
@@ -178,6 +200,8 @@ $(document).ready(function() {
       $(this).toggleClass('load-complete');
       $(this).find(".checkmark").toggle('fast',taskCompleted());
     });
+
+    $
 
     
     
@@ -406,7 +430,7 @@ $(document).ready(function() {
 
   //Activate textfield when modal is shown//
   $('#myModal').on('shown.bs.modal', function () {
-  $('#tName').focus();
+    $('#tName').focus();
   });
 
 
@@ -609,54 +633,55 @@ $(document).ready(function() {
       },
 
       /*Triggered when an event is being rendered*/
-      eventRender: function(event,jsEvent){
-          if(!event.complete) {
+        eventRender: function(event,jsEvent){
+            if(!event.complete) {
             //popover properties
 
-            jsEvent.popover({
+                jsEvent.popover({
 
-                html: true,
-                content: popTemplate,
-                template: popTemplate,
-                animation: true,
-                container: 'body',
+                    html: true,
+                    content: popTemplate,
+                    template: popTemplate,
+                    animation: true,
+                    container: 'body',
                 //trigger:'manual'
-            });
-            let dragEvent=event;
-            if (justDragged.length > 0 && justDragged[0].id == dragEvent.id) {
-                let newStart = dragEvent.start._d.toISOString().split('.', 1)[0];
-                let newEnd = dragEvent.end._d.toISOString().split('.', 1)[0];
-                let eventData = {
-                    name: justDragged[0].title,
-                    start: newStart,
-                    end: newEnd,
-                    oldStart: justDragged[0].start,
-                    oldEnd: justDragged[0].end
-                };
-                if (newStart != justDragged[0].start || newEnd != justDragged[0].end) {
-                    $.ajax(
-                        {
-                            url: "http://localhost:3000/update_cal_task",
-                            async: true,
-                            type: "POST",
-                            data: eventData,
-                            success: function (result) {
-                                console.log("successfully updated calendar task");
-                            }
-                        });
-                    let i = calendarEvents.indexOf(justDragged[0]);
-                    calendarEvents.splice(i, 1);
-                    let newCalEvent = {
-                        name: justDragged[0].name,
-                        duration: justDragged[0].duration,
-                        cat: justDragged[0].cat,
+                });
+            
+                let dragEvent=event;
+                if (justDragged.length > 0 && justDragged[0].id == dragEvent.id) {
+                    let newStart = dragEvent.start._d.toISOString().split('.', 1)[0];
+                    let newEnd = dragEvent.end._d.toISOString().split('.', 1)[0];
+                    let eventData = {
+                        name: justDragged[0].title,
                         start: newStart,
-                        end: newEnd
+                        end: newEnd,
+                        oldStart: justDragged[0].start,
+                        oldEnd: justDragged[0].end
                     };
-                    calendarEvents.push(newCalEvent);
-                    justDragged.pop();
+                    if (newStart != justDragged[0].start || newEnd != justDragged[0].end) {
+                        $.ajax(
+                            {
+                                url: "http://localhost:3000/update_cal_task",
+                                async: true,
+                                type: "POST",
+                                data: eventData,
+                                success: function (result) {
+                                    console.log("successfully updated calendar task");
+                                }
+                            });
+                        let i = calendarEvents.indexOf(justDragged[0]);
+                        calendarEvents.splice(i, 1);
+                        let newCalEvent = {
+                            name: justDragged[0].name,
+                            duration: justDragged[0].duration,
+                            cat: justDragged[0].cat,
+                            start: newStart,
+                            end: newEnd
+                        };
+                        calendarEvents.push(newCalEvent);
+                        justDragged.pop();
+                    }
                 }
-            }
 
           //Use the code below if popover trigger is hover 
           //.on("mouseenter", function () { 
@@ -674,15 +699,15 @@ $(document).ready(function() {
           //     }
           //   }, 300);
           // });
-        }else {
-          jsEvent.fadeTo(0, 0.5);
-        }
+            }else {
+                jsEvent.fadeTo(0, 0.5);
+            }
       
-      },
+        },
 
 
 
-      //function fires when event is finished dragging
+    //function fires when event is finished dragging
       eventDragStop: function( event, jsEvent, ui, view ) {
         dragging = false;
         for (let i=0; i<calendarEvents.length; i++) {
@@ -777,6 +802,10 @@ function validateForm() {
     }
 }
 
+function validateCat() {
+    return true;
+}
+
 
 
 
@@ -851,5 +880,18 @@ function isEventOverDiv(x, y) {
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
   }
+
+// get categories
+function getCategories(){
+    $.getJSON('/categories', function(data){
+        $.each(data, function(key, val){
+            log.console("hello")
+        });       
+    });
+}
+
+function newCategory(){
+
+}
 
   

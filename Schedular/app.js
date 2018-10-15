@@ -261,6 +261,14 @@ app.get('/load_cal_items', function(request, response){
 
 });
 
+// send categories
+app.get('/categories', function(request, response) {
+    let query = "SELECT * FROM categories WHERE user_id=" + request.user.id + ";";
+    pool.query(query, function(err, result) {
+        response.send(results.rows);
+    })
+})
+
 app.post('/new_task', function(request, response) {
     let query_string = "INSERT INTO todo_item (user_id, num_hours, category, completed, description) ";
     let item = request.body;
@@ -355,7 +363,6 @@ app.post('/remove_cal_task', function(request, response) {
 });
 
 app.post('/edit_task', function(request, response){
-    console.log(request.body)
     let oriName = request.body.oldName;
     let newName = request.body.newName;
     let dury = request.body.newDury;
@@ -371,6 +378,10 @@ app.post('/edit_task', function(request, response){
         client.release;
     })
 });
+
+app.post('/add_categories', function(request, response) {
+    console.log(request.body)
+})
 
 
 
