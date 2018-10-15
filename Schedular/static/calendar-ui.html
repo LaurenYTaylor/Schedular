@@ -41,8 +41,8 @@
 
   <div id='wrap'>
     <div class="tabList">
-      <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Ongoing')" >Ongoing</button>
-      <button class="tablinks" onclick="openCity(event, 'Completed')">Completed</button>
+      <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Ongoing')" >Tasks</button>
+      <button class="tablinks" onclick="openCity(event, 'Completed')">Settings</button>
 
 
     <div id='Ongoing' class="tabcontent">
@@ -103,10 +103,12 @@
             </div>
             <p></p>
             <div class="task-dropdown">
-              Priority: <select name="priority" id = "priority">
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
+              Repeat: <select name="repeat" id = "repeat">
+                <option value="None">None</option>
+                <option value="day">Every day</option>
+                <option value="week">Every week</option>
+                <option value="month">Every month</option>
+                <option value="year">Every year</option>
               </select>
             </div>
             <p></p>
@@ -160,10 +162,19 @@
             </div>
             <p></p>
             <div class="task-dropdown">
+<<<<<<< HEAD
               Priority: <select name="priority" id = "editPriority">
                 <option value="Low">Low</option>
                 <option value="Medium">Medium</option>
                 <option value="High">High</option>
+=======
+              Repeat: <select name="repeat" id = "repeat">
+                <option value="None">None</option>
+                <option value="day">Every day</option>
+                <option value="week">Every week</option>
+                <option value="month">Every month</option>
+                <option value="year">Every year</option>
+>>>>>>> 254d2cd8eef1f74a4c18cd3b25257d04afd1a895
               </select>
             </div>
             <p></p>
