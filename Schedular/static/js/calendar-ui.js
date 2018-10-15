@@ -188,6 +188,7 @@ $(document).ready(function() {
           category = $("#category").val();
           repeat = $('#repeat').val();
           dueDate = $('#dueDate').val();
+          priority = $('#priority').val();
 
 
           let new_task = {name: taskName, duration: dury, category: category, priority: priority, dueDate: dueDate};
@@ -209,15 +210,15 @@ $(document).ready(function() {
           if(category == "University") {
               $("#list").append("<div class='task-drag' id='" + taskName +"' style='background: #6578a0' data-taskid=" +new_task.id+ "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
           }else if(category =="Work"){
-              $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" +new_task.id+ "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+              $("#list").append("<div class='task-drag' id='" + taskName +"' style='background: #84b79d' data-taskid=" +new_task.id+ "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
           }else if(category =="Fun"){
-              $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" +new_task.id+ "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+              $("#list").append("<div class='task-drag' id='" + taskName +"' style='background: #c3c60b' data-taskid=" +new_task.id+ "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
           }else if(category =="Chores"){
-              $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" +new_task.id+ "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+              $("#list").append("<div class='task-drag' id='" + taskName +"' style='background: #e5a190' data-taskid=" +new_task.id+ "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
           }else if(category =="Hobby"){
-              $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" +new_task.id+ "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+              $("#list").append("<div class='task-drag' id='" + taskName +"' style='background: #c18fe8' data-taskid=" +new_task.id+ "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
           }else if(category =="Other"){
-              $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" +new_task.id+ "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+              $("#list").append("<div class='task-drag' id='" + taskName +"' style='background: grey' data-taskid=" +new_task.id+ "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
           }          $('#tName').val('');
           $('#hiddenText').hide();
           $("#list").sortable('refresh');
@@ -332,7 +333,7 @@ $(document).ready(function() {
         //let newTask = {name: description, duration: val.num_hours, category: val.category, repeat: val.repeat, dueDate: val.due_date};
         allEvents.push(newTask);
         // create new task with description
-        $("#list").append("<div class='task-drag' id=" + key + "><label>" + description +
+        $("#list").append("<div class='task-drag' id=" + key + " data-taskid = " + val.item_id + "><label>" + description +
         "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>")
 
           // data for calendar
@@ -399,61 +400,6 @@ $(document).ready(function() {
         revertDuration: 0  //  original position after the drag
       });
     });
-
-
-    // get each calendar item description in database
-  $.getJSON('/load_cal_items', function(data){
-      let calendarEvents=[];
-      $.each(data, function(key, val){
-          let date = val.yyyymmdd;
-          let date_split = date.split();
-          let timeless_date = date_split[0];
-          let start_date = timeless_date+'T'+val.start_time;
-          let end_date = timeless_date+'T'+val.end_time;
-          let newEvent = {
-              title: val.description,
-              id: val.item_id,
-              start: start_date,
-              end: end_date
-          };
-          calendarEvents.push(newEvent);
-      });
-      $('#calendar').fullCalendar('renderEvents', calendarEvents, 'stick');
-  });
-
-  $('#list').sortable(
-    {
-      items: ".task-drag",
-      opacity: .6,
-      placeholder: 'placeholder',
-
-      helper:   'clone',
-      update: function(event, ui) {
-        console.log($( "#list" ).sortable( "toArray" ));
-    }
-  });
-
-
-
-  $('#task-list .task-drag').each(function() {
-    // store data so the calendar knows to render an event upon drop
-    $(this).data('event', {
-      title: $.trim($(this).text()), // use the element's text as the event title
-      stick: true, // maintain when user navigates (see docs on the renderEvent method)
-      color: 'green',
-      description: 'This is a cool event',
-      complete: false
-    });
-
-    // make the event draggable using jQuery UI
-    $(this).draggable({
-      zIndex: 999,
-      revert: true,      // will cause the event to go back to its
-      revertDuration: 0  //  original position after the drag
-    });
-
-    });
-
     
     /* initialize the calendar
     -----------------------------------------------------------------*/
@@ -660,8 +606,7 @@ $(document).ready(function() {
                             }
                         });
                     $('#calendar').fullCalendar('removeEvents', event._id);
-                    var el = $( "<div class='task-drag' data-taskid=" + task_id +"><label>"+event.title + "</label>" + "<img src='../rubbish-bin.png'  id='removeBin' ></div>").appendTo( "#list");
-                    //var el = $( "<div class='task-drag' id='" +event.title+ "'><label>"+event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>").appendTo( "#list");
+                    var el = $( "<div class='task-drag' id='" +event.title+ "' data-taskid=" + task_id +"><label>"+event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>").appendTo( "#list");
                     // el.draggable({
                     //   zIndex: 999,
                     //   revert: true,
