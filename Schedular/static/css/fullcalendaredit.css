@@ -1324,7 +1324,7 @@ be a descendant of the grid when it is being dragged.
   vertical-align: middle;
 
 }
-
+/* search tab*/
 /*Task List
 -------------------------------------------------------------------------------------*/
 
@@ -1338,7 +1338,7 @@ be a descendant of the grid when it is being dragged.
 
 
   border: 0px solid #ccc;
-  background: #ddd;
+  background: white;
   text-align: left;
 
 
@@ -1359,7 +1359,6 @@ be a descendant of the grid when it is being dragged.
   cursor: pointer;
   background: #39517A;
   color: white;
-    transition: 0.16s;
 }
 
 #task-list .task-drag:hover {
@@ -1381,13 +1380,13 @@ be a descendant of the grid when it is being dragged.
 
 /* Style the buttons inside the tab */
 .tablinks {
-  background-color: #444444;
-  color: white;
+  background-color: white;
+  color: black;
   float: left;
   border: none;
   outline: none;
   cursor: pointer;
-  padding: 19px 20px;
+  padding: 10px 20px;
   font-size: 11px;
   width: 50%;
     transition: 0.3s;
@@ -1395,14 +1394,14 @@ be a descendant of the grid when it is being dragged.
 
 /* Change background color of buttons on hover */
 .tablinks:hover {
-  background-color: #eee;
+  background-color: #444444;
     color: black;
 }
 
 /* Create an active/current tablink class */
 .tablinks.active {
-  background-color: #ddd;
-    color: black;
+  background-color: #444444;
+    color: white;
 }
 
 /* Style the tab content */
@@ -1410,7 +1409,7 @@ be a descendant of the grid when it is being dragged.
 
 
   width: 100%;
-  background: #ddd;
+  background: white;
   text-align: left;
   padding: 50px 5px;
 
