@@ -583,7 +583,8 @@ $(document).ready(function() {
                     start: newStart,
                     end: newEnd,
                     oldStart: justDragged[0].start,
-                    oldEnd: justDragged[0].end
+                    oldEnd: justDragged[0].end,
+                    id: justDragged[0].id
                 };
                 if (newStart != justDragged[0].start || newEnd != justDragged[0].end) {
                     $.ajax(
