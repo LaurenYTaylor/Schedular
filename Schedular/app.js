@@ -354,6 +354,20 @@ app.post('/remove_cal_task', function(request, response) {
     });
 });
 
+app.post('/edit_task', function(request, response){
+    console.log(request.body)
+    let oriName = request.body.oldName;
+    let newName = request.body.newName;
+    let dury = request.body.newDury;
+    let cat = request.body.newCat;
+    let priority = request.body.newPriority;
+
+    let query_string = "UPDATE todo_item SET description='" + newName + 
+        "', num_hours='" + dury +"', category='" + cat + "', priority='" + 
+        priority +"' WHERE description='" + oriName + "' AND user_id=" +
+        request.user.id + ";";
+});
+
 
 
 http.listen(port, () => console.log("Listening on port " + port));

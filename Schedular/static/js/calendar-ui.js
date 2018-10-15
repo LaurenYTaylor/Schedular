@@ -158,8 +158,9 @@ $(document).ready(function() {
     $(document).on('click', '.editTask', function(){
       $('.popover').popover('hide');
       $("#editModal").modal();
-     
+
       $('#editName').val(element.title);
+
       //Add the rest of the task options eg. duration,priority, Due Date
 
     });
@@ -291,10 +292,25 @@ $(document).ready(function() {
 
   $(function() {
     $(".editButton").click(function() {
+      var oldTitle = element.title;
       element.title = $('#editName').val();
-      console.log(element.title);
       $('#editModal').modal("hide");
       $('#calendar').fullCalendar('updateEvent', element);
+
+      data = {oldName: oldTitle, newName: $('#editName').val(), newDury: $('#editDury').val(),
+              newCat: $('#editCat').val(), newPriority: $('#editPriority').val(), 
+              newDue: $('#datetimepicker1').val()}
+
+      $.ajax(
+        {
+          url: "http://localhost:3000/edit_task",
+          async: true,
+          type: "POST",
+          data: data,
+          success: function (result) {
+            console.log("successfully added");
+          }
+        });
     
 
       // if (validateForm()) {
