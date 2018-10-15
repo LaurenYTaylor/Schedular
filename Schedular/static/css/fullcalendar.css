@@ -1375,8 +1375,8 @@ be a descendant of the grid when it is being dragged.
 }
 
 /*Style the events in the task list*/
-#task-list .task-drag {
-  
+#list .task-drag {
+  position: relative;
   border-radius: 3.5px;
   padding: 5px;
   margin: 10px 0;
@@ -1387,14 +1387,17 @@ be a descendant of the grid when it is being dragged.
 
 
 
-#removeBin {
-  position: absolute;
+.task-drag img:hover {
+  /* float:right;  
+  width: 15px; */
+  /* position: absolute;
   vertical-align: middle;
-  right:10px;
-  background-repeat: no-repeat;
-  height: 17px;
-  visibility: hidden; 
-  /* display:none;  */
+  right:10px; 
+  max-width:15spx;
+  max-height:15px;
+  width: auto;
+  height: auto; */
+  /* display: none; */
 }
 
 /* Style the buttons inside the tab */
