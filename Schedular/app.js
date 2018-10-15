@@ -362,10 +362,14 @@ app.post('/edit_task', function(request, response){
     let cat = request.body.newCat;
     let priority = request.body.newPriority;
 
-    let query_string = "UPDATE todo_item SET description='" + newName + 
+    let query_string = "UPDATE calendar_item SET description='" + newName + 
         "', num_hours='" + dury +"', category='" + cat + "', priority='" + 
         priority +"' WHERE description='" + oriName + "' AND user_id=" +
         request.user.id + ";";
+    pool.connect(function(err, client) {
+        pool.query(query_string);
+        client.release;
+    })
 });
 
 

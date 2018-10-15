@@ -290,6 +290,7 @@ $(document).ready(function() {
   $('#tName').focus();
   });
 
+  //Update database and element when task edited
   $(function() {
     $(".editButton").click(function() {
       var oldTitle = element.title;
@@ -299,7 +300,7 @@ $(document).ready(function() {
 
       data = {oldName: oldTitle, newName: $('#editName').val(), newDury: $('#editDury').val(),
               newCat: $('#editCat').val(), newPriority: $('#editPriority').val(), 
-              newDue: $('#datetimepicker1').val()}
+              newDue: $('#newDate').val()}
 
       $.ajax(
         {
