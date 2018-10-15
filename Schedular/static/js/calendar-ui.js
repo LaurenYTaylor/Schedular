@@ -106,6 +106,7 @@ $(document).ready(function() {
       if (currentPopover.find('ul.file-list').children('li').length >0){
         currentPopover.find('ul.file-list').show();
       }
+      alert(repeat);
 
       
     });
@@ -192,6 +193,7 @@ $(document).ready(function() {
 
 
           let new_task = {name: taskName, duration: dury, category: category, priority: priority, dueDate: dueDate};
+
           $.ajax(
               {
                   url: "http://localhost:3000/new_task",
@@ -221,65 +223,71 @@ $(document).ready(function() {
           } else if (category == "Other") {
               $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
           }
+
+
           $('#tName').val('');
           $('#hiddenText').hide();
           //This sortable thing isn't working idk why
-          //$("#list").sortable('refresh');
+          $("#list").sortable('refresh');
 
           $("#task-list .task-drag").each(function () {
-              let id = $(this)[0].dataset.taskid;
-              let name = $(this).text();
-              let time = "04:00:00";
-              let colour = "grey";
+            let id = $(this)[0].dataset.taskid;
+            let name = $(this).text();
+            let time = "04:00:00";
+            let colour = "grey";
 
-              var arrayLength = allEvents.length;
-              for (var i = 0; i < arrayLength; i++) {
-                  if (id == allEvents[i].id) {
-                      time = "0" + allEvents[i].duration + ":00:00";
-                      category = allEvents[i].category;
-                      if (category == "University") {
-                          colour = "#6578a0";
-                          /*blue*/
-                      }
-                      else if (category == "Work") {
-                          colour = "#84b79d";
-                          /*green*/
-                      }
-                      else if (category == "Fun") {
-                          colour = "#c3c60b";
-                          /*yellow*/
-                      }
-                      else if (category == "Chores") {
-                          colour = "#e5a190";
-                          /*orange*/
-                      }
-                      else if (category == "Hobby") {
-                          colour = "#c18fe8";
-                          /*purple*/
-                      }
-                      else {
-                          colour = "grey";
-                      }
-                  }
-
+            var arrayLength = allEvents.length;
+            for (var i = 0; i < arrayLength; i++) {
+              if (id == allEvents[i].id) {
+                time = "0" + allEvents[i].duration + ":00:00";
+                category = allEvents[i].category;
+                if (category == "University") {
+                    colour = "#6578a0";
+                    /*blue*/
+                }
+                else if (category == "Work") {
+                    colour = "#84b79d";
+                    /*green*/
+                }
+                else if (category == "Fun") {
+                    colour = "#c3c60b";
+                    /*yellow*/
+                }
+                else if (category == "Chores") {
+                    colour = "#e5a190";
+                    /*orange*/
+                }
+                else if (category == "Hobby") {
+                    colour = "#c18fe8";
+                    /*purple*/
+                }
+                else {
+                    colour = "grey";
+                }
               }
 
+            }
+
+            //THIS IS THE DATA THAT 
               // store data so the calendar knows to render an event upon drop
-              $(this).data('event', {
-                  title: name, // use the element's text as the event title
-                  stick: true, // maintain when user navigates (see docs on the renderEvent method)
-                  color: colour,
-                  description: name,
-                  complete: false,
-                  duration: time
-              });
+            $(this).data('event', {
+
+              title: name, // use the element's text as the event title
+              stick: true, // maintain when user navigates (see docs on the renderEvent method)
+              color: "red",
+              description: name,
+              complete: false,
+              start: "09:00:00", //This initializes new task to start at 9am on monthly view
+              end: "10:00:00",
+              duration: time
+            });
 
               //make the event draggable using jQuery UI
-              $(this).draggable({
-                  zIndex: 999,
-                  revert: true,      // will cause the event to go back to its
-                  revertDuration: 0  //  original position after the drag
-              });
+              // $(this).draggable({
+              //     zIndex: 999,
+              //     revert: true,      // will cause the event to go back to its
+              //     revertDuration: 0  //  original position after the drag
+              // });
 
           });
           return false;
@@ -302,7 +310,6 @@ $(document).ready(function() {
   $(function() {
     $(".editButton").click(function() {
       element.title = $('#editName').val();
-      console.log(element.title);
       $('#editModal').modal("hide");
       $('#calendar').fullCalendar('updateEvent', element);
     });
@@ -325,75 +332,81 @@ $(document).ready(function() {
     -----------------------------------------------------------------*/
     // get tasks in database and add to task list
 
-    $.getJSON('/tasks', function(data){
-      // get each task description in database
+  $.getJSON('/tasks', function(data){
+    // get each task description in database
 
-      //CAN I CHANGE THE ID OF THIS TASK FROM KEY TO EVENT TITLE??????????
-      $.each(data, function(key, val){
-        if(val.in_calendar==true) {
-            return;
-        }
-        let description = val.description;
-        let newTask = {id: val.item_id, name: description, duration: val.num_hours, category: val.category, priority: val.priority, dueDate: val.due_date};
-        //let newTask = {name: description, duration: val.num_hours, category: val.category, repeat: val.repeat, dueDate: val.due_date};
-        allEvents.push(newTask);
-        // create new task with description
-        $("#list").append("<div class='task-drag' id=" + key + " data-taskid = " + val.item_id + "><label>" + description +
-        "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>")
+    //CAN I CHANGE THE ID OF THIS TASK FROM KEY TO EVENT TITLE??????????
+    $.each(data, function(key, val){
+      if(val.in_calendar==true) {
+          return;
+      }
+      let description = val.description;
+      let newTask = {id: val.item_id, name: description, duration: val.num_hours, category: val.category, priority: val.priority, dueDate: val.due_date};
+      //let newTask = {name: description, duration: val.num_hours, category: val.category, repeat: val.repeat, dueDate: val.due_date};
+      allEvents.push(newTask);
+      // create new task with description
+      $("#list").append("<div class='task-drag' id=" + key + " data-taskid = " + val.item_id + "><label>" + description +
+      "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>")
 
-          // data for calendar
-        $("#" + key).data('event', {
-          title: $.trim($("#" + key).text()), // use the element's text as the event title
-          stick: true, // maintain when user navigates (see docs on the renderEvent method)
-          color: 'green',
-          description: description,
-          complete: false
-        });
+        // data for calendar
+      $("#" + key).data('event', {
+        title: $.trim($("#" + key).text()), // use the element's text as the event title
+        stick: true, // maintain when user navigates (see docs on the renderEvent method)
+        color: 'green',
+        start: "09:00:00",
+        end: "10:00:00",
+        description: description,
+        complete: false
+      });
 
-        // make task draggable
-        $("#" + key).draggable({
-          zIndex: 999,
-          revert: true,      // will cause the event to go back to its
-          revertDuration: 0  //  original position after the drag
-        });
+      // make task draggable
+      $("#" + key).draggable({
+        connectToSortable: "#list",
+        zIndex: 999,
+        revert: true,      // will cause the event to go back to its
+        revertDuration: 0  //  original position after the drag
       });
     });
+  });
 
     // get each calendar item description in database
-    $.getJSON('/load_cal_items', function(data){
-        $.each(data, function(key, val){
-            let date = val.yyyymmdd;
-            let parent = val.parent_task_id;
-            let date_split = date.split();
-            let timeless_date = date_split[0];
-            let start_date = timeless_date+'T'+val.start_time;
-            let end_date = timeless_date+'T'+val.end_time;
-            let due_date = val.due_date;
-            let priority = val.priority;
-            let newEvent = {
-                title: val.description,
-                id: val.item_id,
-                start: start_date,
-                end: end_date,
-                parent_task: parent,
-                duration: val.num_hours,
-                category: val.category,
-                due_date: due_date,
-                priority: priority,
-            };
-            calendarEvents.push(newEvent);
-        });
-        $('#calendar').fullCalendar('renderEvents', calendarEvents, 'stick');
+  $.getJSON('/load_cal_items', function(data){
+    $.each(data, function(key, val){
+      let date = val.yyyymmdd;
+      let parent = val.parent_task_id;
+      let date_split = date.split();
+      let timeless_date = date_split[0];
+      let start_date = timeless_date+'T'+val.start_time;
+      let end_date = timeless_date+'T'+val.end_time;
+      let due_date = val.due_date;
+      let priority = val.priority;
+      let newEvent = {
+          title: val.description,
+          id: val.item_id,
+          start: start_date,
+          end: end_date,
+          parent_task: parent,
+          duration: val.num_hours,
+          category: val.category,
+          due_date: due_date,
+          priority: priority,
+          color:'green'
+      };
+      
+      calendarEvents.push(newEvent);
     });
+    $('#calendar').fullCalendar('renderEvents', calendarEvents, 'stick');
+  });
 
 
     $('#task-list .task-drag').each(function() {
-        console.log($(this));
       // store data so the calendar knows to render an event upon drop
       $(this).data('event', {
         title: $.trim($(this).text()), // use the element's text as the event title
         stick: true, // maintain when user navigates (see docs on the renderEvent method)
         color: 'green',
+        start: "09:00:00", //This initializes the start time of the task in the task list to 9am
+
         description: description,
         complete: false
       })
@@ -405,6 +418,64 @@ $(document).ready(function() {
         revertDuration: 0  //  original position after the drag
       });
     });
+
+
+    // get each calendar item description in database
+  $.getJSON('/load_cal_items', function(data){
+      let calendarEvents=[];
+      $.each(data, function(key, val){
+          let date = val.yyyymmdd;
+          let date_split = date.split();
+          let timeless_date = date_split[0];
+          let start_date = timeless_date+'T'+val.start_time;
+          let end_date = timeless_date+'T'+val.end_time;
+          let newEvent = {
+              title: val.description,
+              id: val.item_id,
+              start: start_date,
+              end: end_date,
+              color:'grey'
+          };
+          calendarEvents.push(newEvent);
+      });
+      $('#calendar').fullCalendar('renderEvents', calendarEvents, 'stick');
+  });
+
+  $('#list').sortable(
+    {
+      items: ".task-drag",
+      opacity: .6,
+      placeholder: 'placeholder',
+               
+      helper:   'clone',
+      update: function(event, ui) {
+      console.log($( "#list" ).sortable( "toArray" ));
+    }
+  });
+
+
+
+  $('#task-list .task-drag').each(function() {
+    // store data so the calendar knows to render an event upon drop
+    $(this).data('event', {
+      title: $.trim($(this).text()), // use the element's text as the event title
+      stick: true, // maintain when user navigates (see docs on the renderEvent method)
+      color: 'green',
+      description: 'This is a cool event',
+      complete: false
+      
+    });
+
+    // make the event draggable using jQuery UI
+    $(this).draggable({
+      zIndex: 999,
+      revert: true,      // will cause the event to go back to its
+      revertDuration: 0  //  original position after the drag
+    });
+
+  });
+
+
     
     /* initialize the calendar
     -----------------------------------------------------------------*/
@@ -613,6 +684,7 @@ $(document).ready(function() {
                     $('#calendar').fullCalendar('removeEvents', event._id);
                     var el = $( "<div class='task-drag' id='" +event.title+ "' data-taskid=" + task_id +"><label>"+event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>").appendTo( "#list");
                     // el.draggable({
+
                     //   zIndex: 999,
                     //   revert: true,
                     //   revertDuration: 0
@@ -623,6 +695,8 @@ $(document).ready(function() {
                         id :event.id,
                         stick: true,
                         color: 'green',
+                        start: "09:00:00",
+                        end: "10:00:00",
                         description: "Jump",
                         complete: false
                     });
