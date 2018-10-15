@@ -1395,7 +1395,7 @@ be a descendant of the grid when it is being dragged.
 /* Change background color of buttons on hover */
 .tablinks:hover {
   background-color: #444444;
-    color: black;
+    color: white;
 }
 
 /* Create an active/current tablink class */
@@ -1411,7 +1411,7 @@ be a descendant of the grid when it is being dragged.
   width: 100%;
   background: white;
   text-align: left;
-  padding: 50px 5px;
+  padding: 25px 5px;
 
   display: none;
   border-top: none;
