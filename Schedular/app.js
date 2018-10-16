@@ -383,14 +383,13 @@ app.post('/edit_task', function(request, response){
     let newName = request.body.newName;
     let dury = request.body.newDury;
     let cat = request.body.newCat;
-    let priority = request.body.newPriority;
+    let end = request.body.end;
 
     let query_string = "UPDATE calendar_item SET description='" + newName + 
         "', num_hours='" + dury +"', category='" + cat +
-        "' WHERE item_id=" + id + " AND user_id=" +
-        request.user.id + ";";
-
-    console.log(query_string)
+        "', end_time='" + end + "' WHERE item_id=" + id + 
+        " AND user_id=" + request.user.id + ";";
+        
     pool.connect(function(err, client) {
         pool.query(query_string);
         client.release;

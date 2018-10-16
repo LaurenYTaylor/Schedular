@@ -195,6 +195,7 @@ $(document).ready(function() {
       $("#editModal").modal();
 
       $('#editName').val(element.title);
+      $('#editDury').val(element.num_hours);
       //Add the rest of the task options eg. duration,priority, Due Date
 
 
@@ -280,31 +281,49 @@ $(document).ready(function() {
   });
 
   //Update database and element when task edited
-  $(function() {
-    $(".editButton").click(function() {
-      var oldTitle = element.title;
-      element.title = $('#editName').val();
-      $('#editModal').modal("hide");
-      $('#calendar').fullCalendar('updateEvent', element);
+    $(function() {
+        $(".editButton").click(function() {
+            var name = $('#editName').val();
+            var hours = $('#editDury').val();
+            var category = $('#editCat').val();
+            var dueDate = $('#newDate').val();
+            var start = new Date(element.start);
+            var end_date = new Date(start.getTime() + (60000 * 60 * hours));
+            end_date = end_date.toISOString().split('.', 1)[0]
 
-      id = element.id;
-      alert(id);
+            element.title = name;
+            element.num_hours = hours;
+            element.cat = category;
+            element.end = end_date;
 
-      data = {id: id, newName: $('#editName').val(), newDury: $('#editDury').val(),
-              newCat: $('#editCat').val(), newDue: $('#newDate').val()}
+            $('#editModal').modal("hide");
+            $('#calendar').fullCalendar('updateEvent', element);
 
-      $.ajax(
-        {
-          url: "http://localhost:3000/edit_task",
-          async: true,
-          type: "POST",
-          data: data,
-          success: function (result) {
-            console.log("successfully added");
-          }
-        });
+            
+            
+            id = element.id;
+            data = {
+                id: id, 
+                newName: name, 
+                newDury: hours,
+                newCat: category, 
+                newDue: dueDate,
+                end: end_date.split('T')[1]
+            }
+
+            $.ajax(
+            {
+                url: "http://localhost:3000/edit_task",
+                async: true,
+                type: "POST",
+                data: data,
+                success: function (result) {
+                    console.log("successfully added");
+                }
+            });
     
-
+        });
+    });
       // if (validateForm()) {
 
       //     taskName = $('#tName').val();
@@ -382,8 +401,7 @@ $(document).ready(function() {
       // return false;
       // validate and process form here
 
-    });
-  });
+
 
 
   //Close modal when close button is pressed//
@@ -449,6 +467,7 @@ $(document).ready(function() {
             let due_date = val.due_date;
             let priority = val.priority;
             let note = val.notes;
+            let num_hours = val.num_hours;
             let newEvent = {
                 title: val.description,
                 id: val.item_id,
@@ -459,7 +478,8 @@ $(document).ready(function() {
                 category: val.category,
                 due_date: due_date,
                 priority: priority,
-                note: note
+                note: note,
+                num_hours: num_hours
             };
             calendarEvents.push(newEvent);
         });
