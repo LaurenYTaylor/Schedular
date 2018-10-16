@@ -106,11 +106,7 @@ $(document).ready(function() {
       if (currentPopover.find('ul.file-list').children('li').length >0){
         currentPopover.find('ul.file-list').show();
       }
-
-      
     });
-
-
 
     //eventlistener to displays bin icon when the mouse
     //hovers overs a task in the task list
@@ -224,64 +220,7 @@ $(document).ready(function() {
           $('#tName').val('');
           $('#hiddenText').hide();
           //This sortable thing isn't working idk why
-          //$("#list").sortable('refresh');
-
-          $("#task-list .task-drag").each(function () {
-              let id = $(this)[0].dataset.taskid;
-              let name = $(this).text();
-              let time = "04:00:00";
-              let colour = "grey";
-
-              var arrayLength = allEvents.length;
-              for (var i = 0; i < arrayLength; i++) {
-                  if (id == allEvents[i].id) {
-                      time = "0" + allEvents[i].duration + ":00:00";
-                      category = allEvents[i].category;
-                      if (category == "University") {
-                          colour = "#6578a0";
-                          /*blue*/
-                      }
-                      else if (category == "Work") {
-                          colour = "#84b79d";
-                          /*green*/
-                      }
-                      else if (category == "Fun") {
-                          colour = "#c3c60b";
-                          /*yellow*/
-                      }
-                      else if (category == "Chores") {
-                          colour = "#e5a190";
-                          /*orange*/
-                      }
-                      else if (category == "Hobby") {
-                          colour = "#c18fe8";
-                          /*purple*/
-                      }
-                      else {
-                          colour = "grey";
-                      }
-                  }
-
-              }
-
-              // store data so the calendar knows to render an event upon drop
-              $(this).data('event', {
-                  title: name, // use the element's text as the event title
-                  stick: true, // maintain when user navigates (see docs on the renderEvent method)
-                  color: colour,
-                  description: name,
-                  complete: false,
-                  duration: time
-              });
-
-              //make the event draggable using jQuery UI
-              $(this).draggable({
-                  zIndex: 999,
-                  revert: true,      // will cause the event to go back to its
-                  revertDuration: 0  //  original position after the drag
-              });
-
-          });
+          $("#list").sortable('refresh');
           return false;
           // validate and process form here
       }
@@ -338,24 +277,20 @@ $(document).ready(function() {
         //let newTask = {name: description, duration: val.num_hours, category: val.category, repeat: val.repeat, dueDate: val.due_date};
         allEvents.push(newTask);
         // create new task with description
-        $("#list").append("<div class='task-drag' id=" + key + " data-taskid = " + val.item_id + "><label>" + description +
-        "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>")
-
-          // data for calendar
-        $("#" + key).data('event', {
-          title: $.trim($("#" + key).text()), // use the element's text as the event title
-          stick: true, // maintain when user navigates (see docs on the renderEvent method)
-          color: 'green',
-          description: description,
-          complete: false
-        });
-
-        // make task draggable
-        $("#" + key).draggable({
-          zIndex: 999,
-          revert: true,      // will cause the event to go back to its
-          revertDuration: 0  //  original position after the drag
-        });
+        let category = newTask.category;
+        if (category == "University") {
+            $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + val.item_id + "><label>" + description+ "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+        } else if (category == "Work") {
+            $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + val.item_id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+        } else if (category == "Fun") {
+            $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + val.item_id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+        } else if (category == "Chores") {
+            $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + val.item_id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+        } else if (category == "Hobby") {
+            $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + val.item_id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+        } else if (category == "Other") {
+            $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + val.item_id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+        }
       });
     });
 
@@ -377,35 +312,46 @@ $(document).ready(function() {
                 end: end_date,
                 parent_task: parent,
                 duration: val.num_hours,
-                category: val.category,
+                cat: val.category,
                 due_date: due_date,
                 priority: priority,
             };
+            switch(newEvent.cat) {
+                case "University":
+                    newEvent.color = '#6578a0';
+                    break;
+                case "Work":
+                    newEvent.color = '#84b79d';
+                    break;
+                case "Fun":
+                    newEvent.color = '#c3c60b';
+                    break;
+                case "Chores":
+                    newEvent.color = '#e5a190';
+                    break;
+                case "Hobby":
+                    newEvent.color = '#c18fe8';
+                    break;
+                case "Other":
+                    newEvent.color = 'grey';
+            }
             calendarEvents.push(newEvent);
         });
         $('#calendar').fullCalendar('renderEvents', calendarEvents, 'stick');
     });
 
+    $('#list').sortable(
+        {
+            items: ".task-drag",
+            opacity: .6,
+            placeholder: 'placeholder',
 
-    $('#task-list .task-drag').each(function() {
-        console.log($(this));
-      // store data so the calendar knows to render an event upon drop
-      $(this).data('event', {
-        title: $.trim($(this).text()), // use the element's text as the event title
-        stick: true, // maintain when user navigates (see docs on the renderEvent method)
-        color: 'green',
-        description: description,
-        complete: false
-      })
+            helper:   'clone',
+            update: function(event, ui) {
+                console.log($( "#list" ).sortable( "toArray" ));
+            }
+        });
 
-      // make task draggable
-      $("#" + key).draggable({
-        zIndex: 999,
-        revert: true,      // will cause the event to go back to its
-        revertDuration: 0  //  original position after the drag
-      });
-    });
-    
     /* initialize the calendar
     -----------------------------------------------------------------*/
 
@@ -427,9 +373,10 @@ $(document).ready(function() {
           var endTime;
           var dueDate;
           var priority;
+          var time;
           for (var i = 0; i < allEvents.length; i++) {
               if (task_id == allEvents[i].id) {
-                  let time = allEvents[i].duration;
+                  time = allEvents[i].duration;
                   category = allEvents[i].category;
                   startTime = date.format();
                   duration_ms = time*60*60*1000;
@@ -439,31 +386,61 @@ $(document).ready(function() {
                   allEvents.splice(i,1);
               }
           }
-          let newCalEvent = {name: event_name, duration: duration_ms, cat: category, start: startTime, end: endTime,
+          //Put time in appropriate format (IOString) for insertion into the database
+          let start = 9;
+          let end = start+parseInt(time);
+          let start_split = startTime.split('T');
+          if(!start_split[1]) {
+              startTime = startTime+"T09:00:00";
+          }
+          let end_split = endTime.split('T');
+          if(!end_split[1]) {
+              if(end<10) {
+                  endTime = end_split[0]+"T0"+end+":00:00";
+              } else {
+                  endTime = end_split[0]+"T"+end+":00:00";
+              }
+          }
+          let newCalEvent = {title: event_name, duration: duration_ms, cat: category, start: startTime, end: endTime,
               parent_task: task_id, due_date: dueDate, priority: priority};
-
-          let event = {name: event_name, duration: duration_ms, cat: category, start: startTime, end: endTime};
-
+          switch(newCalEvent.cat) {
+              case "University":
+                  newCalEvent.color = '#6578a0';
+                  break;
+              case "Work":
+                  newCalEvent.color = '#84b79d';
+                  break;
+              case "Fun":
+                  newCalEvent.color = '#c3c60b';
+                  break;
+              case "Chores":
+                  newCalEvent.color = '#e5a190';
+                  break;
+              case "Hobby":
+                  newCalEvent.color = '#c18fe8';
+                  break;
+              case "Other":
+                  newCalEvent.color = 'grey';
+          }
           $.ajax(
               {
                   url: "http://localhost:3000/new_cal_task",
-                  async: true,
+                  async: false,
                   type: "POST",
                   data: newCalEvent,
                   success: function (result) {
                       let id = JSON.parse(result);
                       newCalEvent.id = id;
+                      newCalEvent.duration=duration_ms/(60*60*1000);
+
                   }
               });
-          newCalEvent.duration=duration_ms/(60*60*1000);
           calendarEvents.push(newCalEvent);
-          $('#calendar').fullCalendar('renderEvents', newCalEvent, 'stick');
-          console.log(newCalEvent);
-        // is the "remove after drop" checkbox checked?
+          // is the "remove after drop" checkbox checked?
           // if so, remove the element from the "Draggable Events" list
-         $(this).remove();
-          // $('#calendar').fullCalendar('renderEvent', event, true);
-
+          $(this).remove();
+          $('#calendar').fullCalendar('renderEvent', newCalEvent, 'stick');
+          //$('#calendar').fullCalendar('removeEvents', newCalEvent.id);
       },
 
       //When mouse hovers over
@@ -489,7 +466,6 @@ $(document).ready(function() {
 
       /*Triggered when an event is being rendered*/
       eventRender: function(event,jsEvent){
-          console.log(event);
           if(!event.complete) {
             //popover properties
 
@@ -503,12 +479,11 @@ $(document).ready(function() {
                 //trigger:'manual'
             });
             let dragEvent=event;
-            console.log(justDragged[0]);
             if (justDragged.length > 0 && justDragged[0].id == dragEvent.id) {
                 let newStart = dragEvent.start._d.toISOString().split('.', 1)[0];
                 let newEnd = dragEvent.end._d.toISOString().split('.', 1)[0];
                 let eventData = {
-                    name: justDragged[0].title,
+                    title: justDragged[0].title,
                     start: newStart,
                     end: newEnd,
                     oldStart: justDragged[0].start,
@@ -530,7 +505,7 @@ $(document).ready(function() {
                     calendarEvents.splice(i, 1);
                     let newCalEvent = {
                         id: justDragged[0].id,
-                        name: justDragged[0].title,
+                        title: justDragged[0].title,
                         duration: justDragged[0].duration,
                         cat: justDragged[0].category,
                         start: newStart,
@@ -568,7 +543,6 @@ $(document).ready(function() {
 
       //function fires when event is finished dragging
       eventDragStop: function( event, jsEvent, ui, view ) {
-        console.log("inside dragging");
         dragging = false;
         for (let i=0; i<calendarEvents.length; i++) {
             if(calendarEvents[i].id==event.id) {
@@ -587,17 +561,16 @@ $(document).ready(function() {
           && jsEvent.pageY <= offset.bottom
          ) {
             let task_id=0;
-            console.log("inside tasklist");
             for(let i=0; i<calendarEvents.length; i++) {
-                console.log(calendarEvents[i].id);
-                console.log(event.id);
-                if(calendarEvents[i].id===event.id) {
+                if(calendarEvents[i].id==event.id) {
                     let id=calendarEvents[i].id;
                     let parent=calendarEvents[i].parent_task;
                     task_id=parent;
-                    let newTask = {id: parent, name: calendarEvents[i].name,
+                    console.log("THE FOLLOWING TASK HAS BEEN ADDED BACK TO THE TASK LIST");
+                    let newTask = {id: parent, name: calendarEvents[i].title,
                         duration: calendarEvents[i].duration, category: calendarEvents[i].cat,
                         priority: calendarEvents[i].priority, dueDate: calendarEvents[i].due_date};
+                    console.log(newTask);
                     allEvents.push(newTask);
                     calendarEvents.splice(i, 1);
                     justDragged.pop();
@@ -612,21 +585,21 @@ $(document).ready(function() {
                             }
                         });
                     $('#calendar').fullCalendar('removeEvents', event._id);
-                    var el = $( "<div class='task-drag' id='" +event.title+ "' data-taskid=" + task_id +"><label>"+event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>").appendTo( "#list");
-                    // el.draggable({
-                    //   zIndex: 999,
-                    //   revert: true,
-                    //   revertDuration: 0
-                    // });
+                    let category = newTask.category;
+                    if (category == "University") {
+                        $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + task_id + "><label>" + event.title + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                    } else if (category == "Work") {
+                        $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                    } else if (category == "Fun") {
+                        $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                    } else if (category == "Chores") {
+                        $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                    } else if (category == "Hobby") {
+                        $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                    } else if (category == "Other") {
+                        $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                    }
 
-                    el.data('event', {
-                        title: event.title,
-                        id :event.id,
-                        stick: true,
-                        color: 'green',
-                        description: "Jump",
-                        complete: false
-                    });
                     $("#list").sortable('refresh');
                 }
             }
