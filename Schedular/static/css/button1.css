@@ -17,16 +17,23 @@
 }
 
 .button1 {
-    background-color: #22385b;
+    background-color: #aabedf;
     color: white;
     border: 0px solid #4CAF50;
     font-size: 18px;
-    padding: 8px 52.9px;
+    padding: 20px 62.5px;
     transition: 0.5s;
+    border:
 }
 
 .button1:hover {
-    background-color: #3b62a0;
+    background-color: #e3eaf4;
+    border-top: 5px double #3b62a0;
+    border-bottom: 5px double #3b62a0;
+
+
+
+
     color: white;
 }
                                                                                                                                                                                                                                                                                                                                                            <button class="button button5">Black</button>
