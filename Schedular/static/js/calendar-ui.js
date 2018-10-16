@@ -150,6 +150,7 @@ $(document).ready(function() {
     $(document).on('mouseenter', '.task-drag', function(){
 
       $(this).find("#removeBin1").css('display', 'inline-block');
+        $(this).find("#edit1").css('display', 'inline-block');
       
     });
 
@@ -158,10 +159,9 @@ $(document).ready(function() {
     // leaves the the task
     $(document).on('mouseleave', '.task-drag', function(){
       $(this).find("#removeBin1").css('display', 'none');
+        $(this).find("#edit1").css('display', 'none');
       
     });
-
-
 
     //eventlistener that fires when user clicks on the bin icon
     //This removes the task from the interface and the database
@@ -183,6 +183,16 @@ $(document).ready(function() {
             console.log("successfully deleted");
         }
       });
+    });
+
+    //this is when you click the edit icon next to the bin
+    //i copied the code below, im not sure why the edit does'nt work, sorry :(
+    $(document).on('click', '#edit1', function(){
+        $('.popover').popover('hide');
+        $("#editModal").modal();
+
+        $('#editName').val(element.title);
+        $('#editDury').val(element.num_hours);
     });
 
 
@@ -245,17 +255,29 @@ $(document).ready(function() {
 
                 $('#myModal').modal('hide')
                 if (category == "University") {
-                    $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + new_task.id + "><label>" + taskName + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                    $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + new_task.id + "><label>" + taskName + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/> " +
+                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                 } else if (category == "Work") {
-                    $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                    $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                 } else if (category == "Fun") {
-                    $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                    $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                 } else if (category == "Chores") {
-                    $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                    $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                 } else if (category == "Hobby") {
-                    $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                    $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                 } else if (category == "Other") {
-                    $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                    $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                 }
                 $('#tName').val('');
                 $('#hiddenText').hide();
@@ -434,7 +456,8 @@ $(document).ready(function() {
         allEvents.push(newTask);
         // create new task with description
         $("#list").append("<div class='task-drag' id=" + key + " data-taskid = " + val.item_id + "><label>" + description +
-        "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>")
+        "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>"
+            + "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>")
 
           // data for calendar
         $("#" + key).data('event', {
