@@ -83,8 +83,9 @@ $(document).ready(function() {
       '</ul>',
       '<div id="Notes">',
       '<h4>Notes</h4>',
-      '<textarea rows="4" cols="50"></textarea>',
+      '<textarea rows="4" cols="50" id="notes"></textarea>',
       '</div>',
+      '<input type="submit" id="save" value="save">',
        '</div>'].join('');
 
     //Modal start appears when adding task//
@@ -129,7 +130,17 @@ $(document).ready(function() {
         currentPopover.find('ul.file-list').show();
       }
 
-      
+      var file = e.target.files[0];
+      $.ajax(
+            {
+              url: "http://localhost:3000/add_file",
+              async: true,
+              type: "POST",
+              data: file,
+              success: function (result) {
+                console.log("successfully added file");
+              }
+        }); 
     });
 
 
@@ -169,7 +180,7 @@ $(document).ready(function() {
         type: "POST",
         data: {taskid: task_id},
         success: function (result) {
-        console.log("successfully deleted");
+            console.log("successfully deleted");
         }
       });
     });
@@ -549,6 +560,33 @@ $(document).ready(function() {
         //closePopovers();
         popoverElement = $(jsEvent.currentTarget);
         element = calEvent;
+
+
+        let task_id = calEvent.id
+
+        $(document).on('click', '#save', function(){
+            var note = $('#notes').val()
+
+            var data = {
+                id: task_id,
+                note: note
+
+            }
+
+        //data = {note:note, filename:"file"}
+
+            $.ajax(
+            {
+                url: "http://localhost:3000/add_notes_files",
+                async: true,
+                type: "POST",
+                data: data,
+                success: function (result) {
+                    console.log("successfully added");
+                }
+            });
+        })
+
         
      
       },
@@ -725,11 +763,7 @@ $(document).ready(function() {
 
       },
 
-
-
     });
-
-
 
 });
 

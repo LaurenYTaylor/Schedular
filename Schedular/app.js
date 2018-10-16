@@ -397,7 +397,29 @@ app.post('/edit_task', function(request, response){
 
 app.post('/add_categories', function(request, response) {
     console.log(request.body)
-})
+});
+
+app.post('/add_file', function(request, response) {
+    //console.log(request.body)
+    console.log("file added")
+});
+
+app.post('/add_notes_files', function(request, response) {
+    console.log(request.body);
+    let id = request.body.id
+    let note = request.body.note
+
+    let query_string = "UPDATE calendar_item SET notes='" +
+        note + "' WHERE item_id=" + id + " AND user_id=" +
+        request.user.id + ";";
+    console.log(query_string)
+
+    pool.connect(function(err, client) {
+        pool.query(query_string);
+        client.release;
+    })
+
+});
 
 
 
