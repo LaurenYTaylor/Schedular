@@ -446,6 +446,7 @@ $(document).ready(function() {
             let end_date = timeless_date+'T'+val.end_time;
             let due_date = val.due_date;
             let priority = val.priority;
+            let note = val.notes;
             let newEvent = {
                 title: val.description,
                 id: val.item_id,
@@ -456,6 +457,7 @@ $(document).ready(function() {
                 category: val.category,
                 due_date: due_date,
                 priority: priority,
+                note: note
             };
             calendarEvents.push(newEvent);
         });
@@ -562,18 +564,24 @@ $(document).ready(function() {
         element = calEvent;
 
 
+        var dispNote;
+
+        for (var i = 0; i < calendarEvents.length; i++){
+            if(calendarEvents[i].id == element.id) {
+                dispNote = calendarEvents[i].note;
+            }
+        }
+
+        $('#notes').val(dispNote);
+
         let task_id = calEvent.id
-
+        //add notes to database
         $(document).on('click', '#save', function(){
-            var note = $('#notes').val()
-
+            var note = $('#notes').val();
             var data = {
                 id: task_id,
                 note: note
-
-            }
-
-        //data = {note:note, filename:"file"}
+            };
 
             $.ajax(
             {
@@ -586,8 +594,6 @@ $(document).ready(function() {
                 }
             });
         })
-
-        
      
       },
 
