@@ -287,8 +287,10 @@ $(document).ready(function() {
       $('#editModal').modal("hide");
       $('#calendar').fullCalendar('updateEvent', element);
 
+      id = element.id;
+      alert(id);
 
-      data = {oldName: oldTitle, newName: $('#editName').val(), newDury: $('#editDury').val(),
+      data = {id: id, newName: $('#editName').val(), newDury: $('#editDury').val(),
               newCat: $('#editCat').val(), newDue: $('#newDate').val()}
 
       $.ajax(
@@ -563,7 +565,7 @@ $(document).ready(function() {
         popoverElement = $(jsEvent.currentTarget);
         element = calEvent;
 
-
+        //load notes into popover
         var dispNote;
 
         for (var i = 0; i < calendarEvents.length; i++){
@@ -571,11 +573,10 @@ $(document).ready(function() {
                 dispNote = calendarEvents[i].note;
             }
         }
-
         $('#notes').val(dispNote);
 
-        let task_id = calEvent.id
         //add notes to database
+        let task_id = calEvent.id
         $(document).on('click', '#save', function(){
             var note = $('#notes').val();
             var data = {

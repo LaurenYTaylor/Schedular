@@ -379,7 +379,7 @@ app.post('/remove_cal_task', function(request, response) {
 });
 
 app.post('/edit_task', function(request, response){
-    let oriName = request.body.oldName;
+    let id = request.body.id;
     let newName = request.body.newName;
     let dury = request.body.newDury;
     let cat = request.body.newCat;
@@ -387,8 +387,10 @@ app.post('/edit_task', function(request, response){
 
     let query_string = "UPDATE calendar_item SET description='" + newName + 
         "', num_hours='" + dury +"', category='" + cat +
-        "' WHERE description='" + oriName + "' AND user_id=" +
+        "' WHERE item_id=" + id + " AND user_id=" +
         request.user.id + ";";
+
+    console.log(query_string)
     pool.connect(function(err, client) {
         pool.query(query_string);
         client.release;
@@ -405,14 +407,12 @@ app.post('/add_file', function(request, response) {
 });
 
 app.post('/add_notes_files', function(request, response) {
-    console.log(request.body);
     let id = request.body.id
     let note = request.body.note
 
     let query_string = "UPDATE calendar_item SET notes='" +
         note + "' WHERE item_id=" + id + " AND user_id=" +
         request.user.id + ";";
-    console.log(query_string)
 
     pool.connect(function(err, client) {
         pool.query(query_string);
