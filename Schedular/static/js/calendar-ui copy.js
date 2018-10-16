@@ -206,56 +206,112 @@ $(document).ready(function() {
     //This needs to be checked every time a task is added into the calendar
     $(function() {
         let newEventID=0;
-        $(".CreateButton").click(function() {
-            if (validateForm()) {
-                taskName = $('#tName').val();
-                dury = $('#dury').val();
-                category = $("#category").val();
-                repeat = $('#repeat').val();
-                dueDate = $('#dueDate').val();
-                priority = $('#priority').val();
+    $(".CreateButton").click(function() {
+      if (validateForm()) {
+          taskName = $('#tName').val();
+          dury = $('#dury').val();
+          category = $("#category").val();
+          repeat = $('#repeat').val();
+          dueDate = $('#dueDate').val();
+          priority = $('#priority').val();
 
 
-                let new_task = {name: taskName, duration: dury, category: category, priority: priority, dueDate: dueDate};
-                $.ajax(
-                {
-                    url: "http://localhost:3000/new_task",
-                    async: false,
-                    type: "POST",
-                    data: new_task,
-                    success: function (result) {
-                        let task_id = JSON.parse(result);
-                        new_task.id = task_id;
-                        newEventID = new_task.id;
-                        allEvents.push(new_task);
-                    }
-                });
+          let new_task = {name: taskName, duration: dury, category: category, priority: priority, dueDate: dueDate};
+          $.ajax(
+              {
+                  url: "http://localhost:3000/new_task",
+                  async: false,
+                  type: "POST",
+                  data: new_task,
+                  success: function (result) {
+                      let task_id = JSON.parse(result);
+                      new_task.id = task_id;
+                      newEventID = new_task.id;
+                      allEvents.push(new_task);
+                  }
+              });
 
-                $('#myModal').modal('hide')
-                if (category == "University") {
-                    $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + new_task.id + "><label>" + taskName + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Work") {
-                    $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Fun") {
-                    $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Chores") {
-                    $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Hobby") {
-                    $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Other") {
-                    $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
-                }
-                $('#tName').val('');
-                $('#hiddenText').hide();
-                //This sortable thing isn't working idk why
-                //$("#list").sortable('refresh');
+          $('#myModal').modal('hide')
+          if (category == "University") {
+              $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + new_task.id + "><label>" + taskName + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+              //$("#list").append("<div class='task-drag' data-taskid = " + val.item_id + "><label>" + description + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>")
+          } else if (category == "Work") {
+              $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+          } else if (category == "Fun") {
+              $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+          } else if (category == "Chores") {
+              $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+          } else if (category == "Hobby") {
+              $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+          } else if (category == "Other") {
+              $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+          }
+          $('#tName').val('');
+          $('#hiddenText').hide();
+          //This sortable thing isn't working idk why
+          //$("#list").sortable('refresh');
 
-                taskInit();
-                return false;
+          $("#task-list .task-drag").each(function () {
+              let id = $(this)[0].dataset.taskid;
+              let name = $(this).text();
+              let time = "04:00:00";
+              let colour = "grey";
+
+              var arrayLength = allEvents.length;
+              for (var i = 0; i < arrayLength; i++) {
+                  if (id == allEvents[i].id) {
+                      time = "0" + allEvents[i].duration + ":00:00";
+                      category = allEvents[i].category;
+                      if (category == "University") {
+                          colour = "#6578a0";
+                          /*blue*/
+                      }
+                      else if (category == "Work") {
+                          colour = "#84b79d";
+                          /*green*/
+                      }
+                      else if (category == "Fun") {
+                          colour = "#c3c60b";
+                          /*yellow*/
+                      }
+                      else if (category == "Chores") {
+                          colour = "#e5a190";
+                          /*orange*/
+                      }
+                      else if (category == "Hobby") {
+                          colour = "#c18fe8";
+                          /*purple*/
+                      }
+                      else {
+                          colour = "grey";
+                      }
+                  }
+
+              }
+
+              // store data so the calendar knows to render an event upon drop
+              $(this).data('event', {
+                  title: name, // use the element's text as the event title
+                  stick: true, // maintain when user navigates (see docs on the renderEvent method)
+                  color: colour,
+                  description: name,
+                  complete: false,
+                  duration: time
+              });
+
+              //make the event draggable using jQuery UI
+              $(this).draggable({
+                  zIndex: 999,
+                  revert: true,      // will cause the event to go back to its
+                  revertDuration: 0  //  original position after the drag
+              });
+
+          });
+          return false;
           // validate and process form here
-            }
-        });
+      }
     });
+  });
 
 
   //Close modal when close button is pressed//
@@ -420,7 +476,6 @@ $(document).ready(function() {
           revert: true,      // will cause the event to go back to its
           revertDuration: 0  //  original position after the drag
         });
-        taskInit()
       });
     });
 
@@ -469,7 +524,6 @@ $(document).ready(function() {
         revert: true,      // will cause the event to go back to its
         revertDuration: 0  //  original position after the drag
       });
-
     });
     
     /* initialize the calendar
@@ -715,7 +769,6 @@ $(document).ready(function() {
                         description: "Jump",
                         complete: false
                     });
-                    taskInit()
                     $("#list").sortable('refresh');
                 }
             }
@@ -850,63 +903,8 @@ function getCategories(){
     });
 }
 
-function taskInit(){
-    $("#task-list .task-drag").each(function () {
-        let id = $(this)[0].dataset.taskid;
-        let name = $(this).text();
-        let time = "04:00:00";
-        let colour = "grey";
+function newCategory(){
 
-        var arrayLength = allEvents.length;
-        for (var i = 0; i < arrayLength; i++) {
-            if (id == allEvents[i].id) {
-                time = "0" + allEvents[i].duration + ":00:00";
-                category = allEvents[i].category;
-                if (category == "University") {
-                    colour = "#6578a0";
-                          /*blue*/
-                }
-                else if (category == "Work") {
-                    colour = "#84b79d";
-                          /*green*/
-                }
-                else if (category == "Fun") {
-                    colour = "#c3c60b";
-                          /*yellow*/
-                }
-                else if (category == "Chores") {
-                    colour = "#e5a190";
-                          /*orange*/
-                }
-                else if (category == "Hobby") {
-                    colour = "#c18fe8";
-                          /*purple*/
-                }
-                else {
-                    colour = "grey";
-                }
-            }
-
-        }
-
-        // store data so the calendar knows to render an event upon drop
-        $(this).data('event', {
-            title: name, // use the element's text as the event title
-            stick: true, // maintain when user navigates (see docs on the renderEvent method)
-            color: colour,
-            description: name,
-            complete: false,
-            duration: time
-        });
-
-        //make the event draggable using jQuery UI
-        $(this).draggable({
-            zIndex: 999,
-            revert: true,      // will cause the event to go back to its
-            revertDuration: 0  //  original position after the drag
-        });
-
-    });
-};
+}
 
   
