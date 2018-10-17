@@ -13,7 +13,8 @@
 body .fc {
   /* extra precedence to overcome jqui */
   font-size: 1em;
-  color: #636363}
+  font-family: "roboto", sans-serif;
+  color: #22385b}
 
 
 /* Colors
@@ -802,7 +803,10 @@ NOTE: use percentage font sizes or else old IE chokes
 
 /* title text */
 .fc-toolbar h2 {
-  margin: 0; }
+  margin: 0;
+color: #22385b;
+  font-max-size: infinity;
+font-size: xx-large;}
 
 /* button layering (for border precedence) */
 .fc-toolbar button {

@@ -17,23 +17,34 @@
 }
 
 .button1 {
-    background-color: #aabedf;
+    background-color: #efefef;
     color: white;
     border: 0px solid #4CAF50;
     font-size: 18px;
     padding: 7px 70px;
     transition: 0.5s;
-    border:
 }
 
 .button1:hover {
     background-color: #e3eaf4;
     border-top: 5px solid #7e9dcf;
     border-bottom: 5px solid #7e9dcf;
+    color: white;
+}
 
+.button2 {
+    background-color: #efefef;
+    color: darkblue;
+    border: 0px solid #4CAF50;
+    font-size: 18px;
+    padding: 7px 30px;
+    transition: 0.5s;
+}
 
-
-
+.button2:hover {
+    background-color: #e3eaf4;
+    border-top: 5px solid #7e9dcf;
+    border-bottom: 5px solid #7e9dcf;
     color: white;
 }
                                                                                                                                                                                                                                                                                                                                                            <button class="button button5">Black</button>

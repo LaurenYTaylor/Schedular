@@ -3,12 +3,13 @@ float: left;
 }
 
 .title {
-	font-family: "Helvetica Neue", sans-serif;
+	font-family: "roboto", sans-serif;
 	color: white;
 	position: absolute;
     text-align: center;
-	font-size: 40px;
-	margin: 0px 70px;
+	font-size: 50px;
+	font-weight: 200;
+	margin: -8px 70px;
 }
 
 body {
