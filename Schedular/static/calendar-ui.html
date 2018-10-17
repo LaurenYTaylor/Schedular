@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset='utf-8' />
-<link href='../css/fullcalendaredit.css' rel='stylesheet' />
-<link href='../css/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+  <meta charset='utf-8' />
+  <link href='../css/fullcalendaredit.css' rel='stylesheet' />
+  <link href='../css/fullcalendar.print.min.css' rel='stylesheet' media='print' />
 
-<script src='../js/moment.min.js'></script>
-<script src='../js/jquery.min.js'></script>
-<script src='../js/jquery-ui.min.js'></script>
-<script src='../js/calendar-ui.js'></script>
-<script src='../js/fullcalendar.min.js'></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src= "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link href='../css/popover.css' rel='stylesheet'>
-<link href="../css/subtask.css" rel="stylesheet">
-<link href='../css/button1.css' rel='stylesheet' />
+  <script src='../js/moment.min.js'></script>
+  <script src='../js/jquery.min.js'></script>
+  <script src='../js/jquery-ui.min.js'></script>
+  <script src='../js/calendar-ui.js'></script>
+  <script src='../js/fullcalendar.min.js'></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src= "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href='../css/popover.css' rel='stylesheet'>
+  <link href="../css/subtask.css" rel="stylesheet">
+  <link href='../css/button1.css' rel='stylesheet' />
 
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.6/fullcalendar.min.js"></script> -->
-<script src="/socket.io/socket.io.js"></script>
-<script>const socket = io(); </script>
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.6/fullcalendar.min.js"></script> -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script>const socket = io(); </script>
 
-<!-- <script src='../static/js/fullcalendar.min.js'></script> -->
+  <!-- <script src='../static/js/fullcalendar.min.js'></script> -->
 
   <link href='../css/header.css' rel='stylesheet' />
 
@@ -49,33 +49,29 @@
       <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Ongoing')" >Tasks</button>
       <button class="tablinks" onclick="openCity(event, 'Completed')">Settings</button>
 
+      <div id='Ongoing' class="tabcontent">
+        <br>
+        <button type="submit" name="add" id="add" class ="button1">
+          <img id='add' src='../taskIconDark.png'   style='float: right; ' width='45'/>
+        </button>
 
-    <div id='Ongoing' class="tabcontent">
-
-
-        </div>
-      <!-- <input type="text" name="task name" id="taskName" value="Task Name"> -->
-        <button type="submit" name="add" id="add" class ="button1">Add Task</button>
-
-      <div id='task-list'>
-        <h4></h4>
-        <div id = 'list'>
-
-      </div>
-
-    </div>
-
-    <div id='Completed' class="tabcontent">
-        <div id='task-list' >
+        <div id='task-list'>
           <h4></h4>
+          <div id = 'list'></div>
 
-        <!-- <input type="text" name="task name" id="taskName" value="Task Name"> -->
         </div>
-
       </div>
 
+      <div id='Completed' class="tabcontent">
+        <br>
+        <div id="category-list"></div>
+        <button type="submit" name="addCat" id="addCat" class="button1">Add Category</button>
+
+      </div>
     </div>
     <div id='calendar'></div>
+
+
 
 
 
@@ -89,63 +85,132 @@
         <span class="close">&times;</span>
         <h1>Create Task</h1>
         <div class="hiddentext" id="hiddenText" style="display:none">Invalid Name! </div>
-          <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post">
-            <div class='formtext'>
-              <input type="text" name="fname" id="tName" class='taskform-input' placeholder="Task Name">
-            </div>
-            <p></p>
-            <div class='formtext'>
-              <input type ="text" name="duration" id="dury" class='taskform-input' placeholder="Task Duration">
-            </div>
-            <p></p>
-            <div class="task-dropdown">
-              Category: <select name="category" id = "category">
-                <option value="University">University</option>
-                <option value="Work">Work</option>
-                <option value="Fun">Fun</option>
-                <option value="Chores">Chores</option>
-                <option value="Hobby">Hobby</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            <p></p>
-            <div class="task-dropdown">
-              Repeat: <select name="repeat" id = "repeat">
-                <option value="None">None</option>
-                <option value="day">Every day</option>
-                <option value="week">Every week</option>
-                <option value="month">Every month</option>
-                <option value="year">Every year</option>
-              </select>
-            </div>
-            <p></p>
-            <div class="formtext">
-                Due Date:
-                <br/>
+        <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post">
+          <div class='formtext'>
+            <input type="text" name="fname" id="tName" class='taskform-input' placeholder="Task Name">
+          </div>
+          <p></p>
+          <div class='formtext'>
+            <input type ="text" name="duration" id="dury" class='taskform-input' placeholder="Task Duration">
+          </div>
+          <p></p>
+          <div class="task-dropdown">
+            Category: <select name="category" id = "category">
+            <option value="University">University</option>
+            <option value="Work">Work</option>
+            <option value="Fun">Fun</option>
+            <option value="Chores">Chores</option>
+            <option value="Hobby">Hobby</option>
+            <option value="Other">Other</option>
+          </select>
+          </div>
+          <p></p>
+          <div class="task-dropdown">
+            Repeat: <select name="repeat" id = "repeat">
+            <option value="None">None</option>
+            <option value="day">Every day</option>
+            <option value="week">Every week</option>
+            <option value="month">Every month</option>
+            <option value="year">Every year</option>
+          </select>
+          </div>
+          <p></p>
+          <div class="formtext">
+            Due Date:
+            <br/>
 
-                <div class='input-group date' style="text-align: center;" id='datetimepicker1' >
-                  <input type='text' class="form-control"  id='dueDate'/>
-                  <span class="input-group-addon">
+            <div class='input-group date' style="text-align: center;" id='datetimepicker1' >
+              <input type='text' class="form-control"  id='dueDate'/>
+              <span class="input-group-addon">
                   <span class="glyphicon glyphicon-calendar"></span>
                   </span>
-               </div>
-
-
-
             </div>
-
-
-            <p><input type="submit" class="CreateButton" id="Create" value="Create new Task "></p>
+          </div>
+          <p><input type="submit" class="CreateButton" id="Create" value="Create new Task "></p>
         </form>
       </div>
 
     </div>
 
-    <div id="editModal" class="modal" role="dialog"> </div>
+    <div id="editModal" class="modal" role="dialog">
 
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h1>Edit Task</h1>
+        <div class="hiddentext" id="hiddenText" style="display:none">Invalid Name! </div>
+        <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post">
+          <div class='formtext'>
+            <input type="text" name="fname" id="editName" class='taskform-input'>
+          </div>
+          <p></p>
+          <div class='formtext'>
+            <input type ="text" name="duration" id="editDury" class='taskform-input' placeholder="Task Duration">
+          </div>
+          <p></p>
+          <div class="task-dropdown">
+            Category: <select name="category" id = "editCat">
+            <option value="University">University</option>
+            <option value="Work">Work</option>
+            <option value="Fun">Fun</option>
+            <option value="Chores">Chores</option>
+            <option value="Hobby">Hobby</option>
+            <option value="Other">Other</option>
+          </select>
+          </div>
+          <p></p>
+          <div class="task-dropdown">
+            Repeat: <select name="repeat" id = "editRepeat">
+            <option value="None">None</option>
+            <option value="day">Every day</option>
+            <option value="week">Every week</option>
+            <option value="month">Every month</option>
+            <option value="year">Every year</option>
+          </select>
+          </div>
+          <p></p>
+          <div class="formtext">
+            Due Date:
+            <br/>
 
+            <div class='input-group date' style="text-align: center;" id='datetimepicker2' >
+              <input type='text' class="form-control" id="newDate" />
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+          </div>
+          <p><input type="submit" class="editButton" id="Create" value="Edit Task "></p>
+        </form>
+      </div>
+    </div>
+
+    <!-- New Category modal -->
+    <div id="catModal" class="modal" role="dialog">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h1>New Category</h1>
+        <form name="catForm" action="/action_page.php" onsubmit="return validateCat()" method="post">
+          <div class='formtext'>
+            <input type="text" name="catName" id="catName" class="taskform-input" placeholder="Category Name">
+          </div>
+          <p></p>
+          <div class="task-dropdown">
+            Colour: <select name="colour" id = "colour">
+            <option value="#6578a0">#6578a0</option>
+            <option value="#84b79d">#84b79d</option>
+            <option value="#c3c60b">#c3c60b</option>
+            <option value="#e5a190">#e5a190</option>
+            <option value="#c18fe8">#c18fe8</option>
+            <option value="grey">grey</option>
+          </select>
+          </div>
+          <p></p>
+          <input type="submit" class="catCreate" id="Create" value="Add Category">
+        </form>
+      </div>
+    </div>
   </div>
-
 </div>
 </body>
 </html>

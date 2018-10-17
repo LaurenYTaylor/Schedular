@@ -354,6 +354,41 @@ app.post('/remove_cal_task', function(request, response) {
     });
 });
 
+app.post('/edit_task', function(request, response){
+    console.log("doing something");
+    let id = request.body.id;
+    let newName = request.body.newName;
+    let dury = request.body.newDury;
+    let cat = request.body.newCat;
+    let end = request.body.end;
+    //let due = request.body.newDue;
+
+    let query_string = "UPDATE calendar_item SET description='" + newName +
+        "', num_hours='" + dury +"', category='" + cat +
+        "', end_time='" + end +
+        "' WHERE item_id=" + id + " AND user_id=" + request.user.id + ";";
+    console.log(query_string)
+    pool.connect(function(err, client) {
+        pool.query(query_string);
+        client.release;
+    })
+});
+
+app.post('/add_notes_files', function(request, response) {
+    let id = request.body.id
+    let note = request.body.note
+
+    let query_string = "UPDATE calendar_item SET notes='" +
+        note + "' WHERE item_id=" + id + " AND user_id=" +
+        request.user.id + ";";
+
+    pool.connect(function(err, client) {
+        pool.query(query_string);
+        client.release;
+    })
+
+});
+
 
 
 http.listen(port, () => console.log("Listening on port " + port));
