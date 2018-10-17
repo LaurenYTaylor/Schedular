@@ -295,7 +295,6 @@ temporary rendered events).
 /* Scrolling Container
 --------------------------------------------------------------------------------------------------*/
 .fc-scroller {
-  overflow-y: hidden !important;
   -webkit-overflow-scrolling: touch; }
 
 /* TODO: move to agenda/basic */
@@ -802,11 +801,9 @@ NOTE: use percentage font sizes or else old IE chokes
   margin-left: 0; }
 
 /* title text */
-.fc-toolbar h2 {
+.fc-toolbar h1 {
   margin: 0;
-color: #22385b;
-  font-max-size: infinity;
-font-size: xx-large;}
+color: #22385b;}
 
 /* button layering (for border precedence) */
 .fc-toolbar button {
@@ -1355,9 +1352,16 @@ be a descendant of the grid when it is being dragged.
   background-color: #f1f1f1; */
 }
 
+#category-list .cat-check{
+  border-radius: 4px;
+  padding: 5px;
+  margin: 3px 1px;
+  cursor: pointer;
+  background: #39517A;
+  color: white;
+}
+
 /*Style the events in the task list*/
-
-
 #task-list .task-drag{
   border-radius: 4px;
   padding: 5px;
