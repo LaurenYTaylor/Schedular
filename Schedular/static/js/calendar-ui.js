@@ -236,7 +236,7 @@ $(document).ready(function() {
                         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
                         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                 } else if (category == "Fun") {
-                    $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                    $("#list").append("<div class='task-drag' style='background: #ffc53f' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
                         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
                         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                 } else if (category == "Chores") {
@@ -360,7 +360,7 @@ $(document).ready(function() {
                 $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + val.item_id + "><label>" + description + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>"
                     + "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>")
             } else if (category == "Fun") {
-                $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + val.item_id + "><label>" + description + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>"
+                $("#list").append("<div class='task-drag' style='background: #ffc53f' data-taskid=" + val.item_id + "><label>" + description + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>"
                     + "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>")
             } else if (category == "Chores") {
                 $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + val.item_id + "><label>" + description + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>"
@@ -407,7 +407,7 @@ $(document).ready(function() {
                     newEvent.color = '#84b79d';
                     break;
                 case "Fun":
-                    newEvent.color = '#c3c60b';
+                    newEvent.color = '#ffc53f';
                     break;
                 case "Chores":
                     newEvent.color = '#e5a190';
@@ -494,7 +494,7 @@ $(document).ready(function() {
                     newCalEvent.color = '#84b79d';
                     break;
                 case "Fun":
-                    newCalEvent.color = '#c3c60b';
+                    newCalEvent.color = '#ffc53f';
                     break;
                 case "Chores":
                     newCalEvent.color = '#e5a190';
@@ -685,7 +685,7 @@ $(document).ready(function() {
                         } else if (category == "Work") {
                             $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
                         } else if (category == "Fun") {
-                            $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                            $("#list").append("<div class='task-drag' style='background: #ffc53f' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
                         } else if (category == "Chores") {
                             $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
                         } else if (category == "Hobby") {

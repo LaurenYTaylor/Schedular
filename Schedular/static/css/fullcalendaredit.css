@@ -12,7 +12,9 @@
 
 body .fc {
   /* extra precedence to overcome jqui */
-  font-size: 1em; }
+  font-size: 1em;
+  color: #636363}
+
 
 /* Colors
 --------------------------------------------------------------------------------------------------*/
@@ -1380,6 +1382,8 @@ be a descendant of the grid when it is being dragged.
 
 /* Style the buttons inside the tab */
 .tablinks {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
   background-color: white;
   color: black;
   float: left;
@@ -1388,19 +1392,20 @@ be a descendant of the grid when it is being dragged.
   cursor: pointer;
   padding: 10px 20px;
   font-size: 11px;
-  width: 50%;
+  width: 45%;
+margin-left: 6px;
     transition: 0.3s;
 }
 
 /* Change background color of buttons on hover */
 .tablinks:hover {
-  background-color: #444444;
+  background-color: #23395d;
     color: white;
 }
 
 /* Create an active/current tablink class */
 .tablinks.active {
-  background-color: #444444;
+  background-color: #23395d;
     color: white;
 }
 
@@ -1411,7 +1416,7 @@ be a descendant of the grid when it is being dragged.
   width: 100%;
   background: white;
   text-align: left;
-  padding: 25px 5px;
+  padding: 23px 5px;
 
   display: none;
   border-top: none;

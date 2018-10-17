@@ -28,8 +28,8 @@
 
 .button1:hover {
     background-color: #e3eaf4;
-    border-top: 5px double #3b62a0;
-    border-bottom: 5px double #3b62a0;
+    border-top: 5px solid #7e9dcf;
+    border-bottom: 5px solid #7e9dcf;
 
 
 
