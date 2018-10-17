@@ -93,7 +93,29 @@ $(document).ready(function() {
      
     });
 
-   
+    //Modal start when adding Category
+    $("#addCat").click(function(){
+        $("#catModal").modal();
+    })
+
+    $(function() {
+        $('.catCreate').click(function() {
+            data = $('#catName').val()
+            $('#catModal').modal('hide')
+            $.ajax(
+                {
+                  url: "http://localhost:3000/add_categories",
+                  async: true,
+                  type: "POST",
+                  data: data,
+                  success: function (result) {
+                    console.log("successfully added");
+                  }
+            });
+        });
+        return false;
+    });
+
 
 
     //Adds file labels to the file list when
@@ -152,16 +174,6 @@ $(document).ready(function() {
       });
     });
 
-    //this is when you click the edit icon next to the bin
-    //i copied the code below, im not sure why the edit does'nt work, sorry :(
-    $(document).on('click', '#edit1', function(){
-        $('.popover').popover('hide');
-        $("#editModal").modal();
-
-        $('#editName').val(element.title);
-        $('#editDury').val(element.duration);
-    });
-
 
     //eventlistener for when editing a task when the edit
     // button is pressed
@@ -172,7 +184,6 @@ $(document).ready(function() {
       $("#editModal").modal();
 
       $('#editName').val(element.title);
-      $('#editDury').val(element.duration);
       //Add the rest of the task options eg. duration,priority, Due Date
 
 
@@ -186,6 +197,8 @@ $(document).ready(function() {
       $(this).toggleClass('load-complete');
       $(this).find(".checkmark").toggle('fast',taskCompleted());
     });
+
+    $
 
     
     
@@ -218,43 +231,87 @@ $(document).ready(function() {
                   }
               });
 
-                $('#myModal').modal('hide')
-                if (category == "University") {
-                    $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + new_task.id + "><label>" + taskName + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/> " +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Work") {
-                    $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Fun") {
-                    $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Chores") {
-                    $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Hobby") {
-                    $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Other") {
-                    $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                }
-                $('#tName').val('');
-                $('#hiddenText').hide();
-                //This sortable thing isn't working idk why
-                //$("#list").sortable('refresh');
+          $('#myModal').modal('hide')
+          if (category == "University") {
+              $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + new_task.id + "><label>" + taskName + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+              //$("#list").append("<div class='task-drag' data-taskid = " + val.item_id + "><label>" + description + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>")
+          } else if (category == "Work") {
+              $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+          } else if (category == "Fun") {
+              $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+          } else if (category == "Chores") {
+              $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+          } else if (category == "Hobby") {
+              $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+          } else if (category == "Other") {
+              $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+          }
+          $('#tName').val('');
+          $('#hiddenText').hide();
+          //This sortable thing isn't working idk why
+          //$("#list").sortable('refresh');
 
-                taskInit();
-                return false;
+          $("#task-list .task-drag").each(function () {
+              let id = $(this)[0].dataset.taskid;
+              let name = $(this).text();
+              let time = "04:00:00";
+              let colour = "grey";
+
+              var arrayLength = allEvents.length;
+              for (var i = 0; i < arrayLength; i++) {
+                  if (id == allEvents[i].id) {
+                      time = "0" + allEvents[i].duration + ":00:00";
+                      category = allEvents[i].category;
+                      if (category == "University") {
+                          colour = "#6578a0";
+                          /*blue*/
+                      }
+                      else if (category == "Work") {
+                          colour = "#84b79d";
+                          /*green*/
+                      }
+                      else if (category == "Fun") {
+                          colour = "#c3c60b";
+                          /*yellow*/
+                      }
+                      else if (category == "Chores") {
+                          colour = "#e5a190";
+                          /*orange*/
+                      }
+                      else if (category == "Hobby") {
+                          colour = "#c18fe8";
+                          /*purple*/
+                      }
+                      else {
+                          colour = "grey";
+                      }
+                  }
+
+              }
+
+              // store data so the calendar knows to render an event upon drop
+              $(this).data('event', {
+                  title: name, // use the element's text as the event title
+                  stick: true, // maintain when user navigates (see docs on the renderEvent method)
+                  color: colour,
+                  description: name,
+                  complete: false,
+                  duration: time
+              });
+
+              //make the event draggable using jQuery UI
+              $(this).draggable({
+                  zIndex: 999,
+                  revert: true,      // will cause the event to go back to its
+                  revertDuration: 0  //  original position after the drag
+              });
+
+          });
+          return false;
           // validate and process form here
-            }
-        });
+      }
     });
+  });
 
 
   //Close modal when close button is pressed//
@@ -267,12 +324,107 @@ $(document).ready(function() {
   $('#tName').focus();
   });
 
+  //Update database and element when task edited
   $(function() {
     $(".editButton").click(function() {
+      var oldTitle = element.title;
       element.title = $('#editName').val();
-      console.log(element.title);
       $('#editModal').modal("hide");
       $('#calendar').fullCalendar('updateEvent', element);
+
+
+      data = {oldName: oldTitle, newName: $('#editName').val(), newDury: $('#editDury').val(),
+              newCat: $('#editCat').val(), newDue: $('#newDate').val()}
+
+      $.ajax(
+        {
+          url: "http://localhost:3000/edit_task",
+          async: true,
+          type: "POST",
+          data: data,
+          success: function (result) {
+            console.log("successfully added");
+          }
+        });
+    
+
+      // if (validateForm()) {
+
+      //     taskName = $('#tName').val();
+      //     dury = $('#dury').val();
+      //     category = $("#category").val();
+      //     $('#myModal').modal('hide')
+      //     $("#list").append("<div class='task-drag'><label>" + taskName + "</label><img src='../rubbish-bin.png'  id='removeBin' ></div>");
+      //     $('#tName').val('');
+      //     $('#hiddenText').hide();
+
+      //     newTask = {name: taskName, duration: dury, category: category};
+      //     allEvents.push(newTask);
+      //     $.ajax(
+      //         {
+      //             url: "http://localhost:3000/new_task",
+      //             async: true,
+      //             type: "POST",
+      //             data: newTask,
+      //             success: function (result) {
+      //                 console.log("successfully added");
+      //             }
+      //         });
+      // }
+
+      // $("#task-list .task-drag" ).each(function() {
+
+      //   //name = "Hey";
+      //   name2 = $(this).text(); 
+      //   time = "04:00:00";
+      //   colour = "grey"; 
+
+      //   var arrayLength = allEvents.length;
+      //   for (var i = 0; i < arrayLength; i++) {
+      //     if(name2 == allEvents[i].name){
+      //      time = "0"+allEvents[i].duration + ":00:00";
+      //      category = allEvents[i].category;
+
+      //      if (category == "University"){
+      //       colour = "Blue";
+      //      }
+      //      else if(category == "Chores"){
+      //       colour = "Yellow";
+      //      }
+      //      else if (category == "Work"){
+      //       colour = "Black";
+      //      }
+
+      //      else{
+      //       colour = "grey";
+      //      }
+          
+      //     }
+
+      //   }
+
+
+      //   // store data so the calendar knows to render an event upon drop
+      //   $(this).data('event', {
+      //     title: name2, // use the element's text as the event title
+      //     stick: true, // maintain when user navigates (see docs on the renderEvent method)
+      //     color: colour,
+      //     description: 'This is a cool event',
+      //     complete: false,
+      //     duration: time
+      //   });
+
+      //   // make the event draggable using jQuery UI
+      //   $(this).draggable({
+      //     zIndex: 999,
+      //     revert: true,      // will cause the event to go back to its
+      //     revertDuration: 0  //  original position after the drag
+      //   });
+
+      // });
+      // return false;
+      // validate and process form here
+
     });
   });
 
@@ -284,7 +436,7 @@ $(document).ready(function() {
 
   //Activate textfield when modal is shown//
   $('#myModal').on('shown.bs.modal', function () {
-  $('#tName').focus();
+    $('#tName').focus();
   });
 
 
@@ -461,14 +613,15 @@ $(document).ready(function() {
           if(!event.complete) {
             //popover properties
 
-            jsEvent.popover({
+                jsEvent.popover({
 
-                html: true,
-                content: popTemplate,
-                template: popTemplate,
-                animation: true,
-                container: 'body',
+                    html: true,
+                    content: popTemplate,
+                    template: popTemplate,
+                    animation: true,
+                    container: 'body',
                 //trigger:'manual'
+
             });
             let dragEvent=event;
             console.log(justDragged[0]);
@@ -480,8 +633,7 @@ $(document).ready(function() {
                     start: newStart,
                     end: newEnd,
                     oldStart: justDragged[0].start,
-                    oldEnd: justDragged[0].end,
-                    id: justDragged[0].id
+                    oldEnd: justDragged[0].end
                 };
                 if (newStart != justDragged[0].start || newEnd != justDragged[0].end) {
                     $.ajax(
@@ -505,10 +657,30 @@ $(document).ready(function() {
                         end: newEnd,
                         parent_task: justDragged[0].parent_task
                     };
-                    calendarEvents.push(newCalEvent);
-                    justDragged.pop();
+                    if (newStart != justDragged[0].start || newEnd != justDragged[0].end) {
+                        $.ajax(
+                            {
+                                url: "http://localhost:3000/update_cal_task",
+                                async: true,
+                                type: "POST",
+                                data: eventData,
+                                success: function (result) {
+                                    console.log("successfully updated calendar task");
+                                }
+                            });
+                        let i = calendarEvents.indexOf(justDragged[0]);
+                        calendarEvents.splice(i, 1);
+                        let newCalEvent = {
+                            name: justDragged[0].name,
+                            duration: justDragged[0].duration,
+                            cat: justDragged[0].cat,
+                            start: newStart,
+                            end: newEnd
+                        };
+                        calendarEvents.push(newCalEvent);
+                        justDragged.pop();
+                    }
                 }
-            }
 
           //Use the code below if popover trigger is hover 
           //.on("mouseenter", function () { 
@@ -526,15 +698,17 @@ $(document).ready(function() {
           //     }
           //   }, 300);
           // });
-        }else {
-          jsEvent.fadeTo(0, 0.5);
+            }else {
+                jsEvent.fadeTo(0, 0.5);
+            }
         }
       
-      },
+    },
 
 
 
-      //function fires when event is finished dragging
+
+    //function fires when event is finished dragging
       eventDragStop: function( event, jsEvent, ui, view ) {
         console.log("inside dragging");
         dragging = false;
@@ -641,6 +815,10 @@ function validateForm() {
     }
 }
 
+function validateCat() {
+    return true;
+}
+
 
 
 
@@ -715,5 +893,18 @@ function isEventOverDiv(x, y) {
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
   }
+
+// get categories
+function getCategories(){
+    $.getJSON('/categories', function(data){
+        $.each(data, function(key, val){
+            log.console("hello")
+        });       
+    });
+}
+
+function newCategory(){
+
+}
 
   
