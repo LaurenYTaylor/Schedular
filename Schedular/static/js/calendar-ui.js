@@ -256,7 +256,11 @@ $(document).ready(function() {
         $(".CreateButton").click(function() {
             if (validateForm()) {
                 taskName = $('#tName').val();
-                dury = $('#dury').val();
+                if($('#dury').val() == ""){
+                    dury = 1;
+                }else {
+                    dury = $('#dury').val();
+                }
                 category = $("#category").val();
                 repeat = $('#repeat').val();
                 dueDate = $('#dueDate').val();
