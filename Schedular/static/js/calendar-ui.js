@@ -200,6 +200,12 @@ $(document).ready(function() {
             });
     });
 
+    $(document).on('click', '#edit1', function(){
+        $('#taskModal').modal()
+
+        alert(element.id)
+    })
+
 
     //eventlistener for when editing a task when the edit
     // button is pressed
@@ -215,7 +221,6 @@ $(document).ready(function() {
         $('#editRepeat').val(element.repeat);
 
         //Add the rest of the task options eg. duration,repeat, Due Date
-
     });
 
 
@@ -298,6 +303,8 @@ $(document).ready(function() {
     //Close modal when close button is pressed//
     $(".close").click(function(){
         $("#myModal").modal("hide");
+        $("#editModal").modal("hide");
+        $('#taskModal').modal("hide");
     });
 
     //Activate textfield when modal is shown//
@@ -310,7 +317,7 @@ $(document).ready(function() {
             var name = $('#editName').val();
             var hours = $('#editDury').val();
             var category = $('#editCat').val();
-            var due_date = $('#newDate').val();
+            //var due_date = $('#newDate').val();
             var repeat = $('#editRepeat').val();
             var start = new Date(element.start);
             var end_date = new Date(start.getTime() + (60000 * 60 * hours));
@@ -322,14 +329,14 @@ $(document).ready(function() {
             element.cat = category;
             element.end = end_date;
             element.repeat = repeat;
-            if(due_date != '') {
-                due_date = due_date.split(' ', 1);
-                element.due_date = due_date;
-            }
+            //if(due_date != '') {
+            //    due_date = due_date.split(' ', 1);
+            //    element.due_date = due_date;
+            //}
 
-            else {
-                due_date = element.due_date;
-            }
+            //else {
+            //    due_date = element.due_date;
+            //}
 
             switch(category) {
                 case "University":
@@ -403,7 +410,7 @@ $(document).ready(function() {
                 return;
             }
             let description = val.description;
-            let newTask = {id: val.item_id, name: description, duration: val.num_hours, category: val.category, priority: val.priority, dueDate: val.due_date};
+            let newTask = {id: val.item_id, name: description, duration: val.num_hours, category: val.category, priority: val.priority, dueDate: val.due_date, repeat: val.repeat};
             //let newTask = {name: description, duration: val.num_hours, category: val.category, repeat: val.repeat, dueDate: val.due_date};
             allEvents.push(newTask);
             // create new task with description
@@ -448,6 +455,7 @@ $(document).ready(function() {
             let due_date = val.due_date;
             let priority = val.priority;
             let note = val.notes;
+            let repeat = val.repeat;
             let newEvent = {
                 title: val.description,
                 id: val.item_id,
@@ -458,7 +466,8 @@ $(document).ready(function() {
                 cat: val.category,
                 due_date: due_date,
                 priority: priority,
-                note: note
+                note: note,
+                repeat: repeat
             };
             switch(newEvent.cat) {
                 case "University":

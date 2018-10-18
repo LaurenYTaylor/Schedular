@@ -361,11 +361,12 @@ app.post('/edit_task', function(request, response){
     let dury = request.body.newDury;
     let cat = request.body.newCat;
     let end = request.body.end;
+    let repeat = request.body.repeat;
     //let due = request.body.newDue;
 
     let query_string = "UPDATE calendar_item SET description='" + newName +
         "', num_hours='" + dury +"', category='" + cat +
-        "', end_time='" + end +
+        "', end_time='" + end + "', repeat='" + repeat + 
         "' WHERE item_id=" + id + " AND user_id=" + request.user.id + ";";
     console.log(query_string)
     pool.connect(function(err, client) {
