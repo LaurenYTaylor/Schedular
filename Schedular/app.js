@@ -262,9 +262,11 @@ app.get('/load_cal_items', function(request, response){
 });
 
 app.post('/new_task', async function(request, response) {
-    let {name, category, duration} = request.body;
-    let query = "INSERT INTO todo_item (user_id, num_hours, category, completed, description) "
-        + "VALUES (" + request.user.id + ", " + duration + ", '" + category + "', 'false', '" + name + "');";
+    let {name, category, duration, repeat} = request.body;
+    let query = "INSERT INTO todo_item (user_id, num_hours, category, completed, description, repeat) "
+        + "VALUES (" + request.user.id + ", " + duration + ", '" + category + "', 'false', '" + name + "', '" + repeat + "');";
+    console.log(query);
+
     let client = await pool.connect();
 
     await pool.query(query);
