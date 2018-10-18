@@ -200,14 +200,25 @@ $(document).ready(function() {
             });
     });
 
+    //editing a task in the tasklist
     $(document).on('click', '#edit1', function(){
         $('#taskModal').modal()
 
-        alert(element.id)
+        let task_id = ($(this).parent()[0].dataset.taskid);
+        for(var i = 0; i < allEvents.length; i++) {
+            if(task_id == allEvents[i].id) {
+                curTask = allEvents[i];
+            }
+        }
+
+        $('#editTName').val(curTask.name);
+        $('#editTDury').val(curTask.duration);
+        $('#editTCat').val(curTask.category);
+        $('#editTRepeat').val(curTask.repeat);
     })
 
 
-    //eventlistener for when editing a task when the edit
+    //eventlistener for when editing a task in calendar when the edit
     // button is pressed
     //TO DO: make changes to other properties of the task
     //TO DO: changes to be edited in the database
@@ -312,6 +323,8 @@ $(document).ready(function() {
         $('#tName').focus();
     });
 
+    // updating edited task in calendar
+    // when submit edits button pressed
     $(function() {
         $(".editButton").click(function() {
             var name = $('#editName').val();
@@ -377,7 +390,7 @@ $(document).ready(function() {
 
             $.ajax(
                 {
-                    url: "http://localhost:3000/edit_task",
+                    url: "http://localhost:3000/edit_cal_task",
                     async: true,
                     type: "POST",
                     data: data,
@@ -385,6 +398,74 @@ $(document).ready(function() {
                         console.log("successfully added");
                     }
                 });
+
+        });
+    });
+
+    $(function() {
+        $(".editTButton").click(function() {
+            var name = $('#editTName').val();
+            var hours = $('#editTDury').val();
+            var category = $('#editTCat').val();
+            //var due_date = $('#newDate').val();
+            var repeat = $('#editTRepeat').val();
+
+            //hide edit modal
+            $('#taskModal').modal("hide");
+
+            // update allEvents array
+            for (var i = 0; i < allEvents.length; i++) {
+                if (curTask.id == allEvents[i].id) {
+                    allEvents[i].name = name;
+                    allEvents[i].duration = hours;
+                    allEvents[i].category = category;
+                    allEvents[i].repeat = repeat;
+                }
+            }
+
+            //update html of task list
+            $("[data-taskid=" + curTask.id +"] label").text(name);
+
+            switch(category) {
+                case "University":
+                    color = '#6578a0';
+                    break;
+                case "Work":
+                    color = '#84b79d';
+                    break;
+                case "Fun":
+                    color = '#ffc53f';
+                    break;
+                case "Chores":
+                    color = '#e5a190';
+                    break;
+                case "Hobby":
+                    color = '#c18fe8';
+                    break;
+                case "Other":
+                    color = 'grey';
+            }
+
+            $("[data-taskid=" + curTask.id +"]").css('background', color);
+
+
+            //update database
+            $.ajax(
+            {
+                url: "http://localhost:3000/edit_task",
+                async: true,
+                type: "POST",
+                data: {
+                    id: curTask.id,
+                    name: name,
+                    dury: hours,
+                    cat: category,
+                    repeat: repeat
+                },
+                success: function (result) {
+                    console.log("successfully added");
+                }
+            });
 
         });
     });
@@ -872,6 +953,8 @@ var btn = document.getElementById("add");
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
+
+var curTask;
 
 
 //Validates AddTask Modal//

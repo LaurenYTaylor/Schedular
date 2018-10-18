@@ -354,8 +354,7 @@ app.post('/remove_cal_task', function(request, response) {
     });
 });
 
-app.post('/edit_task', function(request, response){
-    console.log("doing something");
+app.post('/edit_cal_task', function(request, response){
     let id = request.body.id;
     let newName = request.body.newName;
     let dury = request.body.newDury;
@@ -368,6 +367,24 @@ app.post('/edit_task', function(request, response){
         "', num_hours='" + dury +"', category='" + cat +
         "', end_time='" + end + "', repeat='" + repeat + 
         "' WHERE item_id=" + id + " AND user_id=" + request.user.id + ";";
+    console.log(query_string)
+    pool.connect(function(err, client) {
+        pool.query(query_string);
+        client.release;
+    })
+});
+
+app.post('/edit_task', function(request, response) {
+    let id = request.body.id;
+    let name = request.body.name;
+    let dury = request.body.dury;
+    let cat = request.body.cat;
+    let repeat = request.body.repeat;
+
+    let query_string = "UPDATE todo_item SET description='" + name +
+        "', num_hours='" + dury + "', category='" + cat +
+        "', repeat='" + repeat + "' WHERE item_id=" + id +
+        " AND user_id=" + request.user.id + ";";
     console.log(query_string)
     pool.connect(function(err, client) {
         pool.query(query_string);
