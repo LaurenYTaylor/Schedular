@@ -264,8 +264,8 @@ app.get('/load_cal_items', function(request, response){
 app.post('/new_task', async function(request, response) {
     let {name, category, duration, repeat} = request.body;
     let query = "INSERT INTO todo_item (user_id, num_hours, category, completed, description, repeat) "
-        + "VALUES (" + request.user.id + ", " + duration + ", '" + category + "', 'false', '" + name + "', '" + repeat + "');";
-    console.log(query);
+        + "VALUES (" + request.user.id + ", " + duration + ", '" + category + "', 'false', '" + name + "','" +repeat + "');";
+
 
     let client = await pool.connect();
 
@@ -290,7 +290,7 @@ app.post('/delete_task', async function(request, response) {
 });
 
 app.post('/new_cal_task', async function (request, response) {
-    let query_string = "INSERT INTO calendar_item (user_id, description, yyyymmdd, num_hours, start_time, end_time, category, parent_task_id, due_date, priority) ";
+    let query_string = "INSERT INTO calendar_item (user_id, description, yyyymmdd, num_hours, start_time, end_time, category, parent_task_id, due_date, repeat) ";
     let item = request.body;
     let description=item.title;
     let category=item.cat;
@@ -307,12 +307,13 @@ app.post('/new_cal_task', async function (request, response) {
     let endTime=end_split[1];
     let parent = item.parent_task;
     let dueDate = item.due_date;
-    let priority = item.priority;
+    let repeat= item.repeat;
     query_string+="VALUES ("+request.user.id+", '"+ description+"', '"+date+"', " +
         ""+numHours+", '"+startTime+"', '" +endTime+"', '"+category+"', "+parent+", '" + dueDate + "', '" +
-    priority +"');";
+    repeat +"');";
     let update_string = "UPDATE todo_item SET in_calendar='true' WHERE user_id="+
         request.user.id+" AND description='"+description+"';";
+        console.log(query_string);
     let client = await pool.connect();
 
     await pool.query(query_string);
@@ -349,6 +350,7 @@ app.post('/remove_cal_task', function(request, response) {
     let delete_string = "DELETE FROM calendar_item WHERE item_id='"+id+"' AND user_id="+request.user.id+";";
     let update_string = "UPDATE todo_item SET in_calendar='"+false+"' WHERE user_id="+request.user.id+" AND item_id='"+
         +parent+"';"
+    console.log(delete_string);
     pool.connect(function(err, client) {
         pool.query(delete_string);
         pool.query(update_string);
