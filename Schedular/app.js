@@ -262,10 +262,11 @@ app.get('/load_cal_items', function(request, response){
 });
 
 app.post('/new_task', async function(request, response) {
-    let {name, category, duration, repeat} = request.body;
-    let query = "INSERT INTO todo_item (user_id, num_hours, category, completed, description, repeat) "
-        + "VALUES (" + request.user.id + ", " + duration + ", '" + category + "', 'false', '" + name + "', '" + repeat + "');";
-    console.log(query);
+    let {name, category, duration, repeat, dueDate} = request.body;
+    let query = "INSERT INTO todo_item (user_id, num_hours, category, completed, description, repeat, due_date) "
+        + "VALUES (" + request.user.id + ", " + duration + ", '" + category + "', 'false', '" + name + 
+        "','" +repeat + "', '" + dueDate + "');";
+
 
     let client = await pool.connect();
 
@@ -308,11 +309,13 @@ app.post('/new_cal_task', async function (request, response) {
     let parent = item.parent_task;
     let dueDate = item.due_date;
     let repeat = item.repeat;
+
     query_string+="VALUES ("+request.user.id+", '"+ description+"', '"+date+"', " +
         ""+numHours+", '"+startTime+"', '" +endTime+"', '"+category+"', "+parent+", '" + dueDate + "', '" +
     repeat +"');";
     let update_string = "UPDATE todo_item SET in_calendar='true' WHERE user_id="+
         request.user.id+" AND description='"+description+"';";
+        console.log(query_string);
     let client = await pool.connect();
 
     await pool.query(query_string);
@@ -349,6 +352,7 @@ app.post('/remove_cal_task', function(request, response) {
     let delete_string = "DELETE FROM calendar_item WHERE item_id='"+id+"' AND user_id="+request.user.id+";";
     let update_string = "UPDATE todo_item SET in_calendar='"+false+"' WHERE user_id="+request.user.id+" AND item_id='"+
         +parent+"';"
+    console.log(delete_string);
     pool.connect(function(err, client) {
         pool.query(delete_string);
         pool.query(update_string);
