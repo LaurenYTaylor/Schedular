@@ -56,6 +56,7 @@ $(document).ready(function() {
 
 
 
+
     // var date_input=$('input[name="date"]'); //our date input has the name "date"
     // var options={
     //   format: 'mm/dd/yyyy',
@@ -126,6 +127,10 @@ $(document).ready(function() {
         });
         
     });
+
+    //$(document).on('click', '#addCat' function(){
+        //$('catModal')
+    
 
     $(function() {
         $('.catCreate').click(function() {
@@ -259,7 +264,6 @@ $(document).ready(function() {
 
 
                 let new_task = {name: taskName, duration: dury, category: category, repeat: repeat, dueDate: dueDate};
-                console.log(new_task);
 
                 $.ajax(
                     {
@@ -343,14 +347,6 @@ $(document).ready(function() {
             element.cat = category;
             element.end = end_date;
             element.repeat = repeat;
-            //if(due_date != '') {
-            //    due_date = due_date.split(' ', 1);
-            //    element.due_date = due_date;
-            //}
-
-            //else {
-            //    due_date = element.due_date;
-            //}
 
             switch(category) {
                 case "University":
@@ -403,16 +399,30 @@ $(document).ready(function() {
         });
     });
 
+    // saves edits to task list when edit button clicked
     $(function() {
         $(".editTButton").click(function() {
             var name = $('#editTName').val();
             var hours = $('#editTDury').val();
             var category = $('#editTCat').val();
-            //var due_date = $('#newDate').val();
+            var due_date = $('#newTDate').val();
             var repeat = $('#editTRepeat').val();
+
+            if(due_date != '') {
+                due_date = due_date.split(' ', 1);
+            //    element.due_date = due_date;
+            }
+
+            else {
+                due_date = curTask.dueDate;
+            }
+
+            alert(due_date)
 
             //hide edit modal
             $('#taskModal').modal("hide");
+            //hide data time picker data
+            $("#datetimepicker2").data("DateTimePicker").hide();
 
             // update allEvents array
             for (var i = 0; i < allEvents.length; i++) {
@@ -726,8 +736,8 @@ $(document).ready(function() {
                     duration_ms = time*60*60*1000;
                     endTime = date.clone().add(duration_ms).format();
                     dueDate = allEvents[i].dueDate;
+                    priority = allEvents[i].priority;
                     repeat = allEvents[i].repeat;
-                   
                     allEvents.splice(i,1);
                 }
             }
@@ -747,8 +757,8 @@ $(document).ready(function() {
                 }
             }
             let newCalEvent = {title: event_name, duration: duration_ms, cat: category, start: startTime, end: endTime,
-                parent_task: task_id, due_date: dueDate, repeat: repeat};
 
+                parent_task: task_id, due_date: dueDate, priority: priority, repeat: repeat};
             switch(newCalEvent.cat) {
                 case "University":
                 newCalEvent.color = '#6578a0';
@@ -839,6 +849,7 @@ $(document).ready(function() {
             popoverElement = $(jsEvent.currentTarget);
             element = calEvent;
             $('#notes').val(element.note);
+            alert($('#viv_input').val());
         },
 
         /*Triggered when an event is being rendered*/

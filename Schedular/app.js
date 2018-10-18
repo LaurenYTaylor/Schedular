@@ -265,6 +265,8 @@ app.post('/new_task', async function(request, response) {
     let {name, category, duration, repeat} = request.body;
     let query = "INSERT INTO todo_item (user_id, num_hours, category, completed, description, repeat) "
         + "VALUES (" + request.user.id + ", " + duration + ", '" + category + "', 'false', '" + name + "','" +repeat + "');";
+
+
     let client = await pool.connect();
 
     await pool.query(query);
