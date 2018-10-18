@@ -1740,3 +1740,29 @@ function getPriorityList(){
    
 }
 
+function dueDateOptimise(){
+    getDueDateList(); 
+}
+
+function getDueDateList(){
+    console.log("Getting due date");
+
+    for (x=0; x<allEvents.length; x++){
+        console.log(allEvents[x].dueDate);
+        console.log(allEvents[x].name);
+    }
+
+}
+
+function sortByDueDate(calendarArray){
+
+  calendarArray.sort(function(a,b){
+    return new Date(b.dueDate) - new Date(a.dueDate); 
+  });
+
+  calendarArray.reverse(); 
+
+  return calendarArray; 
+}
+
+
