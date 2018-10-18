@@ -1,7 +1,6 @@
 //popover complete is still somewhat buggy
 // requires 2 clicks to initialize popover after initial popover
-
-//hide popover when clicking outside of the popover
+//Indicator to should if the task is weekly monthly or daily on the task list
 
 
 //global variable to determine if user is dragging
@@ -342,7 +341,7 @@ $(document).ready(function() {
     $.getJSON('/tasks', function(data){
         // get each task description in database
 
-        //CAN I CHANGE THE ID OF THIS TASK FROM KEY TO EVENT TITLE??????????
+        
         $.each(data, function(key, val){
             if(val.in_calendar==true) {
                 return;
@@ -430,6 +429,9 @@ $(document).ready(function() {
             placeholder: 'placeholder',
 
             helper:   'clone',
+            start: function( event, ui ) {console.log(ui.item)},
+             
+
             update: function(event, ui) {
                 console.log($( "#list" ).sortable( "toArray" ));
             }
@@ -444,10 +446,12 @@ $(document).ready(function() {
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
         },
+        fixedWeekCount: false,
+        aspectRatio: 2,
         editable: true,
         droppable: true, // this allows things to be dropped onto the calendar
         dragRevertDuration: 0,
-        drop: function(date) {
+        drop: function(date, jsEvent, ui) {
             let task_id = $(this)[0].dataset.taskid;
             let event_name = $(this)[0].innerText;
             var category;
@@ -457,6 +461,7 @@ $(document).ready(function() {
             var dueDate;
             var priority;
             var time;
+            var repeat;
             for (var i = 0; i < allEvents.length; i++) {
                 if (task_id == allEvents[i].id) {
                     time = allEvents[i].duration;
@@ -466,6 +471,7 @@ $(document).ready(function() {
                     endTime = date.clone().add(duration_ms).format();
                     dueDate = allEvents[i].dueDate;
                     priority = allEvents[i].priority;
+                   
                     allEvents.splice(i,1);
                 }
             }
@@ -485,44 +491,107 @@ $(document).ready(function() {
                 }
             }
             let newCalEvent = {title: event_name, duration: duration_ms, cat: category, start: startTime, end: endTime,
-                parent_task: task_id, due_date: dueDate, priority: priority};
-            switch(newCalEvent.cat) {
-                case "University":
+                parent_task: task_id, due_date: dueDate, repeat: priority};
+
+            var recurringEvents = [];  
+            var numofEvents = 0;
+            var time = startTime;
+            var result_id;
+            if(newCalEvent.repeat == null || newCalEvent.repeat == "None"){
+                switch(newCalEvent.cat) {
+                    case "University":
                     newCalEvent.color = '#6578a0';
-                    break;
-                case "Work":
+                        break;
+                    case "Work":
                     newCalEvent.color = '#84b79d';
-                    break;
-                case "Fun":
+                        break;
+                    case "Fun":
                     newCalEvent.color = '#c3c60b';
-                    break;
-                case "Chores":
+                        break;
+                    case "Chores":
                     newCalEvent.color = '#e5a190';
-                    break;
-                case "Hobby":
+                        break;
+                    case "Hobby":
                     newCalEvent.color = '#c18fe8';
-                    break;
-                case "Other":
+                        break;
+                    case "Other":
                     newCalEvent.color = 'grey';
-            }
-            $.ajax(
-                {
+                }
+
+                $.ajax({
                     url: "http://localhost:3000/new_cal_task",
                     async: false,
                     type: "POST",
                     data: newCalEvent,
                     success: function (result) {
-                        let id = JSON.parse(result);
-                        newCalEvent.id = id;
+                        newCalEvent.id  = JSON.parse(result);
                         newCalEvent.duration=duration_ms/(60*60*1000);
-
                     }
                 });
-            calendarEvents.push(newCalEvent);
-            // is the "remove after drop" checkbox checked?
-            // if so, remove the element from the "Draggable Events" list
+                calendarEvents.push(newCalEvent);
+                recurringEvents.push(newCalEvent);
+            }else{
+                alert(newCalEvent.repeat);
+                while (numofEvents < 3){
+                    var time = date.clone();
+                    
+                    var myEvent = Object.assign({}, newCalEvent);
+                    newTime = time.add(numofEvents, newCalEvent.repeat);
+                    myEvent.start = newTime.format()+"T09:00:00";
+                    if(end<10) {
+                        myEvent.end = newTime.format()+"T0"+end+":00:00";
+                    } else {
+                        myEvent.end = newTime.format()+"T"+end+":00:00";
+                    }
+                    switch(myEvent.cat) {
+                        case "University":
+                        myEvent.color = '#6578a0';
+                            break;
+                        case "Work":
+                        myEvent.color = '#84b79d';
+                            break;
+                        case "Fun":
+                        myEvent.color = '#c3c60b';
+                            break;
+                        case "Chores":
+                        myEvent.color = '#e5a190';
+                            break;
+                        case "Hobby":
+                        myEvent.color = '#c18fe8';
+                            break;
+                        case "Other":
+                        myEvent.color = 'grey';
+                    }
+                    $.ajax({
+                        url: "http://localhost:3000/new_cal_task",
+                        async: false,
+                        type: "POST",
+                        data: myEvent,
+                        success: function (result) {
+                            if(result_id ==null){
+                                result_id = JSON.parse(result);
+                            }
+                            myEvent.id = result_id;
+                            myEvent.duration=duration_ms/(60*60*1000);
+                        }
+                    });
+                    numofEvents++;
+
+                    calendarEvents.push(myEvent);
+                    
+                    recurringEvents.push(myEvent);
+                }
+            }
+
+            $('#calendar').fullCalendar( 'addEventSource', recurringEvents);
+            
+                
+            
+           
+            
+            // calendarEvents.push(newCalEvent);
             $(this).remove();
-            $('#calendar').fullCalendar('renderEvent', newCalEvent, 'stick');
+            // $('#calendar').fullCalendar('renderEvent', newCalEvent, 'stick');
             //$('#calendar').fullCalendar('removeEvents', newCalEvent.id);
         },
 
@@ -637,6 +706,7 @@ $(document).ready(function() {
 
         //function fires when event is finished dragging
         eventDragStop: function( event, jsEvent, ui, view ) {
+            var repeat = false;
             dragging = false;
             for (let i=0; i<calendarEvents.length; i++) {
                 if(calendarEvents[i].id==event.id) {
@@ -657,6 +727,7 @@ $(document).ready(function() {
                 let task_id=0;
                 for(let i=0; i<calendarEvents.length; i++) {
                     if(calendarEvents[i].id==event.id) {
+
                         let id=calendarEvents[i].id;
                         let parent=calendarEvents[i].parent_task;
                         task_id=parent;
@@ -665,6 +736,8 @@ $(document).ready(function() {
                             duration: calendarEvents[i].duration, category: calendarEvents[i].cat,
                             priority: calendarEvents[i].priority, dueDate: calendarEvents[i].due_date};
                         console.log(newTask);
+
+                        //PUSH ONLY ONE TASK??
                         allEvents.push(newTask);
                         calendarEvents.splice(i, 1);
                         justDragged.pop();
@@ -680,18 +753,22 @@ $(document).ready(function() {
                             });
                         $('#calendar').fullCalendar('removeEvents', event._id);
                         let category = newTask.category;
-                        if (category == "University") {
-                            $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + task_id + "><label>" + event.title + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
-                        } else if (category == "Work") {
-                            $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
-                        } else if (category == "Fun") {
-                            $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
-                        } else if (category == "Chores") {
-                            $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
-                        } else if (category == "Hobby") {
-                            $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
-                        } else if (category == "Other") {
-                            $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                        
+                        if(!repeat){
+                            if (category == "University") {
+                                $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + task_id + "><label>" + event.title + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                            } else if (category == "Work") {
+                                $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                            } else if (category == "Fun") {
+                                $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                            } else if (category == "Chores") {
+                                $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                            } else if (category == "Hobby") {
+                                $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                            } else if (category == "Other") {
+                                $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                            }
+                            repeat = true;
                         }
 
                         $("#list").sortable('refresh');
