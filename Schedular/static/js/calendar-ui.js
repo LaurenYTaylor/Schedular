@@ -10,18 +10,21 @@ var dragging = false;
 //e.target -object that is clicked on
 //popoverElement - event that contains the popover
 $('html').on('click', function (e) {
-    console.log(e.target);
-    console.log(popoverElement);
+    //console.log(e.target);
+    //console.log(popoverElement);
 
 
 
     //if object clicked is not the popover object hide the popover
     //if the popover itself is clicked on do not close the popover
+    if(popoverElement && e.target){
     if (!(popoverElement).is(e.target) &&
         popoverElement.has(e.target).length === 0 &&
         $('.popover').has(e.target).length === 0){
         popoverElement.popover('hide');
     }
+
+    };
 
 
 });
@@ -261,7 +264,7 @@ $(document).ready(function() {
             }
         });
     });
-
+    
 
     //Close modal when close button is pressed//
     $(".close").click(function(){
@@ -430,8 +433,99 @@ $(document).ready(function() {
             placeholder: 'placeholder',
 
             helper:   'clone',
+
+            start:function(event,ui){
+                //console.log(ui.item.text());
+                thisEvent = $(this).text(); 
+                eventDuration = getDuration(thisEvent);
+
+                shadowEvents = []; 
+                today = getToday(); 
+                day = parseInt(today.substr(8,10));
+                yearandmonth = today.substr(0,8);
+                x = 0; 
+
+                //Add the dates from this week to be compared. 
+                datesOfInterest = getDaysThisWeek(day,yearandmonth);
+                //Getting the events for this week 
+                alleventeroos = $('#calendar').fullCalendar( 'clientEvents', function(evt) {
+                currentDate = evt.start.format(); 
+                current = currentDate.substr(0,10);
+                result = datesOfInterest.includes(current); 
+                return result; 
+                });
+
+                alleventeroos = sortByDate(alleventeroos); 
+
+                //Starting Daily Iteration 
+                for(dayeroo=0; dayeroo<14; dayeroo++){
+                    currentDay = datesOfInterest[dayeroo];
+                    eventsOfInterest = getTodaysevents(alleventeroos,currentDay); 
+                    eventsOfInterest = sortByDate(eventsOfInterest);
+                    starttime = 0; 
+            
+                    for (hours = 0; hours < 24; hours ++){
+                        //For each hour, check if there is an event at this time. 
+                        for(index = 0; index < eventsOfInterest.length; index ++){
+
+                            currentEventTime = getCurrentTimeFormat(eventsOfInterest, index); 
+                            startDate = currentDay.substr(0,10);
+                            //If this event starts at the current time
+
+                            if(currentEventTime == hours){
+                            //formatting
+                                stringhours = stringifyNumbers(hours); 
+                                if(starttime < 10){ stringstarttime = "0" + String(starttime);}
+                                else { stringstarttime = String(starttime);}
+                  
+                                totalDate = startDate + "T" + stringstarttime + ":00:00"; 
+                                totalEnd = startDate + "T" + stringhours + ":00:00";
+                                //End Formatting 
+                                newEvent = createEvent(totalDate,totalEnd);
+                                //Calculate the duration   
+                                //This is currently calculating the duration of each event. 
+                                duration = calculateDuration(eventsOfInterest,index,totalEnd);
+
+                                //duration = eventDuration;
+
+                                //If the space allows an event to be placed in it, given the duration, add it. 
+                                if(hours - starttime >= eventDuration){
+                                    shadowEvents.push(newEvent);
+                                    //console.log("Adding an event")
+                                }
+                                hours = hours + duration; 
+                                starttime = hours; 
+                            } //End if event occurs at this time. 
+                        } //End loop through all events for the day. 
+
+                     } // End of the hour 
+
+                    //Reformat Start and end time 
+                    if (starttime < 10){
+                        starttime = "0" + String(starttime);
+                    }
+                    q = currentDay + "T" + starttime + ":00:00"; 
+                    x = currentDay + "T" + String(hours) + ":00:00"; 
+
+                    //End Reformatting 
+                    newEventEnd = createEvent(q,x);
+                    shadowEvents.push(newEventEnd);
+                    //console.log("Adding an event");
+
+                } // End the daily iteration 
+
+
+                $('#calendar').fullCalendar( 'renderEvents', shadowEvents , 'stick');
+
+            },
+
+            stop:function(){
+                $('#calendar').fullCalendar( 'removeEvents', 66666);
+
+
+            },
             update: function(event, ui) {
-                console.log($( "#list" ).sortable( "toArray" ));
+                //console.log($( "#list" ).sortable( "toArray" ));
             }
         });
 
@@ -532,6 +626,7 @@ $(document).ready(function() {
         eventDragStart: function( event, jsEvent, ui, view ) {
             dragging = true;
             $('.popover').popover('hide');
+            console.log("Cry")
 
         },
 
@@ -660,11 +755,11 @@ $(document).ready(function() {
                         let id=calendarEvents[i].id;
                         let parent=calendarEvents[i].parent_task;
                         task_id=parent;
-                        console.log("THE FOLLOWING TASK HAS BEEN ADDED BACK TO THE TASK LIST");
+                        //console.log("THE FOLLOWING TASK HAS BEEN ADDED BACK TO THE TASK LIST");
                         let newTask = {id: parent, name: calendarEvents[i].title,
                             duration: calendarEvents[i].duration, category: calendarEvents[i].cat,
                             priority: calendarEvents[i].priority, dueDate: calendarEvents[i].due_date};
-                        console.log(newTask);
+                        //console.log(newTask);
                         allEvents.push(newTask);
                         calendarEvents.splice(i, 1);
                         justDragged.pop();
@@ -675,7 +770,7 @@ $(document).ready(function() {
                                 type: "POST",
                                 data: {id: id, parent_id: parent},
                                 success: function (result) {
-                                    console.log("successfully removed calendar task");
+                                    //console.log("successfully removed calendar task");
                                 }
                             });
                         $('#calendar').fullCalendar('removeEvents', event._id);
@@ -710,7 +805,7 @@ $(document).ready(function() {
 
 });
 
-document.load();
+//document.load();
 
 
 //Holds the jquery object
@@ -815,4 +910,163 @@ function openCity(evt, tabName) {
     evt.currentTarget.className += " active";
 }
 
+
+function createEvent(start,end){
+
+  var newEvent = {
+                    title: 'New Background Event',
+                    id : 66666,
+                    start: start,
+                    end: end ,
+                    rendering:'background'  };
+
+  return newEvent;
+}
+
+function sortByDate(calendarArray){
+
+  calendarArray.sort(function(a,b){
+    return new Date(b.start) - new Date(a.start); 
+  });
+
+  calendarArray.reverse(); 
+
+  return calendarArray; 
+}
+
+function getTodaysevents(alleventeroos, currentDay){
+
+  eventsOfInterest = []; 
+
+//Adding today's events to a list
+for(y=0;y<alleventeroos.length; y++){
+    newDay = alleventeroos[y].start.format();
+    newDay = newDay.substr(0,10);
+    if(newDay == currentDay){
+          eventsOfInterest.push(alleventeroos[y]);
+          }
+    }
+
+    return eventsOfInterest; 
+}
+
+function getDaysThisWeek(day,yearandmonth){
+
+  datesOfInterest = []; 
+  x = 0; 
+  console.log("The days for this week are");
+  month = parseInt(yearandmonth.substr(5,6));
+  console.log("The month is " + month);
+  year = parseInt(yearandmonth.substr(0,4));
+  console.log("The year is " + year);
+  newDay = day - 1; 
+
+
+  while(x<7){
+    console.log("New day is " + newDay + " + " + x); 
+    newDay = newDay + 1; 
+
+    x = x + 1; 
+    if(newDay > 31){
+        console.log("Entering if as newDay is " + newDay);
+        newDay = 1;
+        month = month + 1; 
+        //Do stuff 
+   }
+   if(newDay < 10){
+    newDay = "0" + String(newDay); 
+   }
+
+    wholeNewDate = String(year) + "-" + String(month) + "-" + String(newDay);
+    datesOfInterest.push(wholeNewDate);
+    console.log(wholeNewDate); 
+    newDay = parseInt(newDay);
+
+  }
+
+  return datesOfInterest; 
+}
+
+//This is correct. Get's today's date. 
+function getToday(){
+  var moment = $('#calendar').fullCalendar('getDate');
+  today = moment.format(); 
+  today = today.substr(0,10);
+
+  //console.log("Today is " + today);
+
+  return today; 
+}
+
+function getCurrentTimeFormat(eventsOfInterest, index){
+  currentEventDate = eventsOfInterest[index].start.format();
+  currentEventTime = parseInt(currentEventDate.substr(11,12)); 
+  return currentEventTime; 
+}
+
+function stringifyNumbers(hours){
+
+  if(hours < 10){ 
+    stringhours = "0" + String(hours);
+  }
+  else{ 
+    stringhours = String(hours);
+  }
+
+  return stringhours; 
+}
+
+function calculateDuration(eventsOfInterest,index,totalEnd){
+  endtime = eventsOfInterest[index].end.format(); 
+  starter = parseInt(totalEnd.substr(11,11));
+  ender =   parseInt(endtime.substr(11,13));
+  //console.log("Duration is calculated as " + endtime + " - " + totalEnd);
+  duration = ender - starter; 
+  return duration; 
+}
+
+function getDuration(eventTitle){
+  for (x = 0; x < allEvents.length; x++){
+    if (allEvents[x].title = eventTitle){
+      duration = allEvents[x].duration; 
+      break;
+    }
+  }
+
+  return duration; 
+}
+
+function addAll(){
+
+  listEvents = getListEvents(); 
+
+  for (x=0; x<listEvents.length; x++){
+    console.log(listEvents[x].name);
+  }
+
+}
+
+function getListEvents(){
+
+  calendarEvents = $('#calendar').fullCalendar( 'clientEvents'); 
+  listEvents = []; 
+
+  for (x = 0; x<allEvents.length; x++){
+    //console.log("allEventsLength is " + allEvents.length);
+    exists = false; 
+    for(y = 0; y<calendarEvents.length; y++){
+      //console.log("allEventsLength is " + allEvents.length);
+      if(allEvents[x].name == calendarEvents[x].title){
+        exists = true; 
+      }
+
+    }
+
+    if (exists == false){
+      listEvents.push(allEvents[x]); 
+    }
+  }
+
+  return listEvents; 
+}
   
