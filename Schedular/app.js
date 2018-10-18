@@ -290,7 +290,7 @@ app.post('/delete_task', async function(request, response) {
 });
 
 app.post('/new_cal_task', async function (request, response) {
-    let query_string = "INSERT INTO calendar_item (user_id, description, yyyymmdd, num_hours, start_time, end_time, category, parent_task_id, due_date, priority) ";
+    let query_string = "INSERT INTO calendar_item (user_id, description, yyyymmdd, num_hours, start_time, end_time, category, parent_task_id, due_date, repeat) ";
     let item = request.body;
     let description=item.title;
     let category=item.cat;
@@ -307,10 +307,10 @@ app.post('/new_cal_task', async function (request, response) {
     let endTime=end_split[1];
     let parent = item.parent_task;
     let dueDate = item.due_date;
-    let priority = item.priority;
+    let repeat = item.repeat;
     query_string+="VALUES ("+request.user.id+", '"+ description+"', '"+date+"', " +
         ""+numHours+", '"+startTime+"', '" +endTime+"', '"+category+"', "+parent+", '" + dueDate + "', '" +
-    priority +"');";
+    repeat +"');";
     let update_string = "UPDATE todo_item SET in_calendar='true' WHERE user_id="+
         request.user.id+" AND description='"+description+"';";
     let client = await pool.connect();

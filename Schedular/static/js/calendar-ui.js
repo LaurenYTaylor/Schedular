@@ -240,6 +240,37 @@ $(document).ready(function() {
     });
 
 
+    //show unshow uni categories
+    $(document).on('click', '#uniCheck', function(){
+        showHideCat('#uniCheck', 'University');
+    })
+
+    //show unshow work categories
+    $(document).on('click', '#workCheck', function(){
+        showHideCat('#workCheck', 'Work');
+    })
+
+     //show unshow fun categories
+    $(document).on('click', '#funCheck', function(){
+        showHideCat('#funCheck', 'Fun');
+    })
+
+     //show unshow chore categories
+    $(document).on('click', '#choreCheck', function(){
+        showHideCat('#choreCheck', 'Chores');
+    })
+
+     //show unshow hobby categories
+    $(document).on('click', '#hobbyCheck', function(){
+        showHideCat('#hobbyCheck', 'Hobby');
+    })
+
+      //show unshow other categories
+    $(document).on('click', '#otherCheck', function(){
+        showHideCat('#otherCheck', 'Other');
+    })
+
+
 
     //eventlistener for when completing the task
     //toggles status to complete
@@ -416,8 +447,6 @@ $(document).ready(function() {
             else {
                 due_date = curTask.dueDate;
             }
-
-            alert(due_date)
 
             //hide edit modal
             $('#taskModal').modal("hide");
@@ -800,7 +829,6 @@ $(document).ready(function() {
             popoverElement = $(jsEvent.currentTarget);
             element = calEvent;
             $('#notes').val(element.note);
-            alert($('#viv_input').val());
         },
 
         /*Triggered when an event is being rendered*/
@@ -1238,4 +1266,31 @@ function getListEvents(){
 
   return listEvents; 
 }
+
+function removeCategory(category){
+    for (i = 0; i < calendarEvents.length; i++){
+        if(calendarEvents[i].cat == category) {
+            $('#calendar').fullCalendar('removeEvents', calendarEvents[i].id);
+        }
+    }  
+}
+
+function addBackCategory(category) {
+    for (i = 0; i < calendarEvents.length; i++){
+        if(calendarEvents[i].cat == category) {
+            $('#calendar').fullCalendar('renderEvent', calendarEvents[i], 'stick');
+        }
+    } 
+}
+
+function showHideCat(htmlID, category){
+    if($(htmlID).is(':checked')) {
+        addBackCategory(category);
+    }
+    else{
+        removeCategory(category);
+    }
+}
+
+
   
