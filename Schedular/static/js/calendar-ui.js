@@ -800,8 +800,7 @@ $(document).ready(function() {
             popoverElement = $(jsEvent.currentTarget);
             element = calEvent;
             $('#notes').val(element.note);
-            alert($('#viv_input').val());
-        },
+            },
 
         /*Triggered when an event is being rendered*/
         eventRender: function(event,jsEvent){
@@ -1239,3 +1238,203 @@ function getListEvents(){
   return listEvents; 
 }
   
+function optimise2(){
+
+    console.log("Initialising the optimiser!");
+    console.log($('#viv_input').val());
+
+
+    begin = $('#viv_input').val();
+
+    if (!begin){
+        begin = 9;
+    }
+
+    begin = parseInt(begin);
+
+    end = $('#viv_input2').val();
+
+    if (!end){
+        end = 24;
+    }
+
+    end = parseInt(end);
+
+    today = getToday(); 
+    day = parseInt(today.substr(8,10));
+    yearandmonth = today.substr(0,8);
+    x = 0; 
+
+    //Add the dates from this week to be compared. 
+    datesOfInterest = getDaysThisWeek(day,yearandmonth);
+
+    for (que = 0; que < allEvents.length; que++){
+
+        occ = occupied();
+        console.log(que);
+        console.log(allEvents[que]);
+
+
+        eventDuration = allEvents[que].duration;
+
+        console.log(allEvents[que].name + " is a " + eventDuration + " length event");
+        loopday: 
+        for(dayeroo=0; dayeroo<7; dayeroo++){
+            //Calculate the events of interest for today.
+            currentDay = datesOfInterest[dayeroo];
+            //console.log(currentDay);
+
+            for (hours = begin; hours < end; hours ++){ // For each hour
+
+                add = true; 
+                //console.log("Checking a " + eventDuration + " hour lengthed time slot")
+                for(d = 0; d < parseInt(eventDuration); d++){
+                    newHour = hours + d; 
+
+                    if (newHour < 10){
+                        newHour = "0" + String(newHour);
+                    }
+
+                    time = String(newHour)+ ":00:00";
+                    checkDate = currentDay + "T" + time; 
+                    //console.log("checking " + checkDate);
+                    //console.log(checkDate);
+                    if(occ.includes(checkDate)){
+                        add = false; 
+                    }
+                    //if that time is in occupado set add to false; 
+
+                } // End checking the whole duration 
+
+                if (add == true){
+                    //ADD EVENT and then break.
+                    newHour = parseInt(newHour);
+                    newHour = newHour + 1; 
+                    if (newHour < 10){
+                        newHour = "0" + String(newHour);
+                    }
+
+                    time = String(newHour)+ ":00:00";
+                    checkDate = currentDay + "T" + time; 
+
+
+                    h = hours;
+                    if (h < 10){
+                        h = "0" + String(h); 
+                    }
+
+                    time = String(h)+":00:00"; 
+                    startTime = currentDay + "T" + time;
+                    startTime = String(startTime); 
+
+
+                    event_name = allEvents[que].name;
+                    time = allEvents[que].duration;
+                    category = allEvents[que].category;
+                    
+                    //duration_ms = time*60*60*1000;
+                    endTime = checkDate;
+                    dueDate = allEvents[que].dueDate;
+                    priority = allEvents[que].priority;
+                    task_id = allEvents[que].id;
+                    console.log(startTime,time,category,dueDate,priority);
+
+                    newCalEvent = {title: event_name, duration: time, cat: category, start: startTime, end: endTime};
+
+                switch(newCalEvent.cat) {
+                    case "University":
+                    newCalEvent.color = '#6578a0';
+                    break;
+                    case "Work":
+                    newCalEvent.color = '#84b79d';
+                    break;
+                    case "Fun":
+                    newCalEvent.color = '#ffc53f';
+                    break;
+                    case "Chores":
+                    newCalEvent.color = '#e5a190';
+                    break;
+                    case "Hobby":
+                    newCalEvent.color = '#c18fe8';
+                    break;
+                    case "Other":
+                    newCalEvent.color = 'grey';
+                    }
+
+                    calendarEvents.push(newCalEvent);
+                    console.log(newCalEvent.title,newCalEvent.color, newCalEvent.start, newCalEvent.end);
+
+                    $('#calendar').fullCalendar('renderEvent', newCalEvent, 'stick');
+
+
+                    break loopday;
+
+
+                }
+
+
+            } // End Iterating hours 
+
+
+        } // End Iterating Days
+
+
+    } //End Iterating through task list 
+
+    $("#list .task-drag").each(function(){
+        console.log("lol"); 
+        $(this).remove(); 
+    });
+    allEvents = []; 
+
+} // End Optimise Function 
+
+
+function occupied(){
+    occupado = [];
+    //console.log("Broken?");
+    today = getToday(); 
+    day = parseInt(today.substr(8,10));
+    yearandmonth = today.substr(0,8);
+
+    //Add the dates from this week to be compared. 
+    datesOfInterest = getDaysThisWeek(day,yearandmonth);
+
+    alleventeroos = $('#calendar').fullCalendar( 'clientEvents', function(evt) {
+        currentDate = evt.start.format(); 
+        current = currentDate.substr(0,10);
+        result = datesOfInterest.includes(current); 
+        return result; 
+    });
+
+    for (x=0; x<alleventeroos.length; x++){
+        //console.log(alleventeroos[x].start.format());
+        duration = alleventeroos[x].duration;
+        //console.log(alleventeroos[x].end.format());
+
+
+        date = alleventeroos[x].start.format().substr(0,10);
+        time = alleventeroos[x].start.format().substr(11,13);
+
+        for (y = 0; y < parseInt(duration); y++){
+            
+            time = parseInt(time);
+            time = stringifyNumbers(time); 
+            time = time + ":00:00"; 
+
+            momento = date + "T" + time;
+            //occupiedSpace = {momento}; 
+            occupado.push(momento);
+            time = parseInt(time);
+            time = time + 1; 
+        }
+
+    }
+
+
+    return occupado; 
+
+
+}
+
+
