@@ -353,25 +353,31 @@ $(document).ready(function() {
             allEvents.push(newTask);
             // create new task with description
             let category = newTask.category;
-            if (category == "University") {
-                $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + val.item_id + "><label>" + description+ "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>"
-                    + "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>")
-            } else if (category == "Work") {
-                $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + val.item_id + "><label>" + description + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>"
-                    + "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>")
-            } else if (category == "Fun") {
-                $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + val.item_id + "><label>" + description + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>"
-                    + "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>")
-            } else if (category == "Chores") {
-                $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + val.item_id + "><label>" + description + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>"
-                    + "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>")
-            } else if (category == "Hobby") {
-                $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + val.item_id + "><label>" + description + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>"
-                    + "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>")
-            } else if (category == "Other") {
-                $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + val.item_id + "><label>" + description + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>"
-                    + "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>")
-            }
+                if (category == "University") {
+                    $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + newTask.id + "><label>" + description + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/> " +
+                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                } else if (category == "Work") {
+                    $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + newTask.id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                } else if (category == "Fun") {
+                    $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + newTask.id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                } else if (category == "Chores") {
+                    $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + newTask.id + "><label>" + description+ "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                } else if (category == "Hobby") {
+                    $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + newTask.id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                } else if (category == "Other") {
+                    $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + newTask.id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                }
         });
     });
 
@@ -544,34 +550,31 @@ $(document).ready(function() {
             popoverElement = $(jsEvent.currentTarget);
             element = calEvent;
 
-            var dispNote;
 
-            for (var i = 0; i < calendarEvents.length; i++){
-                if(calendarEvents[i].id == element.id) {
-                    dispNote = calendarEvents[i].note;
-                }
-            }
-            $('#notes').val(dispNote);
+            $('#notes').val(element.note);
 
             //add notes to database
             let task_id = calEvent.id
-            $(document).on('click', '#save', function(){
+            $('#save').click(function(){
+                alert("save")
                 var note = $('#notes').val();
                 var data = {
                     id: task_id,
                     note: note
                 };
 
+
+
                 $.ajax(
-                    {
-                        url: "http://localhost:3000/add_notes_files",
-                        async: true,
-                        type: "POST",
-                        data: data,
-                        success: function (result) {
-                            console.log("successfully added");
-                        }
-                    });
+                {
+                    url: "http://localhost:3000/add_notes_files",
+                    async: true,
+                    type: "POST",
+                    data: data,
+                    success: function (result) {
+                        console.log("successfully added");
+                    }
+                });
             })
         },
 
@@ -681,17 +684,29 @@ $(document).ready(function() {
                         $('#calendar').fullCalendar('removeEvents', event._id);
                         let category = newTask.category;
                         if (category == "University") {
-                            $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + task_id + "><label>" + event.title + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                            $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/> " +
+                                "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                                "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                         } else if (category == "Work") {
-                            $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                            $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                                "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                                "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                         } else if (category == "Fun") {
-                            $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                            $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                                "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                                "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                         } else if (category == "Chores") {
-                            $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                            $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                                "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                                "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                         } else if (category == "Hobby") {
-                            $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                            $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                                "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                                "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                         } else if (category == "Other") {
-                            $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + task_id + "><label>" + event.title + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/></div>");
+                            $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                                "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                                "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                         }
 
                         $("#list").sortable('refresh');

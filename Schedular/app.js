@@ -381,7 +381,7 @@ app.post('/add_notes_files', function(request, response) {
     let query_string = "UPDATE calendar_item SET notes='" +
         note + "' WHERE item_id=" + id + " AND user_id=" +
         request.user.id + ";";
-
+    console.log(query_string)
     pool.connect(function(err, client) {
         pool.query(query_string);
         client.release;
