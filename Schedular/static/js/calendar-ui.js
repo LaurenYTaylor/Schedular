@@ -210,7 +210,8 @@ $(document).ready(function() {
                 priority = $('#priority').val();
 
 
-                let new_task = {name: taskName, duration: dury, category: category, priority: priority, dueDate: dueDate};
+                let new_task = {name: taskName, duration: dury, category: category, repeat: repeat, dueDate: dueDate};
+                console.log(new_task);
                 $.ajax(
                     {
                         url: "http://localhost:3000/new_task",
@@ -347,7 +348,7 @@ $(document).ready(function() {
                 return;
             }
             let description = val.description;
-            let newTask = {id: val.item_id, name: description, duration: val.num_hours, category: val.category, priority: val.priority, dueDate: val.due_date};
+            let newTask = {id: val.item_id, name: description, duration: val.num_hours, category: val.category, repeat: val.repeat, dueDate: val.due_date};
             //let newTask = {name: description, duration: val.num_hours, category: val.category, repeat: val.repeat, dueDate: val.due_date};
             allEvents.push(newTask);
             // create new task with description
@@ -384,7 +385,7 @@ $(document).ready(function() {
             let start_date = timeless_date+'T'+val.start_time;
             let end_date = timeless_date+'T'+val.end_time;
             let due_date = val.due_date;
-            let priority = val.priority;
+            let repeat = val.repeat;
             let note = val.notes;
             let newEvent = {
                 title: val.description,
@@ -395,7 +396,7 @@ $(document).ready(function() {
                 duration: val.num_hours,
                 cat: val.category,
                 due_date: due_date,
-                priority: priority,
+                repeat: repeat,
                 note: note
             };
             switch(newEvent.cat) {
@@ -417,7 +418,20 @@ $(document).ready(function() {
                 case "Other":
                     newEvent.color = 'grey';
             }
-            calendarEvents.push(newEvent);
+
+            var numofEvents = 0;
+            if(newEvent.repeat == "None" || newEvent.repeat == null){
+                calendarEvents.push(newEvent);
+            }else {
+                while (numofEvents < 5){        
+                    var myEvent = Object.assign({}, newEvent);
+                    myEvent.start = moment(newEvent.start).add(numofEvents,newEvent.repeat).format().split("+", 1).toString();
+                    myEvent.end = moment(newEvent.end).add(numofEvents, newEvent.repeat).format().split("+", 1).toString(); 
+                    numofEvents++;
+                    console.log(myEvent);
+                    calendarEvents.push(myEvent);
+                }
+            }
         });
         $('#calendar').fullCalendar('renderEvents', calendarEvents, 'stick');
     });
@@ -470,7 +484,7 @@ $(document).ready(function() {
                     duration_ms = time*60*60*1000;
                     endTime = date.clone().add(duration_ms).format();
                     dueDate = allEvents[i].dueDate;
-                    priority = allEvents[i].priority;
+                    repeat = allEvents[i].repeat;
                    
                     allEvents.splice(i,1);
                 }
@@ -491,90 +505,61 @@ $(document).ready(function() {
                 }
             }
             let newCalEvent = {title: event_name, duration: duration_ms, cat: category, start: startTime, end: endTime,
-                parent_task: task_id, due_date: dueDate, repeat: priority};
+                parent_task: task_id, due_date: dueDate, repeat: repeat};
+
+            switch(newCalEvent.cat) {
+                case "University":
+                newCalEvent.color = '#6578a0';
+                    break;
+                case "Work":
+                newCalEvent.color = '#84b79d';
+                    break;
+                case "Fun":
+                newCalEvent.color = '#c3c60b';
+                    break;
+                case "Chores":
+                newCalEvent.color = '#e5a190';
+                    break;
+                case "Hobby":
+                newCalEvent.color = '#c18fe8';
+                    break;
+                case "Other":
+                newCalEvent.color = 'grey';
+            }
+
+            $.ajax({
+                url: "http://localhost:3000/new_cal_task",
+                async: false,
+                type: "POST",
+                data: newCalEvent,
+                success: function (result) {
+                    newCalEvent.id  = JSON.parse(result);
+                    newCalEvent.duration=duration_ms/(60*60*1000);
+                }
+            });
 
             var recurringEvents = [];  
             var numofEvents = 0;
             var time = startTime;
-            var result_id;
+            alert(newCalEvent.repeat);
             if(newCalEvent.repeat == null || newCalEvent.repeat == "None"){
-                switch(newCalEvent.cat) {
-                    case "University":
-                    newCalEvent.color = '#6578a0';
-                        break;
-                    case "Work":
-                    newCalEvent.color = '#84b79d';
-                        break;
-                    case "Fun":
-                    newCalEvent.color = '#c3c60b';
-                        break;
-                    case "Chores":
-                    newCalEvent.color = '#e5a190';
-                        break;
-                    case "Hobby":
-                    newCalEvent.color = '#c18fe8';
-                        break;
-                    case "Other":
-                    newCalEvent.color = 'grey';
-                }
 
-                $.ajax({
-                    url: "http://localhost:3000/new_cal_task",
-                    async: false,
-                    type: "POST",
-                    data: newCalEvent,
-                    success: function (result) {
-                        newCalEvent.id  = JSON.parse(result);
-                        newCalEvent.duration=duration_ms/(60*60*1000);
-                    }
-                });
                 calendarEvents.push(newCalEvent);
                 recurringEvents.push(newCalEvent);
             }else{
-                alert(newCalEvent.repeat);
                 while (numofEvents < 3){
                     var time = date.clone();
                     
                     var myEvent = Object.assign({}, newCalEvent);
                     newTime = time.add(numofEvents, newCalEvent.repeat);
+                    alert(newTime);
                     myEvent.start = newTime.format()+"T09:00:00";
                     if(end<10) {
                         myEvent.end = newTime.format()+"T0"+end+":00:00";
                     } else {
                         myEvent.end = newTime.format()+"T"+end+":00:00";
                     }
-                    switch(myEvent.cat) {
-                        case "University":
-                        myEvent.color = '#6578a0';
-                            break;
-                        case "Work":
-                        myEvent.color = '#84b79d';
-                            break;
-                        case "Fun":
-                        myEvent.color = '#c3c60b';
-                            break;
-                        case "Chores":
-                        myEvent.color = '#e5a190';
-                            break;
-                        case "Hobby":
-                        myEvent.color = '#c18fe8';
-                            break;
-                        case "Other":
-                        myEvent.color = 'grey';
-                    }
-                    $.ajax({
-                        url: "http://localhost:3000/new_cal_task",
-                        async: false,
-                        type: "POST",
-                        data: myEvent,
-                        success: function (result) {
-                            if(result_id ==null){
-                                result_id = JSON.parse(result);
-                            }
-                            myEvent.id = result_id;
-                            myEvent.duration=duration_ms/(60*60*1000);
-                        }
-                    });
+                   
                     numofEvents++;
 
                     calendarEvents.push(myEvent);
@@ -734,7 +719,7 @@ $(document).ready(function() {
                         console.log("THE FOLLOWING TASK HAS BEEN ADDED BACK TO THE TASK LIST");
                         let newTask = {id: parent, name: calendarEvents[i].title,
                             duration: calendarEvents[i].duration, category: calendarEvents[i].cat,
-                            priority: calendarEvents[i].priority, dueDate: calendarEvents[i].due_date};
+                            repeat: calendarEvents[i].repeat, dueDate: calendarEvents[i].due_date};
                         console.log(newTask);
 
                         //PUSH ONLY ONE TASK??
