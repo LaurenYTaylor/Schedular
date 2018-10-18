@@ -129,8 +129,9 @@ $(document).ready(function() {
         
     });
 
-    //$(document).on('click', '#addCat' function(){
-        //$('catModal')
+    $(document).on('click', '#addCat', function() {
+        $('#catModal').modal();
+    });
     
 
     $(function() {
@@ -147,8 +148,9 @@ $(document).ready(function() {
                         console.log("successfully added");
                     }
                 });
+            return false;
         });
-        return false;
+        
     });
 
 
