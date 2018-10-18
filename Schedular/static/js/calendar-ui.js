@@ -626,7 +626,7 @@ $(document).ready(function() {
         eventDragStart: function( event, jsEvent, ui, view ) {
             dragging = true;
             $('.popover').popover('hide');
-            console.log("Cry")
+            //console.log("Cry")
 
         },
 
@@ -954,33 +954,55 @@ function getDaysThisWeek(day,yearandmonth){
 
   datesOfInterest = []; 
   x = 0; 
-  console.log("The days for this week are");
+  //console.log("The days for this week are");
   month = parseInt(yearandmonth.substr(5,6));
-  console.log("The month is " + month);
+  //console.log("The month is " + month);
   year = parseInt(yearandmonth.substr(0,4));
-  console.log("The year is " + year);
+  //console.log("The year is " + year);
   newDay = day - 1; 
 
 
   while(x<7){
-    console.log("New day is " + newDay + " + " + x); 
+    //console.log("New day is " + newDay + " + " + x); 
     newDay = newDay + 1; 
+    //console.log("New month is " + month);
 
     x = x + 1; 
     if(newDay > 31){
-        console.log("Entering if as newDay is " + newDay);
+
+        if ( month == 1 || month == 3 || month ==  5 ||  month == 7 || month ==  8 || month == 10 || month == 12){
+        //console.log("Entering if as newDay is " + newDay);
+            newDay = 1;
+            month = month + 1; 
+            if(month > 12){
+                month = 1; 
+            }
+        }
+
+    } 
+   
+   if (newDay > 30 ){
+    if(month == 2 || month == 4 || month == 6 || month == 9 || month == 11){
         newDay = 1;
         month = month + 1; 
-        //Do stuff 
+        if (month > 12){
+            month = 1;
+        }
+    }
+
    }
    if(newDay < 10){
     newDay = "0" + String(newDay); 
+   }
+   if (month < 10){
+    month = "0" + String(month);
    }
 
     wholeNewDate = String(year) + "-" + String(month) + "-" + String(newDay);
     datesOfInterest.push(wholeNewDate);
     console.log(wholeNewDate); 
     newDay = parseInt(newDay);
+    month = parseInt(month); 
 
   }
 
