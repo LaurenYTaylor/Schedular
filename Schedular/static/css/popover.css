@@ -4,7 +4,7 @@ Styling the popover and the added animation to the task completion
   
 */
 .popover {
-    height: auto;
+    height:  auto;
     width: 250px;
     position: relative;
     padding: 10px;
@@ -134,3 +134,39 @@ Styling the popover and the added animation to the task completion
     height: auto;
     resize: none;
   }
+
+  .subtasklist {
+    list-style-type:none;
+    padding: 0;
+  }
+
+  .innersubtasks {
+    
+  }
+
+  .subtask {
+    position: relative;
+  }
+
+  .sub-checkbox {
+    vertical-align: middle;
+    float:left;
+    padding-left:10px;
+  }
+
+  .subtasklabel{
+    vertical-align: middle;
+    padding-left:20px;
+  }
+
+  input[type=checkbox]:checked + div.subtasklabel{
+    text-decoration: line-through;
+  }
+
+  #addsub {
+    width: 100%;
+  }
+
+  
+
+  

@@ -49,9 +49,24 @@ $(document).ready(function() {
     });
 
 
+
+
     $("#datetimepicker1").on("dp.change", function() {
         $("#datetimepicker1").data("DateTimePicker").hide();
     });
+
+    //THIS IS WHERE THE SUBTASK IS ADDED TO THE TASK LIST
+    //TO DO: ADD SUBTASK TO DATABASE
+    $(document.body).on('keyup', '#addsub', function(event) {
+        if(event.keyCode == 13) { // 13 = Enter Key
+            if(($("#addsub").val()).trim() != ""){
+                alert("sdfdfe");
+                $(".subtasklist").append('<li class="subtask"><input type="checkbox" id="myCheck" class="sub-checkbox"><div class="subtasklabel">'+ ($("#addsub").val()).trim() +'</div></li>');
+                $("#addsub").val('');
+            }
+           
+        }
+      });
 
 
 
@@ -70,7 +85,7 @@ $(document).ready(function() {
     var popTemplate = [
         '<div tabindex="0" class="popover" style="max-width:600px;">',
         '<div class="arrow"></div>',
-        //'<div class="popover-content"></div>',
+        //'<div class="popover-content">',
         '<div class="popHeader">',
         '<label id=popLabel></label>',
         '<span class="popOptions">',
@@ -92,7 +107,13 @@ $(document).ready(function() {
         '<h4>Notes</h4>',
         '<textarea rows="4" cols="50" id="notes"></textarea>',
         '</div>',
-        '<input type = "submit" id="save" value="save">',
+        '<input type = "submit" id="save" value="save"></input>',
+        '<h4>Subtasks</h4>',
+        '<div class="innersubtasks">',
+        '<ul class="subtasklist"></ul>',
+        '<input type="text" id="addsub" placeholder="Add subtask">',
+        '</div>',
+        '<br/>',
         '</div>'].join('');
 
     //Modal start appears when adding task//
