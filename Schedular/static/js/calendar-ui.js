@@ -49,24 +49,9 @@ $(document).ready(function() {
     });
 
 
-
-
     $("#datetimepicker1").on("dp.change", function() {
         $("#datetimepicker1").data("DateTimePicker").hide();
     });
-
-    //THIS IS WHERE THE SUBTASK IS ADDED TO THE TASK LIST
-    //TO DO: ADD SUBTASK TO DATABASE
-    $(document.body).on('keyup', '#addsub', function(event) {
-        if(event.keyCode == 13) { // 13 = Enter Key
-            if(($("#addsub").val()).trim() != ""){
-                alert("sdfdfe");
-                $(".subtasklist").append('<li class="subtask"><input type="checkbox" id="myCheck" class="sub-checkbox"><div class="subtasklabel">'+ ($("#addsub").val()).trim() +'</div></li>');
-                $("#addsub").val('');
-            }
-           
-        }
-      });
 
 
 
@@ -85,7 +70,7 @@ $(document).ready(function() {
     var popTemplate = [
         '<div tabindex="0" class="popover" style="max-width:600px;">',
         '<div class="arrow"></div>',
-        //'<div class="popover-content">',
+        //'<div class="popover-content"></div>',
         '<div class="popHeader">',
         '<label id=popLabel></label>',
         '<span class="popOptions">',
@@ -107,13 +92,7 @@ $(document).ready(function() {
         '<h4>Notes</h4>',
         '<textarea rows="4" cols="50" id="notes"></textarea>',
         '</div>',
-        '<input type = "submit" id="save" value="save"></input>',
-        '<h4>Subtasks</h4>',
-        '<div class="innersubtasks">',
-        '<ul class="subtasklist"></ul>',
-        '<input type="text" id="addsub" placeholder="Add subtask">',
-        '</div>',
-        '<br/>',
+        '<input type = "submit" id="save" value="save">',
         '</div>'].join('');
 
     //Modal start appears when adding task//
@@ -261,35 +240,49 @@ $(document).ready(function() {
         //Add the rest of the task options eg. duration,repeat, Due Date
     });
 
+    addCatsToList(categories);
+
+    // for (i = 0; i < categories.length; i++) {
+    //     //alert(categories[i].cat)
+
+    //     catID = "#" + categories[i].cat
+    //     cat = categories[i].cat
+
+    //     $(document).on('click',  catID , function(){
+    //         showHideCat(cat);
+    //         alert(catID)
+    //     })
+    // }
 
     //show unshow uni categories
-    $(document).on('click', '#uniCheck', function(){
-        showHideCat('#uniCheck', 'University');
+    $(document).on('click', '#University', function(){
+        showHideCat('University');
+
     })
 
     //show unshow work categories
-    $(document).on('click', '#workCheck', function(){
-        showHideCat('#workCheck', 'Work');
+    $(document).on('click', '#Work', function(){
+        showHideCat('Work');
     })
 
      //show unshow fun categories
-    $(document).on('click', '#funCheck', function(){
-        showHideCat('#funCheck', 'Fun');
+    $(document).on('click', '#Fun', function(){
+        showHideCat('Fun');
     })
 
      //show unshow chore categories
-    $(document).on('click', '#choreCheck', function(){
-        showHideCat('#choreCheck', 'Chores');
+    $(document).on('click', '#Chores', function(){
+        showHideCat('Chores');
     })
 
      //show unshow hobby categories
-    $(document).on('click', '#hobbyCheck', function(){
-        showHideCat('#hobbyCheck', 'Hobby');
+    $(document).on('click', '#Hobby', function(){
+        showHideCat('Hobby');
     })
 
       //show unshow other categories
-    $(document).on('click', '#otherCheck', function(){
-        showHideCat('#otherCheck', 'Other');
+    $(document).on('click', '#Other', function(){
+        showHideCat('Other');
     })
 
 
@@ -569,7 +562,8 @@ $(document).ready(function() {
             }
             let description = val.description;
 
-            let newTask = {id: val.item_id, name: description, duration: val.num_hours, category: val.category, priority: val.priority, dueDate: val.due_date, repeat: val.repeat};
+            let newTask = {id: val.item_id, name: description, duration: val.num_hours, 
+                category: val.category, priority: val.priority, dueDate: val.due_date, repeat: val.repeat};
 
             //let newTask = {name: description, duration: val.num_hours, category: val.category, repeat: val.repeat, dueDate: val.due_date};
             allEvents.push(newTask);
@@ -584,7 +578,8 @@ $(document).ready(function() {
                         " style='float: right; display:none;' width='16'/> " +
                         "<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
                         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                    }
+                }
+
             }
                 // if (category == "University") {
                 //     $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + newTask.id + "><label>" + description + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/> " +
@@ -834,8 +829,8 @@ $(document).ready(function() {
                 }
             }
             let newCalEvent = {title: event_name, duration: duration_ms, cat: category, start: startTime, end: endTime,
-
                 parent_task: task_id, due_date: dueDate, priority: priority, repeat: repeat};
+
             switch(newCalEvent.cat) {
                 case "University":
                 newCalEvent.color = '#6578a0';
@@ -1410,8 +1405,9 @@ function addBackCategory(category) {
     } 
 }
 
-function showHideCat(htmlID, category){
-    if($(htmlID).is(':checked')) {
+function showHideCat(category){
+    categoryID = "#" + category
+    if($(categoryID).is(':checked')) {
         addBackCategory(category);
     }
     else{
@@ -1825,6 +1821,15 @@ function sortByDueDate(calendarArray){
   calendarArray.reverse(); 
 
   return calendarArray; 
+}
+
+//function to make all categories in a list to selectable categories
+function addCatsToList(categoryList){
+    for(i = 0; i < categoryList.length; i++) {
+        $('#category-list').append(categoryList[i].cat + "<input type='checkbox'  id=" + 
+            categoryList[i].cat + " checked='checked'><br>")
+    }
+
 }
 
 
