@@ -92,12 +92,15 @@ $(document).ready(function() {
 
         '<button id="buttonPop" class="fileContainer">' +
         '<img id=\'file1\' src=\'../file-icon-dark.png\'   style=\'float: right; display: block;\' width=\'16\'/>',
-
         '<input id="addFile" type="file"/>',
         '</button>',
 
         '<button id="buttonPop" class="editTask">' +
         '<img id=\'edit2\' src=\'../edit-icon-dark.png\'   style=\'float: right; display: block;\' width=\'16\'/>',
+        '</button>',
+
+        '<button id="buttonPop" class="deleteTask">' +
+        '<img id=\'edit2\' src=\'../icon-bin-dark.png\'   style=\'float: right; display: block;\' width=\'16\'/>',
         '</button>',
 
 
