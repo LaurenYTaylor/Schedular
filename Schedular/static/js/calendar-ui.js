@@ -89,9 +89,6 @@ $(document).ready(function() {
         '<div class="popHeader">',
         '<label id=popLabel></label>',
         '<span class="popOptions">',
-        '<button class="deleteCal">',
-        'Delete',
-        '</button>',
         '<button id="buttonPop" class="fileContainer">' +
         '<img id=\'file1\' src=\'../file-icon-dark.png\'   style=\'float: right; display: block;\' width=\'16\'/>',
 
@@ -103,7 +100,7 @@ $(document).ready(function() {
         '</button>',
 
         '<button id="buttonPop" class="deleteTask">' +
-        '<img id=\'edit2\' src=\'../icon-bin-dark.png\'   style=\'float: right; display: block;\' width=\'16\'/>',
+        '<img id=\'edit2\' class="deleteCal" src=\'../icon-bin-dark.png\'   style=\'float: right; display: block;\' width=\'16\'/>',
         '</button>',
 
 
@@ -202,8 +199,8 @@ $(document).ready(function() {
     //eventlistener to displays bin icon when the mouse
     //hovers overs a task in the task list
     $(document).on('mouseenter', '.task-drag', function(){
-        $(this).find("#removeBin1").css('display', 'inline-block');
-        $(this).find("#edit1").css('display', 'inline-block');
+        $(this).find("#removeBin1").css('visibility', 'visible');
+        $(this).find("#edit1").css('visibility', 'visible');
 
     });
 
@@ -211,8 +208,8 @@ $(document).ready(function() {
     //eventlistener that hides the bin icon when the mouse
     // leaves the the task
     $(document).on('mouseleave', '.task-drag', function(){
-        $(this).find("#removeBin1").css('display', 'none');
-        $(this).find("#edit1").css('display', 'none');
+        $(this).find("#removeBin1").css('visibility', 'hidden');
+        $(this).find("#edit1").css('visibility', 'hidden');
 
     });
 
@@ -274,8 +271,13 @@ $(document).ready(function() {
         //Add the rest of the task options eg. duration,repeat, Due Date
     });
 
+    $('.deleteCal').on('click', function () {
+        alert("drin1k");
+    });
+
 
     $(document).on('click', '.deleteCal', function(){
+        
         $('.popover').popover('hide');
         var firstrep= false;
         for(let i=0; i<calendarEvents.length; i++) {
@@ -287,9 +289,10 @@ $(document).ready(function() {
                  calendarEvents.splice(i, 1);
                  if(!firstrep){
 
+                    // Am i doing this right?
                     $.ajax(
                         {
-                            url: "http://localhost:3000/remove_cal_task",
+                            url: "http://localhost:3000/delete_cal_task",
                             async: true,
                             type: "POST",
                             data: {id: id, parent_id: parent},
@@ -356,8 +359,10 @@ $(document).ready(function() {
     //This needs to be checked every time a task is added into the calendar
     $(function() {
         let newEventID=0;
+        
         $(".CreateButton").click(function() {
             if (validateForm()) {
+                var badge;
                 taskName = $('#tName').val();
                 if($('#dury').val() == ""){
                     dury = 1;
@@ -368,6 +373,7 @@ $(document).ready(function() {
                 repeat = $('#repeat').val();
                 dueDate = $('#dueDate').val();
                 priority = $('#priority').val();
+
 
 
                 let new_task = {name: taskName, duration: dury, category: category, repeat: repeat, dueDate: dueDate};
@@ -388,29 +394,41 @@ $(document).ready(function() {
 
                 $('#myModal').modal('hide')
                 if (category == "University") {
-                    $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + new_task.id + "><label>" + taskName + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/> " +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                    $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + new_task.id + "><label style='width:50%'>" + taskName + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +
+                        "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                        "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
+                        getBadge(repeat) +
+                        "</div>");
                 } else if (category == "Work") {
-                    $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                    $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + new_task.id + "><label style='width:50%'>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/>" +
+                        "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                        "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>" +
+                        getBadge(repeat) +
+                        "</div>");
                 } else if (category == "Fun") {
-                    $("#list").append("<div class='task-drag' style='background: #ffc53f' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                    $("#list").append("<div class='task-drag' style='background: #ffc53f' data-taskid=" + new_task.id + "><label style='width:50%'>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/>" +
+                        "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                        "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
+                        getBadge(repeat) +
+                        "</div>");
                 } else if (category == "Chores") {
-                    $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                    $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + new_task.id + "><label style='width:50%'>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/>" +
+                        "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                        "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>" +
+                        getBadge(repeat) +
+                        "</div>");
                 } else if (category == "Hobby") {
-                    $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                    $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + new_task.id + "><label style='width:50%'>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                        "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                        "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
+                        getBadge(repeat) +
+                        "</div>");
                 } else if (category == "Other") {
-                    $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                    $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + new_task.id + "><label style='width:50%'>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                        "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                        "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
+                        getBadge(repeat) +
+                        "</div>");
                 }
                 $('#tName').val('');
                 $('#hiddenText').hide();
@@ -564,7 +582,6 @@ $(document).ready(function() {
 
             $("[data-taskid=" + curTask.id +"]").css('background', color);
 
-
             //update database
             $.ajax(
             {
@@ -610,35 +627,49 @@ $(document).ready(function() {
 
             let newTask = {id: val.item_id, name: description, duration: val.num_hours, category: val.category, priority: val.priority, dueDate: val.due_date, repeat: val.repeat};
 
+
+
             //let newTask = {name: description, duration: val.num_hours, category: val.category, repeat: val.repeat, dueDate: val.due_date};
             allEvents.push(newTask);
             // create new task with description
             let category = newTask.category;
-                if (category == "University") {
-                    $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + newTask.id + "><label>" + description + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/> " +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Work") {
-                    $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + newTask.id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Fun") {
-                    $("#list").append("<div class='task-drag' style='background: #ffc53f' data-taskid=" + newTask.id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Chores") {
-                    $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + newTask.id + "><label>" + description+ "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Hobby") {
-                    $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + newTask.id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Other") {
-                    $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + newTask.id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                }
+            if (category == "University") {
+                $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + newTask.id + "><label style='width:50%'>" + description + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +
+                    "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                    "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
+                    getBadge(newTask.repeat) +
+                    "</div>");
+            } else if (category == "Work") {
+                $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + newTask.id + "><label style='width:50%'>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/>" +
+                    "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                    "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>" +
+                    getBadge(newTask.repeat) +
+                    "</div>");
+            } else if (category == "Fun") {
+                $("#list").append("<div class='task-drag' style='background: #ffc53f' data-taskid=" + newTask.id + "><label style='width:50%'>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/>" +
+                    "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                    "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
+                    getBadge(newTask.repeat) +
+                    "</div>");
+            } else if (category == "Chores") {
+                $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + newTask.id + "><label style='width:50%'>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/>" +
+                    "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                    "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>" +
+                    getBadge(newTask.repeat) +
+                    "</div>");
+            } else if (category == "Hobby") {
+                $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + newTask.id + "><label style='width:50%'>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                    "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                    "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
+                    getBadge(newTask.repeat) +
+                    "</div>");
+            } else if (category == "Other") {
+                $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + newTask.id + "><label style='width:50%'>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                    "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                    "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
+                    getBadge(newTask.repeat) +
+                    "</div>");
+            }
         });
     });
 
@@ -823,8 +854,12 @@ $(document).ready(function() {
         droppable: true, // this allows things to be dropped onto the calendar
         dragRevertDuration: 0,
         drop: function(date, jsEvent, ui) {
+            console.log($(this));
+            
+            console.log(jsEvent);
+            console.log(ui);
             let task_id = $(this)[0].dataset.taskid;
-            let event_name = $(this)[0].innerText;
+            let event_name = $(this)[0].firstChild.innerText;
             var category;
             var duration_ms;
             var startTime;
@@ -1037,12 +1072,16 @@ $(document).ready(function() {
                     justDragged.push(calendarEvents[i]);
                 }
             }
-            var external_events = $( ".tabList" );
+            var external_events = $( ".tabcontent" );
             var offset = external_events.offset();
             offset.right = external_events.width() + offset.left;
-            offset.bottom = external_events.height() + external_events.position().top;
+            offset.bottom = external_events.height() + 200 + external_events.position().top;
 
             // Compare
+            console.log(external_events.height());
+            console.log("The jsEvent.pageX is " + jsEvent.pageX + " The offset left is " + offset.left);
+            console.log("The jsEvent.pageY is " + jsEvent.pageY + " The top is " + external_events.position().top);
+            console.log("The offset right is " + offset.right + " The offset bottom is " + offset.bottom);
             if (jsEvent.pageX >= offset.left
                 && jsEvent.pageY >= external_events.position().top
                 && jsEvent.pageX <= offset.right
@@ -1050,6 +1089,7 @@ $(document).ready(function() {
             ) {
                 let task_id=0;
                 var firstrepeat = false;
+                alert("inside");
                 for(let i=0; i<calendarEvents.length; i++) {
                     if(calendarEvents[i].id==event.id) {
                         
@@ -1068,6 +1108,7 @@ $(document).ready(function() {
                         justDragged.pop();
                         let category = newTask.category;
                         if(!firstrepeat){
+                           
 
                             $.ajax(
                                 {
@@ -1081,30 +1122,43 @@ $(document).ready(function() {
                                 }); 
 
                             if (category == "University") {
-                                $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/> " +
-                                    "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                                    "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                                $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + newTask.id + "><label style='width:50%'>" + newTask.name + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +
+                                    "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                                    "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
+                                    getBadge(newTask.repeat) +
+                                    "</div>");
                             } else if (category == "Work") {
-                                $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                                    "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                                    "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                                $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + newTask.id + "><label style='width:50%'>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/>" +
+                                    "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                                    "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>" +
+                                    getBadge(newTask.repeat) +
+                                    "</div>");
                             } else if (category == "Fun") {
-                                $("#list").append("<div class='task-drag' style='background: #ffc53f' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                                    "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                                    "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                                $("#list").append("<div class='task-drag' style='background: #ffc53f' data-taskid=" + newTask.id + "><label style='width:50%'>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/>" +
+                                    "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                                    "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
+                                    getBadge(newTask.repeat) +
+                                    "</div>");
                             } else if (category == "Chores") {
-                                $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                                    "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                                    "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                                $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + newTask.id + "><label style='width:50%'>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/>" +
+                                    "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                                    "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>" +
+                                    getBadge(newTask.repeat) +
+                                    "</div>");
                             } else if (category == "Hobby") {
-                                $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                                    "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                                    "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                                $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + newTask.id + "><label style='width:50%'>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                                    "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                                    "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
+                                    getBadge(newTask.repeat) +
+                                    "</div>");
                             } else if (category == "Other") {
-                                $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                                    "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                                    "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                            }
+                                $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + newTask.id + "><label style='width:50%'>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                                    "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                                    "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
+                                    getBadge(newTask.repeat) +
+                                    "</div>");
+                            }   
+
                             firstrepeat = true;
                         }
                         $('#calendar').fullCalendar('removeEvents', event._id);
@@ -1437,6 +1491,22 @@ function showHideCat(htmlID, category){
     else{
         removeCategory(category);
     }
+}
+
+function getBadge(repeatValue){
+    var badge;
+    if (repeatValue == "week"){
+        badge = "<span class='badge progress-bar-warning' style='float: right;'>W</span>";
+    }else if (repeatValue == "month"){
+        badge = "<span class='badge progress-bar-warning' style='float: right;'>M</span>";
+    }else if (repeatValue == "year"){
+        badge = "<span class='badge progress-bar-warning' style='float: right;'>Y</span>";
+    }else if (repeatValue == "day"){
+        badge = "<span class='badge progress-bar-warning' style='float: right;'>D</span>";
+    }else{
+        badge = "";
+    }
+    return badge;
 }
 
 
