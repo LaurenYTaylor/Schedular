@@ -89,6 +89,9 @@ $(document).ready(function() {
         '<div class="popHeader">',
         '<label id=popLabel></label>',
         '<span class="popOptions">',
+        '<button class="deleteCal">',
+        'Delete',
+        '</button>',
         '<button class="fileContainer">',
         'Add Files',
         '<input id="addFile" type="file"/>',
@@ -259,6 +262,42 @@ $(document).ready(function() {
         $('#editRepeat').val(element.repeat);
 
         //Add the rest of the task options eg. duration,repeat, Due Date
+    });
+
+
+    $(document).on('click', '.deleteCal', function(){
+        $('.popover').popover('hide');
+        var firstrep= false;
+        for(let i=0; i<calendarEvents.length; i++) {
+             if(calendarEvents[i].id==element.id) {
+                 let id=calendarEvents[i].id;
+                 let parent=calendarEvents[i].parent_task;
+                 task_id=parent;
+                 console.log("THE FOLLOWING TASK HAS BEEN DELETED FROM THE CALENDAR");
+                 calendarEvents.splice(i, 1);
+                 if(!firstrep){
+
+                    $.ajax(
+                        {
+                            url: "http://localhost:3000/remove_cal_task",
+                            async: true,
+                            type: "POST",
+                            data: {id: id, parent_id: parent},
+                            success: function (result) {
+                                //console.log("successfully removed calendar task");
+                            }
+                        }); 
+
+
+                    $('#calendar').fullCalendar('removeEvents', element._id);
+                    firstrepeat = true;
+                }
+                
+
+            }
+        }
+        
+        
     });
 
 
