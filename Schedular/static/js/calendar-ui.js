@@ -5,6 +5,7 @@
 
 //global variable to determine if user is dragging
 var dragging = false;
+var previouspopover;
 
 //e.target -object that is clicked on
 //popoverElement - event that contains the popover
@@ -17,12 +18,11 @@ $('html').on('click', function (e) {
     //if object clicked is not the popover object hide the popover
     //if the popover itself is clicked on do not close the popover
     if(popoverElement && e.target){
-    if (!(popoverElement).is(e.target) &&
-        popoverElement.has(e.target).length === 0 &&
-        $('.popover').has(e.target).length === 0){
-        popoverElement.popover('hide');
-    }
-
+        if (!(popoverElement).is(e.target) &&
+            popoverElement.has(e.target).length === 0 &&
+            $('.popover').has(e.target).length === 0){
+            popoverElement.popover('hide');
+        }
     };
 
 
@@ -936,9 +936,20 @@ $(document).ready(function() {
         //on EventClick
         eventClick: function (calEvent, jsEvent, view) {
             //closePopovers();
+
             popoverElement = $(jsEvent.currentTarget);
             element = calEvent;
             $('#notes').val(element.note);
+            console.log(calEvent);
+            console.log(jsEvent);
+            $(".popover").each(function() {
+                console.log($(this));
+                $(this).popover().remove();
+            });
+            popoverElement.popover('show');
+
+            
+            
         },
 
         /*Triggered when an event is being rendered*/
@@ -949,11 +960,12 @@ $(document).ready(function() {
                 jsEvent.popover({
 
                     html: true,
+                    
                     content: popTemplate,
                     template: popTemplate,
                     animation: true,
                     container: 'body',
-                    //trigger:'manual'
+                    trigger:'manual'
                 });
                 let dragEvent=event;
                 if (justDragged.length > 0 && justDragged[0].id == dragEvent.id) {
@@ -1817,20 +1829,178 @@ function getPriorityList(){
 }
 
 function dueDateOptimise(){
-    getDueDateList(); 
+    eventList = getDueDateList(); 
+
+    //eventList = getPriorityList();
+    allEvents = [];
+    allEvents = eventList;
+    console.log("Initialising the optimiser!");
+    console.log($('#viv_input').val());
+
+
+    begin = $('#viv_input').val();
+
+    if (!begin){
+        begin = 9;
+    }
+
+    begin = parseInt(begin);
+
+    end = $('#viv_input2').val();
+
+    if (!end){
+        end = 24;
+    }
+
+    end = parseInt(end);
+
+    today = getToday(); 
+    day = parseInt(today.substr(8,10));
+    yearandmonth = today.substr(0,8);
+    x = 0; 
+
+    //Add the dates from this week to be compared. 
+    datesOfInterest = getDaysThisWeek(day,yearandmonth);
+
+    for (que = 0; que < allEvents.length; que++){
+
+        occ = occupied();
+
+
+        eventDuration = allEvents[que].duration;
+
+        console.log(allEvents[que].name + " is a " + eventDuration + " length event");
+        loopday: 
+        for(dayeroo=0; dayeroo<7; dayeroo++){
+            //Calculate the events of interest for today.
+            currentDay = datesOfInterest[dayeroo];
+            //console.log(currentDay);
+
+            for (hours = begin; hours < end; hours ++){ // For each hour
+
+                add = true; 
+                //console.log("Checking a " + eventDuration + " hour lengthed time slot")
+                for(d = 0; d < parseInt(eventDuration); d++){
+                    newHour = hours + d; 
+
+                    if (newHour < 10){
+                        newHour = "0" + String(newHour);
+                    }
+
+                    time = String(newHour)+ ":00:00";
+                    checkDate = currentDay + "T" + time; 
+                    //console.log("checking " + checkDate);
+                    //console.log(checkDate);
+                    if(occ.includes(checkDate)){
+                        add = false; 
+                    }
+                    //if that time is in occupado set add to false; 
+
+                } // End checking the whole duration 
+
+                if (add == true){
+                    //ADD EVENT and then break.
+                    newHour = parseInt(newHour);
+                    newHour = newHour + 1; 
+                    if (newHour < 10){
+                        newHour = "0" + String(newHour);
+                    }
+
+                    time = String(newHour)+ ":00:00";
+                    checkDate = currentDay + "T" + time; 
+
+
+                    h = hours;
+                    if (h < 10){
+                        h = "0" + String(h); 
+                    }
+
+                    time = String(h)+":00:00"; 
+                    startTime = currentDay + "T" + time;
+                    startTime = String(startTime); 
+
+
+                    event_name = allEvents[que].name;
+                    time = allEvents[que].duration;
+                    category = allEvents[que].category;
+                    
+                    //duration_ms = time*60*60*1000;
+                    endTime = checkDate;
+                    dueDate = allEvents[que].dueDate;
+                    priority = allEvents[que].priority;
+                    task_id = allEvents[que].id;
+                    console.log(startTime,time,category,dueDate,priority);
+
+                    newCalEvent = {title: event_name, duration: time, cat: category, start: startTime, end: endTime};
+
+                switch(newCalEvent.cat) {
+                    case "University":
+                    newCalEvent.color = '#6578a0';
+                    break;
+                    case "Work":
+                    newCalEvent.color = '#84b79d';
+                    break;
+                    case "Fun":
+                    newCalEvent.color = '#ffc53f';
+                    break;
+                    case "Chores":
+                    newCalEvent.color = '#e5a190';
+                    break;
+                    case "Hobby":
+                    newCalEvent.color = '#c18fe8';
+                    break;
+                    case "Other":
+                    newCalEvent.color = 'grey';
+                    }
+
+                    calendarEvents.push(newCalEvent);
+                    console.log(newCalEvent.title,newCalEvent.color, newCalEvent.start, newCalEvent.end);
+                    //Beni and Lauren - New event is added here to the calendar
+
+                    $('#calendar').fullCalendar('renderEvent', newCalEvent, 'stick');
+
+
+                    break loopday;
+
+
+                }
+
+
+            } // End Iterating hours 
+
+
+        } // End Iterating Days
+
+
+    } //End Iterating through task list 
+
+    //Beni and lauren, all tasks are deleted from the calendar here. 
+
+    $("#list .task-drag").each(function(){
+        console.log("lol"); 
+        $(this).remove(); 
+    });
+    allEvents = []; 
+
+
 }
 
 function getDueDateList(){
     console.log("Getting due date");
 
-    for (x=0; x<allEvents.length; x++){
-        console.log(allEvents[x].dueDate);
-        console.log(allEvents[x].name);
+    dueDateList = sortByDueDate(allEvents);
+
+    for (x=0; x<dueDateList.length; x++){
+        console.log(dueDateList[x].dueDate);
+        console.log(dueDateList[x].name);
     }
 
+
+    return dueDateList;
 }
 
 function sortByDueDate(calendarArray){
+    console.log("hey");
 
   calendarArray.sort(function(a,b){
     return new Date(b.dueDate) - new Date(a.dueDate); 
@@ -1849,5 +2019,6 @@ function addCatsToList(categoryList){
     }
 
 }
+
 
 
