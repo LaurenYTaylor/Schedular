@@ -414,6 +414,12 @@ app.post('/add_notes_files', function(request, response) {
 
 });
 
+app.post('/add_files', function(request, response) {
+    let filename = request.body.filename
+    let file = request.body.file
+    console.log(file)
+})
+
 
 
 http.listen(port, () => console.log("Listening on port " + port));

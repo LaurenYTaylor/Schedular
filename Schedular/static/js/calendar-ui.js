@@ -163,6 +163,24 @@ $(document).ready(function() {
         if (currentPopover.find('ul.file-list').children('li').length >0){
             currentPopover.find('ul.file-list').show();
         }
+
+        var reader = new FileReader();
+        file = reader.readAsText(e.target.files[0]).result;
+        alert(file);
+        $.ajax(
+        {
+            url: "http://localhost:3000/add_files",
+            async: true,
+            type: "POST",
+            data: {
+                filename: fileName,
+                file: file
+            },
+            success: function (result) {
+                console.log("successfully added");
+            }
+        });
+
     });
 
     //eventlistener to displays bin icon when the mouse
