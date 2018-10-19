@@ -317,31 +317,42 @@ $(document).ready(function() {
                     });
 
                 $('#myModal').modal('hide')
-                if (category == "University") {
-                    $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + new_task.id + "><label>" + taskName + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/> " +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Work") {
-                    $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Fun") {
-                    $("#list").append("<div class='task-drag' style='background: #ffc53f' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Chores") {
-                    $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Hobby") {
-                    $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Other") {
-                    $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+
+                for(i = 0; i < categories.length; i++){
+                    if(categories[i].cat == category) {
+                        $("#list").append("<div class='task-drag' style='background: " + categories[i].color + 
+                            "' data-taskid=" + new_task.id + "><label>" + new_task.name + 
+                            "</label>" + "<img id='removeBin1' src='../rubbish-bin.png' " + 
+                            " style='float: right; display:none;' width='16'/> " +
+                            "<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                            "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                        }
                 }
+                // if (category == "University") {
+                //     $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + new_task.id + "><label>" + taskName + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/> " +
+                //         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                //         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                // } else if (category == "Work") {
+                //     $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                //         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                //         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                // } else if (category == "Fun") {
+                //     $("#list").append("<div class='task-drag' style='background: #ffc53f' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                //         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                //         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                // } else if (category == "Chores") {
+                //     $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                //         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                //         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                // } else if (category == "Hobby") {
+                //     $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                //         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                //         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                // } else if (category == "Other") {
+                //     $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + new_task.id + "><label>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                //         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                //         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                // }
                 $('#tName').val('');
                 $('#hiddenText').hide();
                 //This sortable thing isn't working idk why
@@ -445,14 +456,11 @@ $(document).ready(function() {
             var due_date = $('#newTDate').val();
             var repeat = $('#editTRepeat').val();
 
-            if(due_date != '') {
-                due_date = due_date.split(' ', 1);
+            if(due_date == '') {
+                due_date = curTask.dueDate;
             //    element.due_date = due_date;
             }
-
-            else {
-                due_date = curTask.dueDate;
-            }
+            alert(due_date)
 
             //hide edit modal
             $('#taskModal').modal("hide");
@@ -466,6 +474,7 @@ $(document).ready(function() {
                     allEvents[i].duration = hours;
                     allEvents[i].category = category;
                     allEvents[i].repeat = repeat;
+                    allEvents[i].dueDate = due_date;
                 }
             }
 
@@ -506,7 +515,8 @@ $(document).ready(function() {
                     name: name,
                     dury: hours,
                     cat: category,
-                    repeat: repeat
+                    repeat: repeat,
+                    dueDate: due_date
                 },
                 success: function (result) {
                     console.log("successfully added");
@@ -544,31 +554,42 @@ $(document).ready(function() {
             allEvents.push(newTask);
             // create new task with description
             let category = newTask.category;
-                if (category == "University") {
-                    $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + newTask.id + "><label>" + description + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/> " +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+
+            for(i = 0; i < categories.length; i++){
+                if(categories[i].cat == category) {
+                    $("#list").append("<div class='task-drag' style='background: " + categories[i].color + 
+                        "' data-taskid=" + newTask.id + "><label>" + newTask.name + 
+                        "</label>" + "<img id='removeBin1' src='../rubbish-bin.png' " + 
+                        " style='float: right; display:none;' width='16'/> " +
+                        "<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
                         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Work") {
-                    $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + newTask.id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Fun") {
-                    $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + newTask.id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Chores") {
-                    $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + newTask.id + "><label>" + description+ "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Hobby") {
-                    $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + newTask.id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                } else if (category == "Other") {
-                    $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + newTask.id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                }
+                    }
+            }
+                // if (category == "University") {
+                //     $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + newTask.id + "><label>" + description + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/> " +
+                //         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                //         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                // } else if (category == "Work") {
+                //     $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + newTask.id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                //         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                //         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                // } else if (category == "Fun") {
+                //     $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + newTask.id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                //         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                //         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                // } else if (category == "Chores") {
+                //     $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + newTask.id + "><label>" + description+ "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                //         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                //         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                // } else if (category == "Hobby") {
+                //     $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + newTask.id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                //         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                //         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                // } else if (category == "Other") {
+                //     $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + newTask.id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                //         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                //         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                // }
         });
     });
 
@@ -998,31 +1019,42 @@ $(document).ready(function() {
                                     }
                                 }); 
 
-                            if (category == "University") {
-                                $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/> " +
-                                    "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                                    "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                            } else if (category == "Work") {
-                                $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                                    "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                                    "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                            } else if (category == "Fun") {
-                                $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                                    "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                                    "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                            } else if (category == "Chores") {
-                                $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                                    "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                                    "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                            } else if (category == "Hobby") {
-                                $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                                    "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                                    "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
-                            } else if (category == "Other") {
-                                $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                                    "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
-                                    "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                            for(i = 0; i < categories.length; i++){
+                                if(categories[i].cat == category) {
+                                    $("#list").append("<div class='task-drag' style='background: " + categories[i].color + 
+                                        "' data-taskid=" + newTask.id + "><label>" + newTask.name + 
+                                        "</label>" + "<img id='removeBin1' src='../rubbish-bin.png' " + 
+                                        " style='float: right; display:none;' width='16'/> " +
+                                        "<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                                        "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                                }
                             }
+
+                            // if (category == "University") {
+                            //     $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/> " +
+                            //         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                            //         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                            // } else if (category == "Work") {
+                            //     $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                            //         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                            //         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                            // } else if (category == "Fun") {
+                            //     $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                            //         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                            //         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                            // } else if (category == "Chores") {
+                            //     $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                            //         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                            //         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                            // } else if (category == "Hobby") {
+                            //     $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                            //         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                            //         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                            // } else if (category == "Other") {
+                            //     $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                            //         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
+                            //         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
+                            // }
                             firstrepeat = true;
                         }
                         $('#calendar').fullCalendar('removeEvents', event._id);
@@ -1063,6 +1095,15 @@ var span = document.getElementsByClassName("close")[0];
 
 var curTask;
 
+var categories = [
+    {cat: 'University', color: '#6578a0'},
+    {cat:'Work', color: '#84b79d'},
+    {cat:'Fun', color: '#c3c60b'},
+    {cat:'Chores', color: '#e5a190'},
+    {cat:'Hobby', color: '#c18fe8' },
+    {cat:'Other', color: 'grey'}
+
+]
 
 //Validates AddTask Modal//
 function validateForm() {

@@ -314,8 +314,8 @@ app.post('/new_cal_task', async function (request, response) {
         ""+numHours+", '"+startTime+"', '" +endTime+"', '"+category+"', "+parent+", '" + dueDate + "', '" +
     repeat +"');";
     let update_string = "UPDATE todo_item SET in_calendar='true' WHERE user_id="+
-        request.user.id+" AND description='"+description+"';";
-        console.log(query_string);
+        request.user.id+" AND item_id='"+ parent +"';";
+        console.log(update_string);
     let client = await pool.connect();
 
     await pool.query(query_string);
@@ -386,10 +386,11 @@ app.post('/edit_task', function(request, response) {
     let dury = request.body.dury;
     let cat = request.body.cat;
     let repeat = request.body.repeat;
+    let dueDate = request.body.dueDate;
 
     let query_string = "UPDATE todo_item SET description='" + name +
         "', num_hours='" + dury + "', category='" + cat +
-        "', repeat='" + repeat + "' WHERE item_id=" + id +
+        "', repeat='" + repeat + "', due_date='" + dueDate + "' WHERE item_id=" + id +
         " AND user_id=" + request.user.id + ";";
     console.log(query_string)
     pool.connect(function(err, client) {
