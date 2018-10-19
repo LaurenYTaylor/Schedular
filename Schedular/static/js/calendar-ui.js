@@ -5,6 +5,7 @@
 
 //global variable to determine if user is dragging
 var dragging = false;
+var previouspopover;
 
 //e.target -object that is clicked on
 //popoverElement - event that contains the popover
@@ -17,12 +18,11 @@ $('html').on('click', function (e) {
     //if object clicked is not the popover object hide the popover
     //if the popover itself is clicked on do not close the popover
     if(popoverElement && e.target){
-    if (!(popoverElement).is(e.target) &&
-        popoverElement.has(e.target).length === 0 &&
-        $('.popover').has(e.target).length === 0){
-        popoverElement.popover('hide');
-    }
-
+        if (!(popoverElement).is(e.target) &&
+            popoverElement.has(e.target).length === 0 &&
+            $('.popover').has(e.target).length === 0){
+            popoverElement.popover('hide');
+        }
     };
 
 
@@ -902,9 +902,20 @@ $(document).ready(function() {
         //on EventClick
         eventClick: function (calEvent, jsEvent, view) {
             //closePopovers();
+
             popoverElement = $(jsEvent.currentTarget);
             element = calEvent;
             $('#notes').val(element.note);
+            console.log(calEvent);
+            console.log(jsEvent);
+            $(".popover").each(function() {
+                console.log($(this));
+                $(this).popover().remove();
+            });
+            popoverElement.popover('show');
+
+            
+            
         },
 
         /*Triggered when an event is being rendered*/
@@ -915,11 +926,12 @@ $(document).ready(function() {
                 jsEvent.popover({
 
                     html: true,
+                    
                     content: popTemplate,
                     template: popTemplate,
                     animation: true,
                     container: 'body',
-                    //trigger:'manual'
+                    trigger:'manual'
                 });
                 let dragEvent=event;
                 if (justDragged.length > 0 && justDragged[0].id == dragEvent.id) {
