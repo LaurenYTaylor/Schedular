@@ -1047,7 +1047,7 @@ $(document).ready(function() {
                                     "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
                                     "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                             } else if (category == "Fun") {
-                                $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                                $("#list").append("<div class='task-drag' style='background: #ffc53f' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
                                     "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
                                     "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                             } else if (category == "Chores") {
