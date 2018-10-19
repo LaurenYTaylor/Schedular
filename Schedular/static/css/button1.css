@@ -1,3 +1,16 @@
+.tag {
+    border: #333e53 1px dashed;
+    color: #333e53;
+    border-bottom-right-radius: 2px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+    width: 140px;
+    height: 25px;
+    text-align: left;
+    margin: 1px 0px;
+}
+
 .button {
     background-color: #a5a5a5;
     border: none;
