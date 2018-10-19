@@ -92,11 +92,21 @@ $(document).ready(function() {
         '<button class="deleteCal">',
         'Delete',
         '</button>',
-        '<button class="fileContainer">',
-        'Add Files',
+        '<button id="buttonPop" class="fileContainer">' +
+        '<img id=\'file1\' src=\'../file-icon-dark.png\'   style=\'float: right; display: block;\' width=\'16\'/>',
+
         '<input id="addFile" type="file"/>',
         '</button>',
-        '<button class="editTask">Edit</button>',
+
+        '<button id="buttonPop" class="editTask">' +
+        '<img id=\'edit2\' src=\'../edit-icon-dark.png\'   style=\'float: right; display: block;\' width=\'16\'/>',
+        '</button>',
+
+        '<button id="buttonPop" class="deleteTask">' +
+        '<img id=\'edit2\' src=\'../icon-bin-dark.png\'   style=\'float: right; display: block;\' width=\'16\'/>',
+        '</button>',
+
+
         '<div class="circle-loader">',
         '<div class = "checkmarkoverlay"></div>',
         '<div class="checkmark draw"></div>',
@@ -613,7 +623,7 @@ $(document).ready(function() {
                         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
                         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                 } else if (category == "Fun") {
-                    $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + newTask.id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                    $("#list").append("<div class='task-drag' style='background: #ffc53f' data-taskid=" + newTask.id + "><label>" + description + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
                         "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
                         "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                 } else if (category == "Chores") {
@@ -1079,7 +1089,7 @@ $(document).ready(function() {
                                     "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
                                     "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                             } else if (category == "Fun") {
-                                $("#list").append("<div class='task-drag' style='background: #c3c60b' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
+                                $("#list").append("<div class='task-drag' style='background: #ffc53f' data-taskid=" + newTask.id + "><label>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
                                     "\<img id='edit1' src='../gap.png'   style='float: right; display:none;' width='6'/>" +
                                     "<img id='edit1' src='../edit-icon.png'   style='float: right; display:none;' width='16'/></div>");
                             } else if (category == "Chores") {
@@ -1813,20 +1823,178 @@ function getPriorityList(){
 }
 
 function dueDateOptimise(){
-    getDueDateList(); 
+    eventList = getDueDateList(); 
+
+    //eventList = getPriorityList();
+    allEvents = [];
+    allEvents = eventList;
+    console.log("Initialising the optimiser!");
+    console.log($('#viv_input').val());
+
+
+    begin = $('#viv_input').val();
+
+    if (!begin){
+        begin = 9;
+    }
+
+    begin = parseInt(begin);
+
+    end = $('#viv_input2').val();
+
+    if (!end){
+        end = 24;
+    }
+
+    end = parseInt(end);
+
+    today = getToday(); 
+    day = parseInt(today.substr(8,10));
+    yearandmonth = today.substr(0,8);
+    x = 0; 
+
+    //Add the dates from this week to be compared. 
+    datesOfInterest = getDaysThisWeek(day,yearandmonth);
+
+    for (que = 0; que < allEvents.length; que++){
+
+        occ = occupied();
+
+
+        eventDuration = allEvents[que].duration;
+
+        console.log(allEvents[que].name + " is a " + eventDuration + " length event");
+        loopday: 
+        for(dayeroo=0; dayeroo<7; dayeroo++){
+            //Calculate the events of interest for today.
+            currentDay = datesOfInterest[dayeroo];
+            //console.log(currentDay);
+
+            for (hours = begin; hours < end; hours ++){ // For each hour
+
+                add = true; 
+                //console.log("Checking a " + eventDuration + " hour lengthed time slot")
+                for(d = 0; d < parseInt(eventDuration); d++){
+                    newHour = hours + d; 
+
+                    if (newHour < 10){
+                        newHour = "0" + String(newHour);
+                    }
+
+                    time = String(newHour)+ ":00:00";
+                    checkDate = currentDay + "T" + time; 
+                    //console.log("checking " + checkDate);
+                    //console.log(checkDate);
+                    if(occ.includes(checkDate)){
+                        add = false; 
+                    }
+                    //if that time is in occupado set add to false; 
+
+                } // End checking the whole duration 
+
+                if (add == true){
+                    //ADD EVENT and then break.
+                    newHour = parseInt(newHour);
+                    newHour = newHour + 1; 
+                    if (newHour < 10){
+                        newHour = "0" + String(newHour);
+                    }
+
+                    time = String(newHour)+ ":00:00";
+                    checkDate = currentDay + "T" + time; 
+
+
+                    h = hours;
+                    if (h < 10){
+                        h = "0" + String(h); 
+                    }
+
+                    time = String(h)+":00:00"; 
+                    startTime = currentDay + "T" + time;
+                    startTime = String(startTime); 
+
+
+                    event_name = allEvents[que].name;
+                    time = allEvents[que].duration;
+                    category = allEvents[que].category;
+                    
+                    //duration_ms = time*60*60*1000;
+                    endTime = checkDate;
+                    dueDate = allEvents[que].dueDate;
+                    priority = allEvents[que].priority;
+                    task_id = allEvents[que].id;
+                    console.log(startTime,time,category,dueDate,priority);
+
+                    newCalEvent = {title: event_name, duration: time, cat: category, start: startTime, end: endTime};
+
+                switch(newCalEvent.cat) {
+                    case "University":
+                    newCalEvent.color = '#6578a0';
+                    break;
+                    case "Work":
+                    newCalEvent.color = '#84b79d';
+                    break;
+                    case "Fun":
+                    newCalEvent.color = '#ffc53f';
+                    break;
+                    case "Chores":
+                    newCalEvent.color = '#e5a190';
+                    break;
+                    case "Hobby":
+                    newCalEvent.color = '#c18fe8';
+                    break;
+                    case "Other":
+                    newCalEvent.color = 'grey';
+                    }
+
+                    calendarEvents.push(newCalEvent);
+                    console.log(newCalEvent.title,newCalEvent.color, newCalEvent.start, newCalEvent.end);
+                    //Beni and Lauren - New event is added here to the calendar
+
+                    $('#calendar').fullCalendar('renderEvent', newCalEvent, 'stick');
+
+
+                    break loopday;
+
+
+                }
+
+
+            } // End Iterating hours 
+
+
+        } // End Iterating Days
+
+
+    } //End Iterating through task list 
+
+    //Beni and lauren, all tasks are deleted from the calendar here. 
+
+    $("#list .task-drag").each(function(){
+        console.log("lol"); 
+        $(this).remove(); 
+    });
+    allEvents = []; 
+
+
 }
 
 function getDueDateList(){
     console.log("Getting due date");
 
-    for (x=0; x<allEvents.length; x++){
-        console.log(allEvents[x].dueDate);
-        console.log(allEvents[x].name);
+    dueDateList = sortByDueDate(allEvents);
+
+    for (x=0; x<dueDateList.length; x++){
+        console.log(dueDateList[x].dueDate);
+        console.log(dueDateList[x].name);
     }
 
+
+    return dueDateList;
 }
 
 function sortByDueDate(calendarArray){
+    console.log("hey");
 
   calendarArray.sort(function(a,b){
     return new Date(b.dueDate) - new Date(a.dueDate); 
@@ -1836,5 +2004,6 @@ function sortByDueDate(calendarArray){
 
   return calendarArray; 
 }
+
 
 

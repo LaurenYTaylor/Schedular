@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link rel='shortcut icon' type='image/x-icon' href='../logo.ico' />
   <meta charset='utf-8' />
   <link href='../css/fullcalendaredit.css' rel='stylesheet' />
   <link href='../css/fullcalendar.print.min.css' rel='stylesheet' media='print' />
@@ -66,19 +67,31 @@
 
       <div id='Completed' class="tabcontent">
         <br>
-        <div id="category-list"></div>
+        <h4>Categories</h4>
+        <div>
+          <input type="checkbox" id="uniCheck" checked="checked">
+          <button class="tag" style="background-color: #6578a0;">University</button><br>
+          <input type="checkbox" id="workCheck" checked="checked">
+          <button class="tag" style="background-color: #84b79d;">Work</button><br>
+          <input type="checkbox" id="funCheck" checked="checked">
+          <button class="tag" style="background-color: #ffc53f;">Fun</button><br>
+          <input type="checkbox" id="choreCheck" checked="checked">
+          <button class="tag" style="background-color: #e5a190;">Chores</button><br>
+          <input type="checkbox" id="hobbyCheck" checked="checked">
+          <button class="tag" style="background-color: #c18fe8;">Hobby</button><br>
+          <input type="checkbox" id="otherCheck" checked="checked">
+          <button class="tag" style="background-color: grey;">Others</button><br>
+        </div>
+        <br>
         <button type="submit" name="addCat" id="addCat" class="button2">Add Category</button>
+        <div id="category-list"></div>
+
         <input type="text" name="data_for_viv" id="viv_input">
         <br>
-        <h4>Select Categories</h4>
-        <div>
-          University <input type="checkbox"  id="uniCheck" checked="checked"><br>
-          Work <input type="checkbox" id="workCheck" checked="checked"><br>
-          Fun <input type="checkbox" id="funCheck" checked="checked"><br>
-          Chores <input type="checkbox" id="choreCheck" checked="checked"><br>
-          Hobby <input type="checkbox" id="hobbyCheck" checked="checked"><br>
-          Other <input type="checkbox" id="otherCheck" checked="checked">
-        </div>
+
+
+
+
         <button  onclick= "optimise2()"name="optimise" id="optimise" class="button2">Optimise Me Please</button>
 
         Start <input type="text" name="data_for_viv" id="viv_input">
@@ -110,11 +123,11 @@
         <div class="hiddentext" id="hiddenText" style="display:none">Invalid Name! </div>
         <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post">
           <div class='formtext'>
-            <input type="text" name="fname" id="tName" class='taskform-input' placeholder="Task Name">
+            <input type="text" name="fname" id="tName" class='taskform-input' placeholder="Task Name" style="background-color: #eeeeee">
           </div>
           <p></p>
           <div class='formtext'>
-            <input type ="text" name="duration" id="dury" class='taskform-input' placeholder="Task Duration">
+            <input type ="text" name="duration" id="dury" class='taskform-input' placeholder="Task Duration" style="background-color: #eeeeee">
           </div>
           <p></p>
           <div class="task-dropdown">

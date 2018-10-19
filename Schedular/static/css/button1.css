@@ -1,5 +1,14 @@
-.buttonPop {
-    color: pink;
+.tag {
+    border: #333e53 1px dashed;
+    color: #333e53;
+    border-bottom-right-radius: 2px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+    width: 140px;
+    height: 25px;
+    text-align: left;
+    margin: 1px 0px;
 }
 
 .button {
@@ -15,13 +24,23 @@
     cursor: pointer;
 
 }
-#button1 {
-    background-color: #efefef;
+#buttonPop {
+    background-color: #ffffff;
     color: white;
-    border: 0px solid #4CAF50;
+    border: 1px solid #bbbbbb;
+    border-radius: 100px;
     font-size: 18px;
-    padding: 7px 70px;
-    transition: 0.5s;
+    padding: 5px 9px;
+    transition: 0s;
+}
+#buttonPop:hover {
+    background-color: #cccccc;
+    color: white;
+    border: 1px solid #bbbbbb;
+    border-radius: 100px;
+    font-size: 18px;
+    padding: 5px 9px;
+    transition: 0s;
 }
 
 .button1 {
