@@ -39,6 +39,17 @@ Styling the popover and the added animation to the task completion
     width: 2.5em;
     height: 2.5em;
   }
+
+.circle-loader:hover {
+
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    position: relative;
+background-color: #cccccc;
+    vertical-align: top;
+    border-radius: 50%;
+    width: 2.5em;
+    height: 2.5em;
+}
   
   .load-complete {
     -webkit-animation: none;
@@ -48,7 +59,7 @@ Styling the popover and the added animation to the task completion
   }
   
   .checkmarkoverlay {
-    opacity: 0.5;
+    opacity: 1.0;
     height: 1.25em;
     width: 0.625em;
     transform-origin: left top;
