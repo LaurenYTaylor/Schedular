@@ -261,6 +261,15 @@ app.get('/load_cal_items', function(request, response){
 
 });
 
+app.get('/load_subtasks', function(request, response){
+    let query = "SELECT * FROM subtasks WHERE user_id=" + request.user.id;
+    console.log(query)
+    pool.query(query, function(err, result) {
+        let subtasks = (result.rows);
+        response.send(subtasks);
+    })
+});
+
 app.post('/new_task', async function(request, response) {
     let {name, category, duration, repeat, dueDate} = request.body;
     let query = "INSERT INTO todo_item (user_id, num_hours, category, completed, description, repeat, due_date) "
@@ -314,8 +323,9 @@ app.post('/new_cal_task', async function (request, response) {
         ""+numHours+", '"+startTime+"', '" +endTime+"', '"+category+"', "+parent+", '" + dueDate + "', '" +
     repeat +"');";
     let update_string = "UPDATE todo_item SET in_calendar='true' WHERE user_id="+
-        request.user.id+" AND description='"+description+"';";
-        console.log(query_string);
+        request.user.id+" AND item_id='"+ parent +"';";
+        console.log(update_string);
+    console.log(query_string)    
     let client = await pool.connect();
 
     await pool.query(query_string);
@@ -364,9 +374,12 @@ app.post('/remove_cal_task', function(request, response) {
 app.post('/delete_cal_task', function(request, response) {
     let id = request.body.id;
     let parent = request.body.parent_id;
+    //let subtask_delete = "DELETE FROM subtasks WHERE parent_task_id=" + id +
+    //    "AND user_id=" + request.user.id + ";";
     let delete_string = "DELETE FROM calendar_item WHERE item_id='"+id+"' AND user_id="+request.user.id+";";
     console.log(delete_string);
     pool.connect(function(err, client) {
+    //    pool.query(subtask_delete);
         pool.query(delete_string);
         client.release();
     });
@@ -398,10 +411,11 @@ app.post('/edit_task', function(request, response) {
     let dury = request.body.dury;
     let cat = request.body.cat;
     let repeat = request.body.repeat;
+    let dueDate = request.body.dueDate;
 
     let query_string = "UPDATE todo_item SET description='" + name +
         "', num_hours='" + dury + "', category='" + cat +
-        "', repeat='" + repeat + "' WHERE item_id=" + id +
+        "', repeat='" + repeat + "', due_date='" + dueDate + "' WHERE item_id=" + id +
         " AND user_id=" + request.user.id + ";";
     console.log(query_string)
     pool.connect(function(err, client) {
@@ -424,6 +438,37 @@ app.post('/add_notes_files', function(request, response) {
     })
 
 });
+
+app.post('/add_files', function(request, response) {
+    let filename = request.body.filename
+    let file = request.body.file
+    console.log(file)
+})
+
+app.post('/add_subtask', async function(request, response) {
+    let description = request.body.description;
+    let parent = request.body.parent_id;
+    let completed = request.body.completed;
+
+    let query = "INSERT INTO subtasks (description, parent_task_id, completed, user_id)" +
+        "VALUES('" + description + "', " + parent + ", '" + completed + "', " + request.user.id +");"
+         console.log(query);
+
+    let client = await pool.connect();
+
+    await pool.query(query);
+
+    let id_finder = "SELECT MAX(task_id) FROM subtasks WHERE "
+        + "parent_task_id="+parent+";";
+
+    let result = await pool.query(id_finder);
+    let max = result.rows[0].max;
+    console.log(max)
+    response.send(JSON.stringify(max));
+
+    client.release();
+
+})
 
 
 
