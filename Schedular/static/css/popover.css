@@ -4,12 +4,16 @@ Styling the popover and the added animation to the task completion
   
 */
 .popover {
-    height:  auto;
-    width: 250px;
-    position: relative;
-    padding: 10px;
+  height:  auto;
+  width: 250px;
+  position: relative;
+  padding: 10px;
     
   }
+
+.popover:focus {
+  outline:0;
+}
   
   .popover-content {
     font-size: 30px;
@@ -177,6 +181,8 @@ background-color: #cccccc;
   #addsub {
     width: 100%;
   }
+
+  button:focus {outline:0;}
 
   
 
