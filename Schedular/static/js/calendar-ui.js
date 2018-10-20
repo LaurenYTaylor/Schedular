@@ -255,8 +255,8 @@ $(document).ready(function() {
     //eventlistener that hides the bin icon when the mouse
     // leaves the the task
     $(document).on('mouseleave', '.task-drag', function(){
-        $(this).find("#edit1").css('visibility', 'visible');
-        $(this).find("#removeBin1").css('visibility', 'visible');
+        $(this).find("#edit1").css('visibility', 'hidden');
+        $(this).find("#removeBin1").css('visibility', 'hidden');
        
 
     });
@@ -538,6 +538,8 @@ $(document).ready(function() {
             element.end = end_date;
             element.repeat = repeat;
 
+
+
             switch(category) {
                 case "University":
                     element.color = '#6578a0';
@@ -558,9 +560,15 @@ $(document).ready(function() {
                     element.color = 'grey';
             }
 
+            for (i = 0; i < calendarEvents.length; i++) {
+                if (calendarEvents[i].id == element.id) {
+                    calendarEvents[i] = element;
+                }
+            }
+
             $('#editModal').modal("hide");
             $('#calendar').fullCalendar('updateEvent', element);
-
+            console.log(calendarEvents)
 
             id = element.id;
             data = {
@@ -570,7 +578,8 @@ $(document).ready(function() {
                 newCat: category,
                 //newDue: dueDate,
                 end: end_date.split('T')[1],
-                repeat: repeat
+                repeat: repeat,
+                parent: element.parent_task
             }
 
 
@@ -1302,7 +1311,7 @@ $(document).ready(function() {
                         let newTask = {id: parent, name: calendarEvents[i].title,
                             duration: calendarEvents[i].duration, category: calendarEvents[i].cat,
                             repeat: calendarEvents[i].repeat, dueDate: calendarEvents[i].due_date};
-                        //console.log(newTask);
+                        console.log(newTask);
 
                         allEvents.push(newTask);
                         calendarEvents.splice(i, 1);

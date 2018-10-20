@@ -392,15 +392,21 @@ app.post('/edit_cal_task', function(request, response){
     let cat = request.body.newCat;
     let end = request.body.end;
     let repeat = request.body.repeat;
+    let parent = request.body.parent;
     //let due = request.body.newDue;
 
     let query_string = "UPDATE calendar_item SET description='" + newName +
         "', num_hours='" + dury +"', category='" + cat +
         "', end_time='" + end + "', repeat='" + repeat + 
         "' WHERE item_id=" + id + " AND user_id=" + request.user.id + ";";
-    console.log(query_string)
+
+    let task_query = "UPDATE todo_item SET description='" + newName +
+        "', num_hours='" + dury + "', category='" + cat +
+        "', repeat='" + repeat + "' WHERE item_id=" + parent + " AND user_id=" + request.user.id + ";";
+    console.log(task_query)
     pool.connect(function(err, client) {
         pool.query(query_string);
+        pool.query(task_query);
         client.release();
     })
 });
