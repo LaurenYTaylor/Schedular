@@ -87,20 +87,24 @@
         <button type="submit" name="addCat" id="addCat" class="tagAdd" style="margin: 5px 17px; background-color: #eeeeee;">+</button>
         <div id="category-list"></div>
 
-        <input type="text" name="data_for_viv" id="viv_input">
+
         <br>
+        <h4>Optimizer</h4>
 
 
+        <input type="text" name="data_for_viv" id="viv_input" placeholder="Start Time" style="height: 20px; width: 80px;">
+        <input type="text" name="data_for_viv2" id="viv_input2" placeholder="Finish Time" style="height: 20px; width: 80px;">
 
 
-        <button  onclick= "optimise2()"name="optimise" id="optimise" class="button2">Optimise Me Please</button>
+        <button  onclick= "optimise2()"name="optimise" id="optimise" class="button1">
+        <img id='pri1' src='../pri1.png'   style='float: start; display: inline;' width='16'/> Optimize</button>
 
-        Start <input type="text" name="data_for_viv" id="viv_input">
-        Stop <input type="text" name="data_for_viv2" id="viv_input2">
+        <button  onclick= "priorityOptimise()"name="optimiseP" id="optimiseP" class="button1">
+        <img id='pri2' src='../pri2.png'   style='float: start; display: inline;' width='16'/> Priority</button>
 
-        <button  onclick= "priorityOptimise()"name="optimiseP" id="optimiseP" class="button2">Priority Optimise</button>
 
-        <button  onclick= "dueDateOptimise()"name="optimiseD" id="optimiseD" class="button2">Due Date Optimise</button>
+        <button  onclick= "dueDateOptimise()"name="optimiseD" id="optimiseD" class="button1">
+        <img id='pri3' src='../pri3.png'   style='float: start; display: inline;' width='16'/> Due Date</button>
 
 
 
