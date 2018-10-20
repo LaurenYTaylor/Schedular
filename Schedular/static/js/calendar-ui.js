@@ -448,11 +448,10 @@ $(document).ready(function() {
                     if(categories[i].cat == category) {
                        $("#list").append("<div class='task-drag' style='background: " + categories[i].color + 
                             "' data-taskid=" + new_task.id + "><label style='width:50%'>" + taskName + 
-                            "</label>" + getBadge(new_task.repeat) +
-                           "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +
+                            "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +                      
                             "<img src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
                             "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
-
+                            getBadge(new_task.repeat) +
                             "</div>");
                    }
                 }
@@ -718,11 +717,10 @@ $(document).ready(function() {
                 if(categories[i].cat == category) {
                     $("#list").append("<div class='task-drag' style='background: " + categories[i].color + 
                         "' data-taskid=" + newTask.id + "><label style='width:50%'>" + description + 
-                        "</label>" + getBadge(newTask.repeat) +
-                        "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +
+                        "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +
                         "<img src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
                         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
-
+                        getBadge(newTask.repeat) +  
                         "</div>");
                 }
             }
@@ -1357,11 +1355,10 @@ $(document).ready(function() {
 
                                     $("#list").append("<div class='task-drag' style='background: " + categories[i].color + 
                                         "' data-taskid=" + newTask.id + "><label style='width:50%'>" + newTask.name + 
-                                        "</label>" +   getBadge(newTask.repeat) +
-                                        "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +
+                                        "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +
                                         "<img src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
                                         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
-
+                                        getBadge(newTask.repeat) +
                                         "</div>");
                                 }
                             }
@@ -1483,7 +1480,7 @@ function validateForm() {
 //   alert('yes');
 //   $(".circle-loader").toggleClass("load-complete");
 //   $(".checkmark").toggle();
-//   $("#showCompleted").slideToggle('slow', 	taskCompleted());
+//   $("#showCompleted").slideToggle('slow',    taskCompleted());
 // });
 
 //Mark the task as complete
@@ -1811,7 +1808,7 @@ function getBadge(repeatValue){
     }else if (repeatValue == "day"){
         badge = "<span class='badge' style='float: right; background-color: #db69b1'>D</span>";
     }else{
-        badge = "badge = \"<label class='badge' style='float: right; background-color: transparent;'> </label>\";";
+        badge = "";
     }
     return badge;
 }
@@ -1980,7 +1977,7 @@ function optimise2(){
                         newCalEvent.color = 'grey';
                     }
                     // BE SURE TO UNCOMMENT THIS SECTION. ONLY COMMENTED FOR TESTING PURPOSES.
-                   
+                   /*
                     $.ajax({
                         url: "http://localhost:3000/new_cal_task",
                         async: false,
@@ -1991,7 +1988,7 @@ function optimise2(){
                             //newCalEvent.duration=duration_ms/(60*60*1000);
                         }
                     });
-                    
+                    */ 
                     calendarEvents.push(newCalEvent);
                     //console.log("1 checking on the value of hours = " + hours);
 
@@ -2550,4 +2547,3 @@ function calculateStartTime(hours){
    // console.log("returning " + starttime);
     return starttime; 
 }
-
