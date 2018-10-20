@@ -33,6 +33,7 @@ $('html').on('click', function (e) {
 allEvents = [];
 calendarEvents=[];
 justDragged=[];
+subtasks=[];
 
 $(document).ready(function() {
 
@@ -54,6 +55,40 @@ $(document).ready(function() {
     });
 
 
+    //THIS IS WHERE THE SUBTASK IS ADDED TO THE TASK LIST
+    //TO DO: ADD SUBTASK TO DATABASE
+    $(document.body).on('keyup', '#addsub', function(event) {
+        if(event.keyCode == 13) { // 13 = Enter Key
+            if(($("#addsub").val()).trim() != ""){
+                var description = ($("#addsub").val()).trim();
+                var id;
+
+                $.ajax(
+                {
+                    url: "http://localhost:3000/add_subtask",
+                    async: true,
+                    type: "POST",
+                    data: {
+                        description: description,
+                        parent_id: element.id,
+                        completed: false
+                    },
+                    success: function (result) {
+                        console.log("successfully added");
+                        id  = JSON.parse(result);
+                        alert("ajax responded")
+
+                        $(".subtasklist").append('<li class="subtask"><input type="checkbox" ' + 
+                            'id=' + id + ' class="sub-checkbox"><div class="subtasklabel">'+ 
+                        ($("#addsub").val()).trim() +'</div></li>');
+                        $("#addsub").val('');
+                        
+                    }
+                });      
+            }
+        }
+
+      });
 
 
 
@@ -70,7 +105,7 @@ $(document).ready(function() {
     var popTemplate = [
         '<div tabindex="0" class="popover" style="max-width:600px;">',
         '<div class="arrow"></div>',
-        //'<div class="popover-content"></div>',
+        //'<div class="popover-content">',
         '<div class="popHeader">',
         '<label id=popLabel></label>',
         '<span class="popOptions">',
@@ -92,7 +127,13 @@ $(document).ready(function() {
         '<h4>Notes</h4>',
         '<textarea rows="4" cols="50" id="notes"></textarea>',
         '</div>',
-        '<input type = "submit" id="save" value="save">',
+        '<input type = "submit" id="save" value="save"></input>',
+        '<h4>Subtasks</h4>',
+        '<div class="innersubtasks">',
+        '<ul class="subtasklist"></ul>',
+        '<input type="text" id="addsub" placeholder="Add subtask">',
+        '</div>',
+        '<br/>',
         '</div>'].join('');
 
     //Modal start appears when adding task//
@@ -123,6 +164,7 @@ $(document).ready(function() {
             data: data,
             success: function (result) {
                 console.log("successfully added");
+
             }
         });
         
@@ -564,6 +606,19 @@ $(document).ready(function() {
         $('#tName').focus();
     });
 
+    $.getJSON('/load_subtasks', function(data) {
+        $.each(data, function(key, val) {
+            let subTask = {
+                id: val.task_id,
+                parent: val.parent_task_id,
+                description: val.description,
+                completed: val.completed
+
+            }
+            subtasks.push(subTask);
+        })
+    })
+
 
 
     /* initialize the external events
@@ -946,7 +1001,20 @@ $(document).ready(function() {
                 console.log($(this));
                 $(this).popover().remove();
             });
+
             popoverElement.popover('show');
+            ($(".subtasklist").children().remove());
+
+            for (i = 0; i < subtasks.length; i++) {
+                if (subtasks[i].parent == element.id) {
+                    $(".subtasklist").append('<li class="subtask"><input type="checkbox" ' + 
+                        'id=' + subtasks[i].id + ' class="sub-checkbox"><div class="subtasklabel">'+ 
+                        subtasks[i].description +'</div></li>');
+
+                }
+            }
+
+
 
             
             

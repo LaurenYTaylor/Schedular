@@ -261,6 +261,15 @@ app.get('/load_cal_items', function(request, response){
 
 });
 
+app.get('/load_subtasks', function(request, response){
+    let query = "SELECT * FROM subtasks WHERE user_id=" + request.user.id;
+    console.log(query)
+    pool.query(query, function(err, result) {
+        let subtasks = (result.rows);
+        response.send(subtasks);
+    })
+});
+
 app.post('/new_task', async function(request, response) {
     let {name, category, duration, repeat, dueDate} = request.body;
     let query = "INSERT INTO todo_item (user_id, num_hours, category, completed, description, repeat, due_date) "
@@ -418,6 +427,31 @@ app.post('/add_files', function(request, response) {
     let filename = request.body.filename
     let file = request.body.file
     console.log(file)
+})
+
+app.post('/add_subtask', async function(request, response) {
+    let description = request.body.description;
+    let parent = request.body.parent_id;
+    let completed = request.body.completed;
+
+    let query = "INSERT INTO subtasks (description, parent_task_id, completed, user_id)" +
+        "VALUES('" + description + "', " + parent + ", '" + completed + "', " + request.user.id +");"
+         console.log(query);
+
+    let client = await pool.connect();
+
+    await pool.query(query);
+
+    let id_finder = "SELECT MAX(task_id) FROM subtasks WHERE "
+        + "parent_task_id="+parent+";";
+
+    let result = await pool.query(id_finder);
+    let max = result.rows[0].max;
+    console.log(max)
+    response.send(JSON.stringify(max));
+
+    client.release();
+
 })
 
 
