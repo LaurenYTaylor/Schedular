@@ -76,7 +76,6 @@ $(document).ready(function() {
                     success: function (result) {
                         console.log("successfully added");
                         id  = JSON.parse(result);
-                        alert("ajax responded")
 
                         $(".subtasklist").append('<li class="subtask"><input type="checkbox" ' + 
                             'id=' + id + ' class="sub-checkbox"><div class="subtasklabel">'+ 
