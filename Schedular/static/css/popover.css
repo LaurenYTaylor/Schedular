@@ -54,7 +54,7 @@ background-color: #cccccc;
   .load-complete {
     -webkit-animation: none;
     animation: none;
-    border-color: #5cb85c;
+    border-color: #03ff03;
     transition: border 500ms ease-out;
   }
   

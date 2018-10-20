@@ -51,6 +51,8 @@ $(document).ready(function() {
 
 
 
+
+
     $("#datetimepicker1").on("dp.change", function() {
         $("#datetimepicker1").data("DateTimePicker").hide();
     });
@@ -430,8 +432,7 @@ $(document).ready(function() {
                         getBadge(repeat) +
                         "</div>");
                 }
-                $('#tName').val('');
-                $('#hiddenText').hide();
+                refreshModal();
                 //This sortable thing isn't working idk why
                 $("#list").sortable('refresh');
                 return false;
@@ -986,6 +987,7 @@ $(document).ready(function() {
         //on EventClick
         eventClick: function (calEvent, jsEvent, view) {
             //closePopovers();
+            
 
             popoverElement = $(jsEvent.currentTarget);
             element = calEvent;
@@ -997,6 +999,16 @@ $(document).ready(function() {
                 $(this).popover().remove();
             });
             popoverElement.popover('show');
+
+            popoverElement.dblclick(function () {
+                if (element.complete){
+                    popoverElement.popover('enable');
+                    element.editable = true;
+                    element.complete = false;
+                    popoverElement.fadeTo('slow', 1);
+                    $('#calendar').fullCalendar('updateEvent', element);
+                }
+            })
 
             
             
@@ -1203,12 +1215,20 @@ var curTask;
 //Validates AddTask Modal//
 function validateForm() {
     var x = document.forms["myForm"]["fname"].value;
+    var y = document.forms["myForm"]["duration"].value;
+    var valid = true;
     if (x == "") {
         $('#hiddenText').show();
-        return false;
-    }else {
-        return true;
+        valid = false;
     }
+
+    if (isNaN(y) || y==""){
+        
+        $('#hiddenDuration').show();
+        valid = false;
+    }
+    
+    return valid;
 }
 
 
@@ -1234,7 +1254,7 @@ function validateForm() {
 function taskCompleted() {
     setTimeout(function() {
         $('.popover').not(this).popover('hide');
-        popoverElement.popover('destroy');
+        popoverElement.popover('disable');
     }, 800);
 
     element.editable = false;
@@ -1245,6 +1265,14 @@ function taskCompleted() {
 
 function closePopovers() {
     $('.popover').not(this).popover('hide');
+}
+
+function refreshModal (){
+    $('#tName').val('');
+    $('#hiddenText').hide();
+    $('#hiddenDuration').hide();
+    $('#repeat').prop('selectedIndex',0);
+    $('#category').prop('selectedIndex',0);
 }
 
 
