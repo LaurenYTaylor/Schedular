@@ -401,7 +401,7 @@ app.post('/edit_cal_task', function(request, response){
     console.log(query_string)
     pool.connect(function(err, client) {
         pool.query(query_string);
-        client.release;
+        client.release();
     })
 });
 
@@ -420,7 +420,7 @@ app.post('/edit_task', function(request, response) {
     console.log(query_string)
     pool.connect(function(err, client) {
         pool.query(query_string);
-        client.release;
+        client.release();
     })
 });
 
@@ -434,7 +434,7 @@ app.post('/add_notes_files', function(request, response) {
     console.log(query_string)
     pool.connect(function(err, client) {
         pool.query(query_string);
-        client.release;
+        client.release();
     })
 
 });
@@ -470,6 +470,20 @@ app.post('/add_subtask', async function(request, response) {
 
 })
 
+
+app.post('/event_complete', function(request, response) {
+    let id = request.body.id;
+    let complete = request.body.complete;
+
+    let query = "UPDATE calendar_item SET complete='" + complete + 
+        "' WHERE item_id=" + id + ";";
+
+    console.log(query)
+    pool.connect(function(err, client) {
+        pool.query(query);
+        client.release();
+    })
+})
 
 
 http.listen(port, () => console.log("Listening on port " + port));
