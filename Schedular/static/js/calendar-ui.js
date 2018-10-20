@@ -1577,6 +1577,18 @@ function getDuration(eventTitle){
   return duration; 
 }
 
+function getDuration2(eventID){
+
+  for (x = 0; x < allEvents.length; x++){
+    if (allEvents[x].id = eventID){
+      duration = allEvents[x].duration; 
+      break;
+    }
+  }
+
+  return duration; 
+}
+
 function addAll(){
 
   listEvents = getListEvents(); 
