@@ -1641,13 +1641,13 @@ function showHideCat(category){
 function getBadge(repeatValue){
     var badge;
     if (repeatValue == "week"){
-        badge = "<span class='badge progress-bar-warning' style='float: right;'>W</span>";
+        badge = "<span class='badge' style='float: right; background-color: #f0ad4e;'>W</span>";
     }else if (repeatValue == "month"){
-        badge = "<span class='badge progress-bar-warning' style='float: right;'>M</span>";
+        badge = "<span class='badge' style='float: right; background-color: #1864dd'>M</span>";
     }else if (repeatValue == "year"){
-        badge = "<span class='badge progress-bar-warning' style='float: right;'>Y</span>";
+        badge = "<span class='badge' style='float: right; background-color: #59b233'>Y</span>";
     }else if (repeatValue == "day"){
-        badge = "<span class='badge progress-bar-warning' style='float: right;'>D</span>";
+        badge = "<span class='badge' style='float: right; background-color: #db69b1'>D</span>";
     }else{
         badge = "";
     }
