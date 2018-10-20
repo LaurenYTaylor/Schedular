@@ -1612,8 +1612,10 @@ function getListEvents(){
 }
 
 function removeCategory(category){
+    console.log(calendarEvents)
     for (i = 0; i < calendarEvents.length; i++){
         if(calendarEvents[i].cat == category) {
+            //alert(calendarEvents[i].cat + " " + category)
             $('#calendar').fullCalendar('removeEvents', calendarEvents[i].id);
         }
     }  
@@ -1756,8 +1758,9 @@ function optimise2(){
                     task_id = allEvents[que].id;
                     console.log(startTime,time,category,dueDate,priority);
 
-                    newCalEvent = {title: event_name, duration: time, cat: category, start: startTime, end: endTime};
-
+                    newCalEvent = {title: event_name, duration: time, cat: category, start: startTime, end: endTime,
+                        parent_task: task_id, due_date: dueDate, repeat: 'None'};
+                        
                 switch(newCalEvent.cat) {
                     case "University":
                     newCalEvent.color = '#6578a0';
@@ -1777,6 +1780,17 @@ function optimise2(){
                     case "Other":
                     newCalEvent.color = 'grey';
                     }
+
+                    $.ajax({
+                        url: "http://localhost:3000/new_cal_task",
+                        async: false,
+                        type: "POST",
+                        data: newCalEvent,
+                        success: function (result) {
+                            newCalEvent.id  = JSON.parse(result);
+                            //newCalEvent.duration=duration_ms/(60*60*1000);
+                        }
+                    });
 
                     calendarEvents.push(newCalEvent);
                     console.log(newCalEvent.title,newCalEvent.color, newCalEvent.start, newCalEvent.end);
@@ -1802,7 +1816,7 @@ function optimise2(){
     //Beni and lauren, all tasks are deleted from the calendar here. 
 
     $("#list .task-drag").each(function(){
-        console.log("lol"); 
+        //console.log("lol"); 
         $(this).remove(); 
     });
     allEvents = []; 
@@ -1960,9 +1974,9 @@ function priorityOptimise(){
                     priority = allEvents[que].priority;
                     task_id = allEvents[que].id;
                     console.log(startTime,time,category,dueDate,priority);
-
-                    newCalEvent = {title: event_name, duration: time, cat: category, start: startTime, end: endTime};
-
+                    newCalEvent = {title: event_name, duration: time, cat: category, start: startTime, end: endTime,
+                        parent_task: task_id, due_date: dueDate, repeat: 'None'};
+                        
                 switch(newCalEvent.cat) {
                     case "University":
                     newCalEvent.color = '#6578a0';
@@ -1983,12 +1997,22 @@ function priorityOptimise(){
                     newCalEvent.color = 'grey';
                     }
 
+                    $.ajax({
+                        url: "http://localhost:3000/new_cal_task",
+                        async: false,
+                        type: "POST",
+                        data: newCalEvent,
+                        success: function (result) {
+                            newCalEvent.id  = JSON.parse(result);
+                            //newCalEvent.duration=duration_ms/(60*60*1000);
+                        }
+                    });
+
                     calendarEvents.push(newCalEvent);
                     console.log(newCalEvent.title,newCalEvent.color, newCalEvent.start, newCalEvent.end);
                     //Beni and Lauren - New event is added here to the calendar
 
                     $('#calendar').fullCalendar('renderEvent', newCalEvent, 'stick');
-
 
                     break loopday;
 
@@ -2139,7 +2163,8 @@ function dueDateOptimise(){
                     task_id = allEvents[que].id;
                     console.log(startTime,time,category,dueDate,priority);
 
-                    newCalEvent = {title: event_name, duration: time, cat: category, start: startTime, end: endTime};
+                    newCalEvent = {title: event_name, duration: time, cat: category, start: startTime, end: endTime,
+                        parent_task: task_id, due_date: dueDate, repeat: 'None'};
 
                 switch(newCalEvent.cat) {
                     case "University":
@@ -2161,12 +2186,22 @@ function dueDateOptimise(){
                     newCalEvent.color = 'grey';
                     }
 
+                    $.ajax({
+                        url: "http://localhost:3000/new_cal_task",
+                        async: false,
+                        type: "POST",
+                        data: newCalEvent,
+                        success: function (result) {
+                            newCalEvent.id  = JSON.parse(result);
+                            //newCalEvent.duration=duration_ms/(60*60*1000);
+                        }
+                    });
+
                     calendarEvents.push(newCalEvent);
                     console.log(newCalEvent.title,newCalEvent.color, newCalEvent.start, newCalEvent.end);
                     //Beni and Lauren - New event is added here to the calendar
 
                     $('#calendar').fullCalendar('renderEvent', newCalEvent, 'stick');
-
 
                     break loopday;
 

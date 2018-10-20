@@ -325,6 +325,7 @@ app.post('/new_cal_task', async function (request, response) {
     let update_string = "UPDATE todo_item SET in_calendar='true' WHERE user_id="+
         request.user.id+" AND item_id='"+ parent +"';";
         console.log(update_string);
+    console.log(query_string)    
     let client = await pool.connect();
 
     await pool.query(query_string);
