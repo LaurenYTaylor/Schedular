@@ -1841,13 +1841,14 @@ function optimise2(){
     day = parseInt(today.substr(8,10));
     yearandmonth = today.substr(0,8);
     x = 0; 
-
+    begin = begin *2; 
+    end = end * 2;
     //Add the dates from this week to be compared. 
     datesOfInterest = getDaysThisWeek(day,yearandmonth);
 
     for (que = 0; que < allEvents.length; que++){
 
-        console.log("The dury is out " + allEvents[que].duration);
+        //console.log("The dury is out " + allEvents[que].duration);
 
         occ = occupied();
         //console.log(que);
@@ -1855,6 +1856,7 @@ function optimise2(){
 
 
         eventDuration = allEvents[que].duration;
+        eventDuration = eventDuration * 2; 
 
         //console.log(allEvents[que].name + " is a " + eventDuration + " length event");
         loopday: 
@@ -1863,26 +1865,38 @@ function optimise2(){
             currentDay = datesOfInterest[dayeroo];
             //console.log(currentDay);
 
+        
+
+
             for (hours = begin; hours < end; hours ++){ // For each hour
 
+                console.log("hours iteration start = " + hours);
+
                 if((eventDuration + hours) > end){
+                    //console.log("hours = " + hours);
                     continue;
                 }
+                //console.log("hours = " + hours);
 
                 add = true; 
+                //console.log("hours = " + hours);
+
                 //console.log("Checking a " + eventDuration + " hour lengthed time slot")
                 for(d = 0; d < parseInt(eventDuration); d++){
-                    newHour = hours + d; 
+                    //console.log("inside d the value of hours = " + hours);
+                    n = hours + d; 
+                   // console.log("hours = " + hours);
 
-                    if (newHour < 10){
-                        newHour = "0" + String(newHour);
-                    }
-
-                    time = String(newHour)+ ":00:00";
-                    checkDate = currentDay + "T" + time; 
+                    newHour = calculateStartTime(n);
+                   // console.log("hours = " + hours);
+                    
+                    //time = String(newHour)+ ":00:00";
+                    checkDate = currentDay + "T" + newHour; 
+                    //console.log("hours = " + hours);
                     //console.log("checking " + checkDate);
                     //console.log(checkDate);
                     if(occ.includes(checkDate)){
+                        //console.log("hours = " + hours);
                         add = false; 
                     }
                     //if that time is in occupado set add to false; 
@@ -1890,25 +1904,41 @@ function optimise2(){
                 } // End checking the whole duration 
 
                 if (add == true){
+                    console.log("hours = " + hours);
                     //ADD EVENT and then break.
-                    newHour = parseInt(newHour);
-                    newHour = newHour + 1; 
-                    if (newHour < 10){
-                        newHour = "0" + String(newHour);
-                    }
 
-                    time = String(newHour)+ ":00:00";
+                    n = n + 1;
+                    //console.log("hours = " + hours);
+                    time = calculateStartTime(n);
+                    //console.log("hours = " + hours);
+
+                    //newHour = parseInt(newHour);
+                    //newHour = newHour + 1; 
+                    //if (newHour < 10){
+                    //    newHour = "0" + String(newHour);
+                    //}
+
+                    //time = String(newHour)+ ":00:00";
                     checkDate = currentDay + "T" + time; 
+                   // console.log("hours = " + hours);
 
 
                     h = hours;
-                    if (h < 10){
-                        h = "0" + String(h); 
-                    }
+                    //console.log("hours = " + hours);
 
-                    time = String(h)+":00:00"; 
+                    time = calculateStartTime(h); 
+                    //console.log("hours = " + hours);
+
+                    //if (h < 10){
+                    //    h = "0" + String(h); 
+                   // }
+
+                    //time = String(h)+":00:00"; 
                     startTime = currentDay + "T" + time;
                     startTime = String(startTime); 
+
+                    console.log("Adding an event with starttime " + startTime);
+                    console.log(" and an end time of " + checkDate); 
 
 
                     event_name = allEvents[que].name;
@@ -1924,28 +1954,30 @@ function optimise2(){
 
                     newCalEvent = {title: event_name, duration: time, cat: category, start: startTime, end: endTime,
                         parent_task: task_id, due_date: dueDate, repeat: 'None'};
+
+                    //console.log("2 checking on the value of hours = " + hours);    
                         
-                switch(newCalEvent.cat) {
-                    case "University":
-                    newCalEvent.color = '#6578a0';
-                    break;
-                    case "Work":
-                    newCalEvent.color = '#84b79d';
-                    break;
-                    case "Fun":
-                    newCalEvent.color = '#ffc53f';
-                    break;
-                    case "Chores":
-                    newCalEvent.color = '#e5a190';
-                    break;
-                    case "Hobby":
-                    newCalEvent.color = '#c18fe8';
-                    break;
-                    case "Other":
-                    newCalEvent.color = 'grey';
+                    switch(newCalEvent.cat) {
+                        case "University":
+                        newCalEvent.color = '#6578a0';
+                        break;
+                        case "Work":
+                        newCalEvent.color = '#84b79d';
+                        break;
+                        case "Fun":
+                        newCalEvent.color = '#ffc53f';
+                        break;
+                        case "Chores":
+                        newCalEvent.color = '#e5a190';
+                        break;
+                        case "Hobby":
+                        newCalEvent.color = '#c18fe8';
+                        break;
+                        case "Other":
+                        newCalEvent.color = 'grey';
                     }
                     // BE SURE TO UNCOMMENT THIS SECTION. ONLY COMMENTED FOR TESTING PURPOSES.
-                   
+                   /*
                     $.ajax({
                         url: "http://localhost:3000/new_cal_task",
                         async: false,
@@ -1956,10 +1988,9 @@ function optimise2(){
                             //newCalEvent.duration=duration_ms/(60*60*1000);
                         }
                     });
-
+                    */ 
                     calendarEvents.push(newCalEvent);
-
-                    
+                    //console.log("1 checking on the value of hours = " + hours);
 
                     //console.log(newCalEvent.title,newCalEvent.color, newCalEvent.start, newCalEvent.end);
                     //Beni and Lauren - New event is added here to the calendar
@@ -1967,10 +1998,14 @@ function optimise2(){
                     $('#calendar').fullCalendar('renderEvent', newCalEvent, 'stick');
 
 
+                    //console.log(" OK checking on the value of hours = " + hours);
+
                     break loopday;
 
 
-                }
+                }//End if add is true. 
+
+               // console.log("at the end hours = " + hours);
 
 
             } // End Iterating hours 
@@ -2018,17 +2053,25 @@ function occupied(){
         date = alleventeroos[x].start.format().substr(0,10);
         time = alleventeroos[x].start.format().substr(11,13);
 
-        for (y = 0; y < parseInt(duration); y++){
-            
-            time = parseInt(time);
-            time = stringifyNumbers(time); 
-            time = time + ":00:00"; 
+        hours = parseInt(alleventeroos[x].start.format().substr(11,2)); 
+        mins = parseInt(alleventeroos[x].start.format().substr(14,2));
+
+        hours = hours * 2;
+
+        if (mins == 30){
+            hours = hours + 1;
+        }
+
+        for (y = 0; y < parseInt(duration)*2; y++){
+
+            time = calculateStartTime(hours);
+
+
 
             momento = date + "T" + time;
-            //occupiedSpace = {momento}; 
-            occupado.push(momento);
-            time = parseInt(time);
-            time = time + 1; 
+             occupado.push(momento);
+
+            hours = hours + 1;
         }
 
     }
@@ -2478,8 +2521,8 @@ function calculateStartTime(hours){
     starttime = Math.floor(hours/2);
     
 
-    console.log("input is " + hours); 
-    console.log("Start time = " + starttime);
+   // console.log("input is " + hours); 
+   // console.log("Start time = " + starttime);
 
     if (isOdd(hours)){
 
@@ -2501,7 +2544,7 @@ function calculateStartTime(hours){
         starttime = String(starttime) + ":00:00";
 
     }
-    console.log("returning " + starttime);
+   // console.log("returning " + starttime);
     return starttime; 
 }
 
