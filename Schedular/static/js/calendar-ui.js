@@ -1013,7 +1013,7 @@ $(document).ready(function() {
             endTime = newdayendTime.substr(0,19);
 
             let newCalEvent = {title: event_name, duration: duration_ms, cat: category, start: startTime, end: endTime,
-                parent_task: task_id, due_date: dueDate, priority: priority, repeat: repeat, complete: 'false'};
+                parent_task: task_id, due_date: dueDate, priority: priority, repeat: repeat, complete: false};
 
             switch(newCalEvent.cat) {
                 case "University":
