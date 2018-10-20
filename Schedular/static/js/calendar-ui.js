@@ -824,15 +824,10 @@ $(document).ready(function() {
             helper:   'clone',
 
 
-            start:function(event,ui){
-                //console.log(ui.item.text());
-                thisEvent = $(this).text(); 
+            start:function(event,ui){ 
+
                 thisId = ui.item.attr('data-taskid'); 
-
                 eventDuration = getDuration2(thisId);
-
-                //console.log("The event duration is " + eventDuration);
-                //eventDuration = getDuration(thisEvent);
 
                 shadowEvents = []; 
                 today = getToday(); 
@@ -854,27 +849,78 @@ $(document).ready(function() {
 
                 //Starting Daily Iteration 
                 for(dayeroo=0; dayeroo<14; dayeroo++){
+
                     currentDay = datesOfInterest[dayeroo];
                     eventsOfInterest = getTodaysevents(alleventeroos,currentDay); 
                     eventsOfInterest = sortByDate(eventsOfInterest);
                     starttime = 0; 
+                    blahtime = 0; 
             
-                    for (hours = 0; hours < 24; hours ++){
-                        //For each hour, check if there is an event at this time. 
+                    hours = 0; 
+                    start = true;
+                    isZero = true; 
+                    addedDuration = false; 
+
+                    for (h = 0; h < 48; h ++){
+
+                        if (addedDuration == true){
+                            h = h-1;
+                        }
+
+
+                        odd = false; 
+
+                        minscompare = 0; 
+
+                        if(isOdd(h)){
+                           minscompare = 30; 
+                            odd = true;
+                        }
+                        else{
+                            minscompare = 0; 
+                        }
+
+
+
+                        if (odd == false && isZero == true){
+                            console.log("setting isZero True");
+                            isZero = false; 
+                        }
+                        else if(odd == false && isZero == false && addedDuration == false){
+                            console.log("incrementing hours");
+                            hours = hours + 1;
+                            //console.log("adding here");
+                        }
+                        else{
+                            //Do nothing?
+                            isZero = false;
+                        }
+
+                        addedDuration = false; 
+
+
                         for(index = 0; index < eventsOfInterest.length; index ++){
 
-                            currentEventTime = getCurrentTimeFormat(eventsOfInterest, index); 
+                            //currentEventTime = getCurrentTimeFormat(eventsOfInterest, index); 
+                            currentEventTime = getHoursFormat(eventsOfInterest, index);
+
+                            mins = getMinutesFormat(eventsOfInterest, index);
+
                             startDate = currentDay.substr(0,10);
                             //If this event starts at the current time
+                            
+                            if(currentEventTime == hours && mins == minscompare){
 
-                            if(currentEventTime == hours){
-                            //formatting
-                                stringhours = stringifyNumbers(hours); 
-                                if(starttime < 10){ stringstarttime = "0" + String(starttime);}
-                                else { stringstarttime = String(starttime);}
-                  
-                                totalDate = startDate + "T" + stringstarttime + ":00:00"; 
-                                totalEnd = startDate + "T" + stringhours + ":00:00";
+                                 //formatting
+
+    
+                                stringhours = calculateStartTime(h);
+                                stringstarttime = calculateStartTime(blahtime); 
+                                totalDate = startDate + "T" + stringstarttime;
+                                totalEnd = startDate + "T" + stringhours;
+
+                                console.log("The start is " + totalDate);
+                                console.log("The end is " + totalEnd);
                                 //End Formatting 
                                 newEvent = createEvent(totalDate,totalEnd);
                                 //Calculate the duration   
@@ -884,34 +930,60 @@ $(document).ready(function() {
                                 //duration = eventDuration;
 
                                 //If the space allows an event to be placed in it, given the duration, add it. 
-                                if(hours - starttime >= eventDuration){
+                                tdawg = (h - blahtime)/2
+                                console.log("(h - blahtime)/2 = " + h + " - " + blahtime +" /2" +  " = " + tdawg);
+
+                                if((h - blahtime)/2 >= eventDuration){
+
                                     shadowEvents.push(newEvent);
-                                    //console.log("Adding an event")
+                                 }
+                                else{
+                                    //Do nothing
                                 }
+
+
+                               // console.log("h is " + h);
+                               console.log("Adding the duration " + duration +" times two which is " + duration * 2 );
+                                h = h + (duration * 2); 
+                                console.log("Now h is " + h);
                                 hours = hours + duration; 
-                                starttime = hours; 
+                                addedDuration = true;
+                                console.log("So the hours is " + hours);
+
+                               // starttime = Math.floor(h/2); 
+                               starttime = hours;
+                               blahtime = h; 
+
+
                             } //End if event occurs at this time. 
                         } //End loop through all events for the day. 
+
 
                      } // End of the hour 
 
                     //Reformat Start and end time 
-                    if (starttime < 10){
-                        starttime = "0" + String(starttime);
+
+                    if (hours == 25){
+                        hours = 24;
                     }
-                    q = currentDay + "T" + starttime + ":00:00"; 
-                    x = currentDay + "T" + String(hours) + ":00:00"; 
+
+                    stringhours = calculateStartTime(h);
+                    stringstarttime = calculateStartTime(blahtime); 
+                    totalDate = startDate + "T" + stringstarttime;
+                    totalEnd = startDate + "T" + stringhours;
+
+
+                    q = currentDay + "T" + stringstarttime; 
+                    x = currentDay + "T" + stringhours; 
 
                     //End Reformatting 
                     newEventEnd = createEvent(q,x);
                     shadowEvents.push(newEventEnd);
-                    //console.log("Adding an event");
 
                 } // End the daily iteration 
 
 
                 $('#calendar').fullCalendar( 'renderEvents', shadowEvents , 'stick');
-
             },
 
             stop:function(){
@@ -1563,6 +1635,9 @@ function stringifyNumbers(hours){
 }
 
 function calculateDuration(eventsOfInterest,index,totalEnd){
+    //console.log(eventsOfInterest.length + "bLAH");
+    //console.log(eventsOfInterest[index]);
+
   endtime = eventsOfInterest[index].end.format(); 
   starter = parseInt(totalEnd.substr(11,11));
   ender =   parseInt(endtime.substr(11,13));
@@ -2286,5 +2361,65 @@ function addCatsToList(categoryList){
 
 }
 
+function isOdd(num) { return num % 2;}
 
+
+function getHoursFormat(eventsOfInterest, index){
+  currentEventDate = eventsOfInterest[index].start.format();
+  //console.log("The time is " + currentEventDate);
+  time = currentEventDate.substr(11,12).split ( ":" );
+  hour = parseInt( time[0].trim() );
+   min = parseInt( time[1].trim() );
+ // console.log("Hour is " + hour);
+  //console.log("Min is " + min);
+  currentEventTime = parseInt(currentEventDate.substr(11,12)); 
+// console.log("spitting out " + currentEventTime);
+  return hour; 
+}
+
+function getMinutesFormat(eventsOfInterest, index){
+  currentEventDate = eventsOfInterest[index].start.format();
+  //console.log("The time is " + currentEventDate);
+  time = currentEventDate.substr(11,12).split ( ":" );
+  hour = parseInt( time[0].trim() );
+   min = parseInt( time[1].trim() );
+  //console.log("Hour is " + hour);
+  //console.log("Min is " + min);
+  currentEventTime = parseInt(currentEventDate.substr(11,12)); 
+  //console.log("spitting out " + currentEventTime);
+  return min; 
+}
+
+function calculateStartTime(hours){
+    startTime = 0; 
+    add30 = false; 
+    starttime = Math.floor(hours/2);
+    
+
+    console.log("input is " + hours); 
+    console.log("Start time = " + starttime);
+
+    if (isOdd(hours)){
+
+        add30 = true; 
+
+    }
+
+    if (starttime < 10){
+        //console.log("Less than ten");
+        starttime = "0" + String(starttime);
+    }
+
+    if(add30){
+        //console.log("adding 30 minutes " ); 
+        starttime = String(starttime) + ":30:00";
+    }
+    else{
+
+        starttime = String(starttime) + ":00:00";
+
+    }
+    console.log("returning " + starttime);
+    return starttime; 
+}
 
