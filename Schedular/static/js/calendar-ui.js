@@ -159,7 +159,7 @@ $(document).ready(function() {
         element.note = note;
         $('.popover').popover('hide');
         $('#calendar').fullCalendar('updateEvent', element);
-        $
+        
         var data = {
             id: task_id,
             note: note
@@ -1071,7 +1071,7 @@ $(document).ready(function() {
 
             popoverElement = $(jsEvent.currentTarget);
             element = calEvent;
-            $('#notes').val(element.note);
+            alert(element.note);
             console.log(calEvent);
             console.log(jsEvent);
             $(".popover").each(function() {
@@ -1090,6 +1090,8 @@ $(document).ready(function() {
 
                 }
             }
+
+            $('#notes').val(element.note);
 
 
 
