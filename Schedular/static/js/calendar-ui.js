@@ -508,6 +508,8 @@ $(document).ready(function() {
 
     // updating edited task in calendar
     // when submit edits button pressed
+    //Remember to change this for tasks longer than 24 hours
+
     $(function() {
         $(".editButton").click(function() {
             var name = $('#editName').val();
@@ -992,7 +994,6 @@ $(document).ready(function() {
             let newdayendTime =moment(dayendTime).add(extraHours, 'hours').format();
 
             endTime = newdayendTime.substr(0,19);
-            alert(endTime);
 
             let newCalEvent = {title: event_name, duration: duration_ms, cat: category, start: startTime, end: endTime,
                 parent_task: task_id, due_date: dueDate, priority: priority, repeat: repeat};
@@ -1037,17 +1038,19 @@ $(document).ready(function() {
                 recurringEvents.push(newCalEvent);
             }else{
                 while (numofEvents < 300){
-                    var time = date.clone();
+                    var repeatstarttime = moment(startTime);
+                    var repeatendtime = moment(endTime);
                     
                     var myEvent = Object.assign({}, newCalEvent);
-                    newTime = time.add(numofEvents, newCalEvent.repeat);
-                    myEvent.start = newTime.format()+"T09:00:00";
-                    if(end<10) {
-                        myEvent.end = newTime.format()+"T0"+end+":00:00";
-                    } else {
-                        myEvent.end = newTime.format()+"T"+end+":00:00";
-                    }
-                   
+
+
+                    newstartTime = repeatstarttime.add(numofEvents, newCalEvent.repeat).format();
+                    newendTime =  repeatendtime.add(numofEvents, newCalEvent.repeat).format();
+
+
+                    myEvent.start = newstartTime.substr(0,19);
+                    
+                    myEvent.end = newendTime.substr(0,19);
                     numofEvents++;
 
                     calendarEvents.push(myEvent);
