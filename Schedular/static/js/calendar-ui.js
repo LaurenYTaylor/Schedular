@@ -63,6 +63,12 @@ $(document).ready(function() {
                 var description = ($("#addsub").val()).trim();
                 var id;
 
+                var newSub = {
+                    description: description,
+                    parent: element.id,
+                    comleted: false
+                }
+
                 $.ajax(
                 {
                     url: "http://localhost:3000/add_subtask",
@@ -74,8 +80,11 @@ $(document).ready(function() {
                         completed: false
                     },
                     success: function (result) {
-                        console.log("successfully added");
+                        //console.log("successfully added");
                         id  = JSON.parse(result);
+                        newSub.id = id;
+
+                        subtasks.push(newSub);
 
                         $(".subtasklist").append('<li class="subtask"><input type="checkbox" ' + 
                             'id=' + id + ' class="sub-checkbox"><div class="subtasklabel">'+ 
@@ -172,7 +181,7 @@ $(document).ready(function() {
             type: "POST",
             data: data,
             success: function (result) {
-                console.log("successfully added");
+                //console.log("successfully added");
 
             }
         });
@@ -441,7 +450,8 @@ $(document).ready(function() {
                     if(categories[i].cat == category) {
                        $("#list").append("<div class='task-drag' style='background: " + categories[i].color + 
                             "' data-taskid=" + new_task.id + "><label style='width:50%'>" + taskName + 
-                            "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +                               "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                            "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +                      
+                            "<img src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
                             "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
                             getBadge(new_task.repeat) +
                             "</div>");
@@ -707,7 +717,7 @@ $(document).ready(function() {
                     $("#list").append("<div class='task-drag' style='background: " + categories[i].color + 
                         "' data-taskid=" + newTask.id + "><label style='width:50%'>" + description + 
                         "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +
-                        "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                        "<img src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
                         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
                         getBadge(newTask.repeat) +  
                         "</div>");
@@ -766,6 +776,7 @@ $(document).ready(function() {
             let due_date = val.due_date;
             let repeat = val.repeat;
             let note = val.notes;
+            let complete = val.complete;
             let newEvent = {
                 title: val.description,
                 id: val.item_id,
@@ -776,7 +787,8 @@ $(document).ready(function() {
                 cat: val.category,
                 due_date: due_date,
                 repeat: repeat,
-                note: note
+                note: note,
+                complete: complete
             };
             switch(newEvent.cat) {
                 case "University":
@@ -807,7 +819,7 @@ $(document).ready(function() {
                     myEvent.start = moment(newEvent.start).add(numofEvents,newEvent.repeat).format().split("+", 1).toString();
                     myEvent.end = moment(newEvent.end).add(numofEvents, newEvent.repeat).format().split("+", 1).toString(); 
                     numofEvents++;
-                    console.log(myEvent);
+                    //console.log(myEvent);
                     calendarEvents.push(myEvent);
                 }
             }
@@ -827,7 +839,12 @@ $(document).ready(function() {
             start:function(event,ui){
                 //console.log(ui.item.text());
                 thisEvent = $(this).text(); 
-                eventDuration = getDuration(thisEvent);
+                thisId = ui.item.attr('data-taskid'); 
+
+                eventDuration = getDuration2(thisId);
+
+                //console.log("The event duration is " + eventDuration);
+                //eventDuration = getDuration(thisEvent);
 
                 shadowEvents = []; 
                 today = getToday(); 
@@ -935,10 +952,10 @@ $(document).ready(function() {
         droppable: true, // this allows things to be dropped onto the calendar
         dragRevertDuration: 0,
         drop: function(date, jsEvent, ui) {
-            console.log($(this));
+            //console.log($(this));
             
-            console.log(jsEvent);
-            console.log(ui);
+            //console.log(jsEvent);
+            //console.log(ui);
             let task_id = $(this)[0].dataset.taskid;
             let event_name = $(this)[0].firstChild.innerText;
             var category;
@@ -978,7 +995,7 @@ $(document).ready(function() {
                 }
             }
             let newCalEvent = {title: event_name, duration: duration_ms, cat: category, start: startTime, end: endTime,
-                parent_task: task_id, due_date: dueDate, priority: priority, repeat: repeat};
+                parent_task: task_id, due_date: dueDate, priority: priority, repeat: repeat, complete: 'false'};
 
             switch(newCalEvent.cat) {
                 case "University":
@@ -1071,11 +1088,9 @@ $(document).ready(function() {
 
             popoverElement = $(jsEvent.currentTarget);
             element = calEvent;
-            alert(element.note);
-            console.log(calEvent);
-            console.log(jsEvent);
+
             $(".popover").each(function() {
-                console.log($(this));
+                //console.log($(this));
                 $(this).popover().remove();
             });
 
@@ -1090,6 +1105,7 @@ $(document).ready(function() {
 
                 }
             }
+            console.log(subtasks)
 
             $('#notes').val(element.note);
 
@@ -1102,6 +1118,19 @@ $(document).ready(function() {
                     element.complete = false;
                     popoverElement.fadeTo('slow', 1);
                     $('#calendar').fullCalendar('updateEvent', element);
+                    $.ajax(
+                    {
+                        url: "http://localhost:3000/event_complete",
+                        async: true,
+                        type: "POST",
+                        data: {
+                            id: element.id,
+                            complete: false
+                        },
+                        success: function (result) {
+                            console.log("successlly completed event")
+                        }
+                    });
                 }
             })
 
@@ -1185,10 +1214,10 @@ $(document).ready(function() {
             offset.bottom = external_events.height() + 200 + external_events.position().top;
 
             // Compare
-            console.log(external_events.height());
-            console.log("The jsEvent.pageX is " + jsEvent.pageX + " The offset left is " + offset.left);
-            console.log("The jsEvent.pageY is " + jsEvent.pageY + " The top is " + external_events.position().top);
-            console.log("The offset right is " + offset.right + " The offset bottom is " + offset.bottom);
+            //console.log(external_events.height());
+            //console.log("The jsEvent.pageX is " + jsEvent.pageX + " The offset left is " + offset.left);
+            //console.log("The jsEvent.pageY is " + jsEvent.pageY + " The top is " + external_events.position().top);
+            //console.log("The offset right is " + offset.right + " The offset bottom is " + offset.bottom);
             if (jsEvent.pageX >= offset.left
                 && jsEvent.pageY >= external_events.position().top
                 && jsEvent.pageX <= offset.right
@@ -1234,7 +1263,7 @@ $(document).ready(function() {
                                     $("#list").append("<div class='task-drag' style='background: " + categories[i].color + 
                                         "' data-taskid=" + newTask.id + "><label style='width:50%'>" + newTask.name + 
                                         "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +
-                                        "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
+                                        "<img src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
                                         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
                                         getBadge(newTask.repeat) +
                                         "</div>");
@@ -1376,8 +1405,24 @@ function taskCompleted() {
 
     element.editable = false;
     element.complete = true;
+    
+
     popoverElement.fadeTo('slow', 0.5);
     $('#calendar').fullCalendar('updateEvent', element);
+    $.ajax(
+    {
+        url: "http://localhost:3000/event_complete",
+        async: true,
+        type: "POST",
+        data: {
+            id: element.id,
+            complete: true
+        },
+        success: function (result) {
+            console.log("successlly completed event")
+        }
+    });
+
 }
 
 function closePopovers() {
@@ -1521,7 +1566,7 @@ function getDaysThisWeek(day,yearandmonth){
 
     wholeNewDate = String(year) + "-" + String(month) + "-" + String(newDay);
     datesOfInterest.push(wholeNewDate);
-    console.log(wholeNewDate); 
+    //console.log(wholeNewDate); 
     newDay = parseInt(newDay);
     month = parseInt(month); 
 
@@ -1570,8 +1615,22 @@ function calculateDuration(eventsOfInterest,index,totalEnd){
 
 function getDuration(eventTitle){
   for (x = 0; x < allEvents.length; x++){
-    if (allEvents[x].title = eventTitle){
+    if (allEvents[x].title == eventTitle){
       duration = allEvents[x].duration; 
+      break;
+    }
+  }
+
+  return duration; 
+}
+
+function getDuration2(eventID){
+
+  for (x = 0; x < allEvents.length; x++){
+    if (allEvents[x].id == eventID){
+      duration = allEvents[x].duration; 
+      //console.log("The event ID is " + eventID + " and the name is " + allEvents[x].name);
+      //console.log("with a duration of " + duration);
       break;
     }
   }
@@ -1584,7 +1643,7 @@ function addAll(){
   listEvents = getListEvents(); 
 
   for (x=0; x<listEvents.length; x++){
-    console.log(listEvents[x].name);
+    //console.log(listEvents[x].name);
   }
 
 }
@@ -1661,8 +1720,8 @@ function getBadge(repeatValue){
   
 function optimise2(){
 
-    console.log("Initialising the optimiser!");
-    console.log($('#viv_input').val());
+    //console.log("Initialising the optimiser!");
+    //console.log($('#viv_input').val());
 
 
     begin = $('#viv_input').val();
@@ -1692,13 +1751,13 @@ function optimise2(){
     for (que = 0; que < allEvents.length; que++){
 
         occ = occupied();
-        console.log(que);
-        console.log(allEvents[que]);
+        //console.log(que);
+        //console.log(allEvents[que]);
 
 
         eventDuration = allEvents[que].duration;
 
-        console.log(allEvents[que].name + " is a " + eventDuration + " length event");
+        //console.log(allEvents[que].name + " is a " + eventDuration + " length event");
         loopday: 
         for(dayeroo=0; dayeroo<7; dayeroo++){
             //Calculate the events of interest for today.
@@ -1795,7 +1854,7 @@ function optimise2(){
                     });
 
                     calendarEvents.push(newCalEvent);
-                    console.log(newCalEvent.title,newCalEvent.color, newCalEvent.start, newCalEvent.end);
+                    //console.log(newCalEvent.title,newCalEvent.color, newCalEvent.start, newCalEvent.end);
                     //Beni and Lauren - New event is added here to the calendar
 
                     $('#calendar').fullCalendar('renderEvent', newCalEvent, 'stick');
@@ -1878,8 +1937,8 @@ function priorityOptimise(){
     eventList = getPriorityList();
     allEvents = [];
     allEvents = eventList;
-    console.log("Initialising the optimiser!");
-    console.log($('#viv_input').val());
+    //console.log("Initialising the optimiser!");
+    //console.log($('#viv_input').val());
 
 
     begin = $('#viv_input').val();
