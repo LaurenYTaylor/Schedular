@@ -871,11 +871,13 @@ $(document).ready(function() {
                 alleventeroos = sortByDate(alleventeroos); 
 
                 //Starting Daily Iteration 
-                for(dayeroo=0; dayeroo<14; dayeroo++){
+                for(dayeroo=0; dayeroo<7; dayeroo++){
 
+                    console.log(dayeroo + "yeah");
                     currentDay = datesOfInterest[dayeroo];
                     eventsOfInterest = getTodaysevents(alleventeroos,currentDay); 
                     eventsOfInterest = sortByDate(eventsOfInterest);
+                    startDate = currentDay.substr(0,10);
                     starttime = 0; 
                     blahtime = 0; 
             
@@ -890,27 +892,23 @@ $(document).ready(function() {
                             h = h-1;
                         }
 
-
                         odd = false; 
-
                         minscompare = 0; 
 
                         if(isOdd(h)){
                            minscompare = 30; 
-                            odd = true;
+                           odd = true;
                         }
                         else{
                             minscompare = 0; 
                         }
 
-
-
                         if (odd == false && isZero == true){
-                            console.log("setting isZero True");
+                            //console.log("setting isZero True");
                             isZero = false; 
                         }
                         else if(odd == false && isZero == false && addedDuration == false){
-                            console.log("incrementing hours");
+                            //console.log("incrementing hours");
                             hours = hours + 1;
                             //console.log("adding here");
                         }
@@ -921,94 +919,69 @@ $(document).ready(function() {
 
                         addedDuration = false; 
 
-
                         for(index = 0; index < eventsOfInterest.length; index ++){
 
-                            //currentEventTime = getCurrentTimeFormat(eventsOfInterest, index); 
                             currentEventTime = getHoursFormat(eventsOfInterest, index);
-
                             mins = getMinutesFormat(eventsOfInterest, index);
+                        
 
-                            startDate = currentDay.substr(0,10);
-                            //If this event starts at the current time
-                            
                             if(currentEventTime == hours && mins == minscompare){
 
-                                 //formatting
-
-    
-                                stringhours = calculateStartTime(h);
-                                stringstarttime = calculateStartTime(blahtime); 
-                                totalDate = startDate + "T" + stringstarttime;
-                                totalEnd = startDate + "T" + stringhours;
-
-                                console.log("The start is " + totalDate);
-                                console.log("The end is " + totalEnd);
-                                //End Formatting 
-                                newEvent = createEvent(totalDate,totalEnd);
-                                //Calculate the duration   
-                                //This is currently calculating the duration of each event. 
-                                duration = calculateDuration(eventsOfInterest,index,totalEnd);
-
-                                //duration = eventDuration;
-
-                                //If the space allows an event to be placed in it, given the duration, add it. 
-                                tdawg = (h - blahtime)/2
-                                console.log("(h - blahtime)/2 = " + h + " - " + blahtime +" /2" +  " = " + tdawg);
-
-                                if((h - blahtime)/2 >= eventDuration){
-
-                                    shadowEvents.push(newEvent);
-                                 }
-                                else{
+                            stringhours = calculateStartTime(h);
+                            stringstarttime = calculateStartTime(blahtime); 
+                            totalDate = startDate + "T" + stringstarttime;
+                            totalEnd = startDate + "T" + stringhours;
+                            newEvent = createEvent(totalDate,totalEnd);
+                            duration = calculateDuration(eventsOfInterest,index,totalEnd);
+                            tdawg = (h - blahtime)/2;
+                            if((h - blahtime)/2 >= eventDuration){
+                                shadowEvents.push(newEvent);
+                            }
+                            else{
                                     //Do nothing
-                                }
+                            }
+                            h = h + (duration * 2); 
+                            hours = hours + duration; 
+                            addedDuration = true;
+                            starttime = hours;
+                            blahtime = h; 
+
+                        }// End of the if 
+                            console.log("hmm");
 
 
-                               // console.log("h is " + h);
-                               console.log("Adding the duration " + duration +" times two which is " + duration * 2 );
-                                h = h + (duration * 2); 
-                                console.log("Now h is " + h);
-                                hours = hours + duration; 
-                                addedDuration = true;
-                                console.log("So the hours is " + hours);
+                        } // End of all events 
 
-                               // starttime = Math.floor(h/2); 
-                               starttime = hours;
-                               blahtime = h; 
+                        //console.log(h);
 
 
-                            } //End if event occurs at this time. 
-                        } //End loop through all events for the day. 
 
-
-                     } // End of the hour 
-
-                    //Reformat Start and end time 
+                    } // End of hours 
 
                     if (hours == 25){
                         hours = 24;
-                    }
+                   }
 
                     stringhours = calculateStartTime(h);
-                    stringstarttime = calculateStartTime(blahtime); 
-                    totalDate = startDate + "T" + stringstarttime;
-                    totalEnd = startDate + "T" + stringhours;
+                   stringstarttime = calculateStartTime(blahtime); 
+                   totalDate = startDate + "T" + stringstarttime;
+                   totalEnd = startDate + "T" + stringhours;
 
 
-                    q = currentDay + "T" + stringstarttime; 
+                   q = currentDay + "T" + stringstarttime; 
                     x = currentDay + "T" + stringhours; 
 
                     //End Reformatting 
                     newEventEnd = createEvent(q,x);
-                    shadowEvents.push(newEventEnd);
+                   shadowEvents.push(newEventEnd);
 
-                } // End the daily iteration 
 
+                } // End of days 
 
                 $('#calendar').fullCalendar( 'renderEvents', shadowEvents , 'stick');
-            },
 
+                    
+            },
             stop:function(){
                 $('#calendar').fullCalendar( 'removeEvents', 66666);
 
@@ -1614,7 +1587,7 @@ function getDaysThisWeek(day,yearandmonth){
 
   datesOfInterest = []; 
   x = 0; 
-  //console.log("The days for this week are");
+  console.log("The days for this week are");
   month = parseInt(yearandmonth.substr(5,6));
   //console.log("The month is " + month);
   year = parseInt(yearandmonth.substr(0,4));
@@ -1660,7 +1633,7 @@ function getDaysThisWeek(day,yearandmonth){
 
     wholeNewDate = String(year) + "-" + String(month) + "-" + String(newDay);
     datesOfInterest.push(wholeNewDate);
-    //console.log(wholeNewDate); 
+    console.log(wholeNewDate); 
     newDay = parseInt(newDay);
     month = parseInt(month); 
 
@@ -1841,8 +1814,12 @@ function optimise2(){
     day = parseInt(today.substr(8,10));
     yearandmonth = today.substr(0,8);
     x = 0; 
+
+    //ADDED CHANGE 
     begin = begin *2; 
     end = end * 2;
+
+
     //Add the dates from this week to be compared. 
     datesOfInterest = getDaysThisWeek(day,yearandmonth);
 
@@ -1856,6 +1833,8 @@ function optimise2(){
 
 
         eventDuration = allEvents[que].duration;
+
+        //ADDED CHANGE 
         eventDuration = eventDuration * 2; 
 
         //console.log(allEvents[que].name + " is a " + eventDuration + " length event");
@@ -1870,7 +1849,7 @@ function optimise2(){
 
             for (hours = begin; hours < end; hours ++){ // For each hour
 
-                console.log("hours iteration start = " + hours);
+                //console.log("hours iteration start = " + hours);
 
                 if((eventDuration + hours) > end){
                     //console.log("hours = " + hours);
@@ -1884,6 +1863,7 @@ function optimise2(){
                 //console.log("Checking a " + eventDuration + " hour lengthed time slot")
                 for(d = 0; d < parseInt(eventDuration); d++){
                     //console.log("inside d the value of hours = " + hours);
+
                     n = hours + d; 
                    // console.log("hours = " + hours);
 
@@ -1977,7 +1957,7 @@ function optimise2(){
                         newCalEvent.color = 'grey';
                     }
                     // BE SURE TO UNCOMMENT THIS SECTION. ONLY COMMENTED FOR TESTING PURPOSES.
-                   /*
+                   
                     $.ajax({
                         url: "http://localhost:3000/new_cal_task",
                         async: false,
@@ -1988,7 +1968,7 @@ function optimise2(){
                             //newCalEvent.duration=duration_ms/(60*60*1000);
                         }
                     });
-                    */ 
+                    
                     calendarEvents.push(newCalEvent);
                     //console.log("1 checking on the value of hours = " + hours);
 
@@ -2091,7 +2071,7 @@ function priorityOptimise(){
     //console.log($('#viv_input').val());
 
 
-    begin = $('#viv_input').val();
+   begin = $('#viv_input').val();
 
     if (!begin){
         begin = 9;
@@ -2112,45 +2092,68 @@ function priorityOptimise(){
     yearandmonth = today.substr(0,8);
     x = 0; 
 
+    //ADDED CHANGE 
+    begin = begin *2; 
+    end = end * 2;
+
+
     //Add the dates from this week to be compared. 
     datesOfInterest = getDaysThisWeek(day,yearandmonth);
 
     for (que = 0; que < allEvents.length; que++){
 
+        //console.log("The dury is out " + allEvents[que].duration);
+
         occ = occupied();
-        console.log(que);
-        console.log(allEvents[que]);
+        //console.log(que);
+        //console.log(allEvents[que]);
 
 
         eventDuration = allEvents[que].duration;
 
-        console.log(allEvents[que].name + " is a " + eventDuration + " length event");
+        //ADDED CHANGE 
+        eventDuration = eventDuration * 2; 
+
+        //console.log(allEvents[que].name + " is a " + eventDuration + " length event");
         loopday: 
         for(dayeroo=0; dayeroo<7; dayeroo++){
             //Calculate the events of interest for today.
             currentDay = datesOfInterest[dayeroo];
             //console.log(currentDay);
 
+        
+
+
             for (hours = begin; hours < end; hours ++){ // For each hour
 
+                //console.log("hours iteration start = " + hours);
+
                 if((eventDuration + hours) > end){
+                    //console.log("hours = " + hours);
                     continue;
                 }
+                //console.log("hours = " + hours);
 
                 add = true; 
+                //console.log("hours = " + hours);
+
                 //console.log("Checking a " + eventDuration + " hour lengthed time slot")
                 for(d = 0; d < parseInt(eventDuration); d++){
-                    newHour = hours + d; 
+                    //console.log("inside d the value of hours = " + hours);
+                    
+                    n = hours + d; 
+                   // console.log("hours = " + hours);
 
-                    if (newHour < 10){
-                        newHour = "0" + String(newHour);
-                    }
-
-                    time = String(newHour)+ ":00:00";
-                    checkDate = currentDay + "T" + time; 
+                    newHour = calculateStartTime(n);
+                   // console.log("hours = " + hours);
+                    
+                    //time = String(newHour)+ ":00:00";
+                    checkDate = currentDay + "T" + newHour; 
+                    //console.log("hours = " + hours);
                     //console.log("checking " + checkDate);
                     //console.log(checkDate);
                     if(occ.includes(checkDate)){
+                        //console.log("hours = " + hours);
                         add = false; 
                     }
                     //if that time is in occupado set add to false; 
@@ -2158,25 +2161,41 @@ function priorityOptimise(){
                 } // End checking the whole duration 
 
                 if (add == true){
+                    console.log("hours = " + hours);
                     //ADD EVENT and then break.
-                    newHour = parseInt(newHour);
-                    newHour = newHour + 1; 
-                    if (newHour < 10){
-                        newHour = "0" + String(newHour);
-                    }
 
-                    time = String(newHour)+ ":00:00";
+                    n = n + 1;
+                    //console.log("hours = " + hours);
+                    time = calculateStartTime(n);
+                    //console.log("hours = " + hours);
+
+                    //newHour = parseInt(newHour);
+                    //newHour = newHour + 1; 
+                    //if (newHour < 10){
+                    //    newHour = "0" + String(newHour);
+                    //}
+
+                    //time = String(newHour)+ ":00:00";
                     checkDate = currentDay + "T" + time; 
+                   // console.log("hours = " + hours);
 
 
                     h = hours;
-                    if (h < 10){
-                        h = "0" + String(h); 
-                    }
+                    //console.log("hours = " + hours);
 
-                    time = String(h)+":00:00"; 
+                    time = calculateStartTime(h); 
+                    //console.log("hours = " + hours);
+
+                    //if (h < 10){
+                    //    h = "0" + String(h); 
+                   // }
+
+                    //time = String(h)+":00:00"; 
                     startTime = currentDay + "T" + time;
                     startTime = String(startTime); 
+
+                    console.log("Adding an event with starttime " + startTime);
+                    console.log(" and an end time of " + checkDate); 
 
 
                     event_name = allEvents[que].name;
@@ -2189,29 +2208,33 @@ function priorityOptimise(){
                     priority = allEvents[que].priority;
                     task_id = allEvents[que].id;
                     console.log(startTime,time,category,dueDate,priority);
+
                     newCalEvent = {title: event_name, duration: time, cat: category, start: startTime, end: endTime,
                         parent_task: task_id, due_date: dueDate, repeat: 'None'};
-                        
-                switch(newCalEvent.cat) {
-                    case "University":
-                    newCalEvent.color = '#6578a0';
-                    break;
-                    case "Work":
-                    newCalEvent.color = '#84b79d';
-                    break;
-                    case "Fun":
-                    newCalEvent.color = '#ffc53f';
-                    break;
-                    case "Chores":
-                    newCalEvent.color = '#e5a190';
-                    break;
-                    case "Hobby":
-                    newCalEvent.color = '#c18fe8';
-                    break;
-                    case "Other":
-                    newCalEvent.color = 'grey';
-                    }
 
+                    //console.log("2 checking on the value of hours = " + hours);    
+                        
+                    switch(newCalEvent.cat) {
+                        case "University":
+                        newCalEvent.color = '#6578a0';
+                        break;
+                        case "Work":
+                        newCalEvent.color = '#84b79d';
+                        break;
+                        case "Fun":
+                        newCalEvent.color = '#ffc53f';
+                        break;
+                        case "Chores":
+                        newCalEvent.color = '#e5a190';
+                        break;
+                        case "Hobby":
+                        newCalEvent.color = '#c18fe8';
+                        break;
+                        case "Other":
+                        newCalEvent.color = 'grey';
+                    }
+                    // BE SURE TO UNCOMMENT THIS SECTION. ONLY COMMENTED FOR TESTING PURPOSES.
+                   
                     $.ajax({
                         url: "http://localhost:3000/new_cal_task",
                         async: false,
@@ -2222,17 +2245,24 @@ function priorityOptimise(){
                             //newCalEvent.duration=duration_ms/(60*60*1000);
                         }
                     });
-
+                    
                     calendarEvents.push(newCalEvent);
-                    console.log(newCalEvent.title,newCalEvent.color, newCalEvent.start, newCalEvent.end);
+                    //console.log("1 checking on the value of hours = " + hours);
+
+                    //console.log(newCalEvent.title,newCalEvent.color, newCalEvent.start, newCalEvent.end);
                     //Beni and Lauren - New event is added here to the calendar
 
                     $('#calendar').fullCalendar('renderEvent', newCalEvent, 'stick');
 
+
+                    //console.log(" OK checking on the value of hours = " + hours);
+
                     break loopday;
 
 
-                }
+                }//End if add is true. 
+
+               // console.log("at the end hours = " + hours);
 
 
             } // End Iterating hours 
@@ -2246,7 +2276,7 @@ function priorityOptimise(){
     //Beni and lauren, all tasks are deleted from the calendar here. 
 
     $("#list .task-drag").each(function(){
-        console.log("lol"); 
+        //console.log("lol"); 
         $(this).remove(); 
     });
     allEvents = []; 
@@ -2306,43 +2336,68 @@ function dueDateOptimise(){
     yearandmonth = today.substr(0,8);
     x = 0; 
 
+    //ADDED CHANGE 
+    begin = begin *2; 
+    end = end * 2;
+
+
     //Add the dates from this week to be compared. 
     datesOfInterest = getDaysThisWeek(day,yearandmonth);
 
     for (que = 0; que < allEvents.length; que++){
 
+        //console.log("The dury is out " + allEvents[que].duration);
+
         occ = occupied();
+        //console.log(que);
+        //console.log(allEvents[que]);
 
 
         eventDuration = allEvents[que].duration;
 
-        console.log(allEvents[que].name + " is a " + eventDuration + " length event");
+        //ADDED CHANGE 
+        eventDuration = eventDuration * 2; 
+
+        //console.log(allEvents[que].name + " is a " + eventDuration + " length event");
         loopday: 
         for(dayeroo=0; dayeroo<7; dayeroo++){
             //Calculate the events of interest for today.
             currentDay = datesOfInterest[dayeroo];
             //console.log(currentDay);
 
+        
+
+
             for (hours = begin; hours < end; hours ++){ // For each hour
 
+                //console.log("hours iteration start = " + hours);
+
                 if((eventDuration + hours) > end){
+                    //console.log("hours = " + hours);
                     continue;
                 }
+                //console.log("hours = " + hours);
 
                 add = true; 
+                //console.log("hours = " + hours);
+
                 //console.log("Checking a " + eventDuration + " hour lengthed time slot")
                 for(d = 0; d < parseInt(eventDuration); d++){
-                    newHour = hours + d; 
+                    //console.log("inside d the value of hours = " + hours);
+                    
+                    n = hours + d; 
+                   // console.log("hours = " + hours);
 
-                    if (newHour < 10){
-                        newHour = "0" + String(newHour);
-                    }
-
-                    time = String(newHour)+ ":00:00";
-                    checkDate = currentDay + "T" + time; 
+                    newHour = calculateStartTime(n);
+                   // console.log("hours = " + hours);
+                    
+                    //time = String(newHour)+ ":00:00";
+                    checkDate = currentDay + "T" + newHour; 
+                    //console.log("hours = " + hours);
                     //console.log("checking " + checkDate);
                     //console.log(checkDate);
                     if(occ.includes(checkDate)){
+                        //console.log("hours = " + hours);
                         add = false; 
                     }
                     //if that time is in occupado set add to false; 
@@ -2350,25 +2405,41 @@ function dueDateOptimise(){
                 } // End checking the whole duration 
 
                 if (add == true){
+                    console.log("hours = " + hours);
                     //ADD EVENT and then break.
-                    newHour = parseInt(newHour);
-                    newHour = newHour + 1; 
-                    if (newHour < 10){
-                        newHour = "0" + String(newHour);
-                    }
 
-                    time = String(newHour)+ ":00:00";
+                    n = n + 1;
+                    //console.log("hours = " + hours);
+                    time = calculateStartTime(n);
+                    //console.log("hours = " + hours);
+
+                    //newHour = parseInt(newHour);
+                    //newHour = newHour + 1; 
+                    //if (newHour < 10){
+                    //    newHour = "0" + String(newHour);
+                    //}
+
+                    //time = String(newHour)+ ":00:00";
                     checkDate = currentDay + "T" + time; 
+                   // console.log("hours = " + hours);
 
 
                     h = hours;
-                    if (h < 10){
-                        h = "0" + String(h); 
-                    }
+                    //console.log("hours = " + hours);
 
-                    time = String(h)+":00:00"; 
+                    time = calculateStartTime(h); 
+                    //console.log("hours = " + hours);
+
+                    //if (h < 10){
+                    //    h = "0" + String(h); 
+                   // }
+
+                    //time = String(h)+":00:00"; 
                     startTime = currentDay + "T" + time;
                     startTime = String(startTime); 
+
+                    console.log("Adding an event with starttime " + startTime);
+                    console.log(" and an end time of " + checkDate); 
 
 
                     event_name = allEvents[que].name;
@@ -2385,26 +2456,29 @@ function dueDateOptimise(){
                     newCalEvent = {title: event_name, duration: time, cat: category, start: startTime, end: endTime,
                         parent_task: task_id, due_date: dueDate, repeat: 'None'};
 
-                switch(newCalEvent.cat) {
-                    case "University":
-                    newCalEvent.color = '#6578a0';
-                    break;
-                    case "Work":
-                    newCalEvent.color = '#84b79d';
-                    break;
-                    case "Fun":
-                    newCalEvent.color = '#ffc53f';
-                    break;
-                    case "Chores":
-                    newCalEvent.color = '#e5a190';
-                    break;
-                    case "Hobby":
-                    newCalEvent.color = '#c18fe8';
-                    break;
-                    case "Other":
-                    newCalEvent.color = 'grey';
+                    //console.log("2 checking on the value of hours = " + hours);    
+                        
+                    switch(newCalEvent.cat) {
+                        case "University":
+                        newCalEvent.color = '#6578a0';
+                        break;
+                        case "Work":
+                        newCalEvent.color = '#84b79d';
+                        break;
+                        case "Fun":
+                        newCalEvent.color = '#ffc53f';
+                        break;
+                        case "Chores":
+                        newCalEvent.color = '#e5a190';
+                        break;
+                        case "Hobby":
+                        newCalEvent.color = '#c18fe8';
+                        break;
+                        case "Other":
+                        newCalEvent.color = 'grey';
                     }
-
+                    // BE SURE TO UNCOMMENT THIS SECTION. ONLY COMMENTED FOR TESTING PURPOSES.
+                   
                     $.ajax({
                         url: "http://localhost:3000/new_cal_task",
                         async: false,
@@ -2415,17 +2489,24 @@ function dueDateOptimise(){
                             //newCalEvent.duration=duration_ms/(60*60*1000);
                         }
                     });
-
+                    
                     calendarEvents.push(newCalEvent);
-                    console.log(newCalEvent.title,newCalEvent.color, newCalEvent.start, newCalEvent.end);
+                    //console.log("1 checking on the value of hours = " + hours);
+
+                    //console.log(newCalEvent.title,newCalEvent.color, newCalEvent.start, newCalEvent.end);
                     //Beni and Lauren - New event is added here to the calendar
 
                     $('#calendar').fullCalendar('renderEvent', newCalEvent, 'stick');
 
+
+                    //console.log(" OK checking on the value of hours = " + hours);
+
                     break loopday;
 
 
-                }
+                }//End if add is true. 
+
+               // console.log("at the end hours = " + hours);
 
 
             } // End Iterating hours 
@@ -2439,11 +2520,10 @@ function dueDateOptimise(){
     //Beni and lauren, all tasks are deleted from the calendar here. 
 
     $("#list .task-drag").each(function(){
-        console.log("lol"); 
+        //console.log("lol"); 
         $(this).remove(); 
     });
     allEvents = []; 
-
 
 }
 
