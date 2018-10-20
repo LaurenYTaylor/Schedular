@@ -1980,7 +1980,7 @@ function optimise2(){
                         newCalEvent.color = 'grey';
                     }
                     // BE SURE TO UNCOMMENT THIS SECTION. ONLY COMMENTED FOR TESTING PURPOSES.
-                   /*
+                   
                     $.ajax({
                         url: "http://localhost:3000/new_cal_task",
                         async: false,
@@ -1991,7 +1991,7 @@ function optimise2(){
                             //newCalEvent.duration=duration_ms/(60*60*1000);
                         }
                     });
-                    */ 
+                    
                     calendarEvents.push(newCalEvent);
                     //console.log("1 checking on the value of hours = " + hours);
 
