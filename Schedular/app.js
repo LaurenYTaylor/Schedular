@@ -369,6 +369,21 @@ app.post('/remove_cal_task', function(request, response) {
     });
 });
 
+//Morgan's code
+app.post('/delete_cal_task', function(request, response) {
+    let id = request.body.id;
+    let parent = request.body.parent_id;
+    //let subtask_delete = "DELETE FROM subtasks WHERE parent_task_id=" + id +
+    //    "AND user_id=" + request.user.id + ";";
+    let delete_string = "DELETE FROM calendar_item WHERE item_id='"+id+"' AND user_id="+request.user.id+";";
+    console.log(delete_string);
+    pool.connect(function(err, client) {
+    //    pool.query(subtask_delete);
+        pool.query(delete_string);
+        client.release();
+    });
+});
+
 app.post('/edit_cal_task', function(request, response){
     let id = request.body.id;
     let newName = request.body.newName;

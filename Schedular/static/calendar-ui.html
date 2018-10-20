@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link rel='shortcut icon' type='image/x-icon' href='../logo.ico' />
   <meta charset='utf-8' />
   <link href='../css/fullcalendaredit.css' rel='stylesheet' />
   <link href='../css/fullcalendar.print.min.css' rel='stylesheet' media='print' />
@@ -46,15 +47,16 @@
 
   <div id='wrap'>
     <div class="tabList">
-      <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Ongoing')" >Tasks</button>
-      <button class="tablinks" onclick="openCity(event, 'Completed')">Settings</button>
+      <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Ongoing')" >
+        <img id='taskDark' src='../taskIconDark.png'   style='float: start; display: inline;' width='16'/></button>
+      </button>
+      <button class="tablinks" onclick="openCity(event, 'Completed')">
+        <img id='settingDark' src='../settingDark.png'   style='float: start; display: inline;' width='16'/></button>
+
+      </button>
 
       <div id='Ongoing' class="tabcontent">
         <br>
-
-        <button type="submit" name="add" id="add" class ="button1">
-          <img id='add' src='../taskIconDark.png'   style='float: right; ' width='30'/>
-        </button>
 
         <div id='task-list'>
           <h4></h4>
@@ -62,25 +64,60 @@
 
         </div>
 
+        <button type="submit" name="add" id="add" class ="addTask" style="font-size: large">
+          +
+        </button>
+
+
+
       </div>
 
       <div id='Completed' class="tabcontent">
-        <br>
+        <!-- <br>
         <button type="submit" name="addCat" id="addCat" class="button2">Add Category</button>
-        <input type="text" name="data_for_viv" id="viv_input">
+        <input type="text" name="data_for_viv" id="viv_input"> -->
         <br>
         <h4>Select Categories</h4>
         <div id='category-list'>
 
+<!-- =======
+        <h4>Categories</h4>
+        <div>
+          <input type="checkbox" id="uniCheck" checked="checked">
+          <button class="tag" style="background-color: #6578a0;">University</button><br>
+          <input type="checkbox" id="workCheck" checked="checked">
+          <button class="tag" style="background-color: #84b79d;">Work</button><br>
+          <input type="checkbox" id="funCheck" checked="checked">
+          <button class="tag" style="background-color: #ffc53f;">Fun</button><br>
+          <input type="checkbox" id="choreCheck" checked="checked">
+          <button class="tag" style="background-color: #e5a190;">Chores</button><br>
+          <input type="checkbox" id="hobbyCheck" checked="checked">
+          <button class="tag" style="background-color: #c18fe8;">Hobby</button><br>
+          <input type="checkbox" id="otherCheck" checked="checked">
+          <button class="tag" style="background-color: grey;">Others</button><br>
+>>>>>>> 2add8a00457df5c574ac47d8a4c39d5d7d1c11a1 -->
         </div>
-        <button  onclick= "optimise2()"name="optimise" id="optimise" class="button2">Optimise Me Please</button>
+        <button type="submit" name="addCat" id="addCat" class="tagAdd" style="margin: 5px 17px; background-color: #eeeeee;">+</button>
+        <div id="category-list"></div>
 
-        Start <input type="text" name="data_for_viv" id="viv_input">
-        Stop <input type="text" name="data_for_viv2" id="viv_input2">
 
-        <button  onclick= "priorityOptimise()"name="optimiseP" id="optimiseP" class="button2">Priority Optimise</button>
+        <br>
+        <h4>Optimizer</h4>
 
-        <button  onclick= "dueDateOptimise()"name="optimiseD" id="optimiseD" class="button2">Due Date Optimise</button>
+
+        <input type="text" name="data_for_viv" id="viv_input" placeholder="Start Time" style="height: 20px; width: 80px;">
+        <input type="text" name="data_for_viv2" id="viv_input2" placeholder="Finish Time" style="height: 20px; width: 80px;">
+
+
+        <button  onclick= "optimise2()"name="optimise" id="optimise" class="button1">
+        <img id='pri1' src='../pri1.png'   style='float: start; display: inline;' width='16'/> Optimize</button>
+
+        <button  onclick= "priorityOptimise()"name="optimiseP" id="optimiseP" class="button1">
+        <img id='pri2' src='../pri2.png'   style='float: start; display: inline;' width='16'/> Priority</button>
+
+
+        <button  onclick= "dueDateOptimise()"name="optimiseD" id="optimiseD" class="button1">
+        <img id='pri3' src='../pri3.png'   style='float: start; display: inline;' width='16'/> Due Date</button>
 
 
 
@@ -104,11 +141,12 @@
         <div class="hiddentext" id="hiddenText" style="display:none">Invalid Name! </div>
         <form name="myForm" action="/action_page.php" onsubmit="return validateForm()" method="post">
           <div class='formtext'>
-            <input type="text" name="fname" id="tName" class='taskform-input' placeholder="Task Name">
+            <input type="text" name="fname" id="tName" class='taskform-input' placeholder="Task Name" style="background-color: #eeeeee">
           </div>
           <p></p>
+          <div class="hiddentext" id="hiddenDuration" style="display:none">Invalid Value! Please enter a Number.</div>
           <div class='formtext'>
-            <input type ="text" name="duration" id="dury" class='taskform-input' placeholder="Task Duration">
+            <input type ="text" name="duration" id="dury" class='taskform-input' placeholder="Task Duration" style="background-color: #eeeeee">
           </div>
           <p></p>
           <div class="task-dropdown">
@@ -162,6 +200,7 @@
             <input type="text" name="fname" id="editName" class='taskform-input'>
           </div>
           <p></p>
+          <div class="hiddentext" id="hiddenDuration" style="display:none">Invalid Value! Please enter a Number.</div>
           <div class='formtext'>
             <input type ="text" name="duration" id="editDury" class='taskform-input' placeholder="Task Duration">
           </div>
