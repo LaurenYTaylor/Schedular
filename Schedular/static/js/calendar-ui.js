@@ -448,10 +448,11 @@ $(document).ready(function() {
                     if(categories[i].cat == category) {
                        $("#list").append("<div class='task-drag' style='background: " + categories[i].color + 
                             "' data-taskid=" + new_task.id + "><label style='width:50%'>" + taskName + 
-                            "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +                      
+                            "</label>" + getBadge(new_task.repeat) +
+                           "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +
                             "<img src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
                             "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
-                            getBadge(new_task.repeat) +
+
                             "</div>");
                    }
                 }
@@ -717,10 +718,11 @@ $(document).ready(function() {
                 if(categories[i].cat == category) {
                     $("#list").append("<div class='task-drag' style='background: " + categories[i].color + 
                         "' data-taskid=" + newTask.id + "><label style='width:50%'>" + description + 
-                        "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +
+                        "</label>" + getBadge(newTask.repeat) +
+                        "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +
                         "<img src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
                         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
-                        getBadge(newTask.repeat) +  
+
                         "</div>");
                 }
             }
@@ -1355,10 +1357,11 @@ $(document).ready(function() {
 
                                     $("#list").append("<div class='task-drag' style='background: " + categories[i].color + 
                                         "' data-taskid=" + newTask.id + "><label style='width:50%'>" + newTask.name + 
-                                        "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +
+                                        "</label>" +   getBadge(newTask.repeat) +
+                                        "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +
                                         "<img src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
                                         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
-                                        getBadge(newTask.repeat) +
+
                                         "</div>");
                                 }
                             }
@@ -1808,7 +1811,7 @@ function getBadge(repeatValue){
     }else if (repeatValue == "day"){
         badge = "<span class='badge' style='float: right; background-color: #db69b1'>D</span>";
     }else{
-        badge = "";
+        badge = "badge = \"<label class='badge' style='float: right; background-color: transparent;'> </label>\";";
     }
     return badge;
 }
