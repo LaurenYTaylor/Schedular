@@ -1847,6 +1847,8 @@ function optimise2(){
 
     for (que = 0; que < allEvents.length; que++){
 
+        console.log("The dury is out " + allEvents[que].duration);
+
         occ = occupied();
         //console.log(que);
         //console.log(allEvents[que]);
@@ -1862,6 +1864,10 @@ function optimise2(){
             //console.log(currentDay);
 
             for (hours = begin; hours < end; hours ++){ // For each hour
+
+                if((eventDuration + hours) > end){
+                    continue;
+                }
 
                 add = true; 
                 //console.log("Checking a " + eventDuration + " hour lengthed time slot")
@@ -1938,8 +1944,9 @@ function optimise2(){
                     case "Other":
                     newCalEvent.color = 'grey';
                     }
-
-                    $.ajax({
+                    // BE SURE TO UNCOMMENT THIS SECTION. ONLY COMMENTED FOR TESTING PURPOSES.
+                   
+                   /* $.ajax({
                         url: "http://localhost:3000/new_cal_task",
                         async: false,
                         type: "POST",
@@ -1951,6 +1958,9 @@ function optimise2(){
                     });
 
                     calendarEvents.push(newCalEvent);
+
+                    */ 
+
                     //console.log(newCalEvent.title,newCalEvent.color, newCalEvent.start, newCalEvent.end);
                     //Beni and Lauren - New event is added here to the calendar
 
