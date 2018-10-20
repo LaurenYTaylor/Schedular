@@ -255,8 +255,9 @@ $(document).ready(function() {
     //eventlistener that hides the bin icon when the mouse
     // leaves the the task
     $(document).on('mouseleave', '.task-drag', function(){
-        $(this).find("#removeBin1").css('visibility', 'hidden');
-        $(this).find("#edit1").css('visibility', 'hidden');
+        $(this).find("#edit1").css('visibility', 'visible');
+        $(this).find("#removeBin1").css('visibility', 'visible');
+       
 
     });
 
@@ -443,9 +444,6 @@ $(document).ready(function() {
                     });
 
                 $('#myModal').modal('hide')
-                $('#tName').val('');
-                $('#hiddenText').hide();
-
                 for(i = 0; i < categories.length; i++){
                     if(categories[i].cat == category) {
                        $("#list").append("<div class='task-drag' style='background: " + categories[i].color + 
@@ -520,6 +518,8 @@ $(document).ready(function() {
 
     // updating edited task in calendar
     // when submit edits button pressed
+    //Remember to change this for tasks longer than 24 hours
+
     $(function() {
         $(".editButton").click(function() {
             var name = $('#editName').val();
@@ -712,6 +712,7 @@ $(document).ready(function() {
             // create new task with description
             let category = newTask.category;
 
+
             for(i = 0; i < categories.length; i++){
                 if(categories[i].cat == category) {
                     $("#list").append("<div class='task-drag' style='background: " + categories[i].color + 
@@ -722,7 +723,6 @@ $(document).ready(function() {
                         getBadge(newTask.repeat) +  
                         "</div>");
                 }
-
             }
 //             if (category == "University") {
 //                 $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + newTask.id + "><label style='width:50%'>" + description + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +
@@ -768,11 +768,22 @@ $(document).ready(function() {
     $.getJSON('/load_cal_items', function(data){
         $.each(data, function(key, val){
             let date = val.yyyymmdd;
+
+            let duration = val.num_hours;
             let parent = val.parent_task_id;
             let date_split = date.split();
             let timeless_date = date_split[0];
             let start_date = timeless_date+'T'+val.start_time;
-            let end_date = timeless_date+'T'+val.end_time;
+
+            let num1 =Math.floor(duration/24);
+            let extraHours = duration % 24;
+
+            let dayendTime =moment(start_date).add(num1, 'days').format();
+            let newdayendTime =moment(dayendTime).add(extraHours, 'hours').format();
+
+            let end_date = newdayendTime.substr(0,19);
+
+            
             let due_date = val.due_date;
             let repeat = val.repeat;
             let note = val.notes;
@@ -980,20 +991,27 @@ $(document).ready(function() {
                 }
             }
             //Put time in appropriate format (IOString) for insertion into the database
-            let start = 9;
-            let end = start+parseInt(time);
+
+
+            let end;
+            let numofDays;
+            let extraHours
             let start_split = startTime.split('T');
             if(!start_split[1]) {
                 startTime = startTime+"T09:00:00";
+                end = parseInt(time);
+            }else {
+                end = parseInt(time);
+
             }
-            let end_split = endTime.split('T');
-            if(!end_split[1]) {
-                if(end<10) {
-                    endTime = end_split[0]+"T0"+end+":00:00";
-                } else {
-                    endTime = end_split[0]+"T"+end+":00:00";
-                }
-            }
+            numofDays =Math.floor(end/24);
+            extraHours = end % 24;
+            
+            let dayendTime =moment(startTime).add(numofDays, 'days').format();
+            let newdayendTime =moment(dayendTime).add(extraHours, 'hours').format();
+
+            endTime = newdayendTime.substr(0,19);
+
             let newCalEvent = {title: event_name, duration: duration_ms, cat: category, start: startTime, end: endTime,
                 parent_task: task_id, due_date: dueDate, priority: priority, repeat: repeat, complete: 'false'};
 
@@ -1037,17 +1055,19 @@ $(document).ready(function() {
                 recurringEvents.push(newCalEvent);
             }else{
                 while (numofEvents < 300){
-                    var time = date.clone();
+                    var repeatstarttime = moment(startTime);
+                    var repeatendtime = moment(endTime);
                     
                     var myEvent = Object.assign({}, newCalEvent);
-                    newTime = time.add(numofEvents, newCalEvent.repeat);
-                    myEvent.start = newTime.format()+"T09:00:00";
-                    if(end<10) {
-                        myEvent.end = newTime.format()+"T0"+end+":00:00";
-                    } else {
-                        myEvent.end = newTime.format()+"T"+end+":00:00";
-                    }
-                   
+
+
+                    newstartTime = repeatstarttime.add(numofEvents, newCalEvent.repeat).format();
+                    newendTime =  repeatendtime.add(numofEvents, newCalEvent.repeat).format();
+
+
+                    myEvent.start = newstartTime.substr(0,19);
+                    
+                    myEvent.end = newendTime.substr(0,19);
                     numofEvents++;
 
                     calendarEvents.push(myEvent);
@@ -1225,7 +1245,7 @@ $(document).ready(function() {
             ) {
                 let task_id=0;
                 var firstrepeat = false;
-                alert("inside");
+                // alert("inside");
                 for(let i=0; i<calendarEvents.length; i++) {
                     if(calendarEvents[i].id==event.id) {
                         
@@ -1256,6 +1276,7 @@ $(document).ready(function() {
                                         //console.log("successfully removed calendar task");
                                     }
                                 }); 
+
 
                             for(i = 0; i < categories.length; i++){
                                 if(categories[i].cat == category) {
@@ -1368,7 +1389,7 @@ function validateForm() {
         valid = false;
     }
 
-    if (isNaN(y) || y==""){
+    if (isNaN(y)){
         
         $('#hiddenDuration').show();
         valid = false;
@@ -1431,6 +1452,7 @@ function closePopovers() {
 
 function refreshModal (){
     $('#tName').val('');
+    $('#dury').val('');
     $('#hiddenText').hide();
     $('#hiddenDuration').hide();
     $('#repeat').prop('selectedIndex',0);
