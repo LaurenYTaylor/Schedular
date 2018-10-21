@@ -1363,6 +1363,7 @@ be a descendant of the grid when it is being dragged.
 
 #category-list .cat-check{
   border-radius: 4px;
+  border: 1px solid white;
   padding: 5px;
   margin: 3px 1px;
   cursor: pointer;
@@ -1373,6 +1374,7 @@ be a descendant of the grid when it is being dragged.
 /*Style the events in the task list*/
 #task-list .task-drag{
   border-radius: 4px;
+  border: 1px solid white;
   padding: 5px;
   margin: 3px 1px;
   cursor: pointer;
@@ -1381,8 +1383,7 @@ be a descendant of the grid when it is being dragged.
 }
 
 #task-list .task-drag:hover {
-
-  font-family: "Roboto", sans-serif;
+  border: 1px dotted #eeeeee;
 }
 
 
