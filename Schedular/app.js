@@ -341,7 +341,7 @@ app.post('/new_cal_task', async function (request, response) {
     client.release();
 });
 
-app.post('/update_cal_task', function(request, response) {
+app.post('/update_cal_task', async function(request, response) {
     let start_split = request.body.start.split('T');
     let end_split = request.body.end.split('T');
     let date=start_split[0];
@@ -350,24 +350,29 @@ app.post('/update_cal_task', function(request, response) {
     let query_string = "UPDATE calendar_item SET start_time='"+start_time+
         "', end_time='"+end_time+"', yyyymmdd='"+date+"' WHERE item_id="+request.body.id+
         " AND user_id="+request.user.id+";";
-    pool.connect(function(err, client) {
-        pool.query(query_string);
-        client.release();
-    });
+
+    let client = await pool.connect();
+
+    await pool.query(query_string);
+
+    client.release();
 });
 
-app.post('/remove_cal_task', function(request, response) {
+app.post('/remove_cal_task', async function(request, response) {
     let id = request.body.id;
     let parent = request.body.parent_id;
     let delete_string = "DELETE FROM calendar_item WHERE item_id='"+id+"' AND user_id="+request.user.id+";";
     let update_string = "UPDATE todo_item SET in_calendar='"+false+"' WHERE user_id="+request.user.id+" AND item_id='"+
         +parent+"';"
+
+    let client = await pool.connect();
+
+    await pool.query(delete_string);
+    await pool.query(update_string);
     console.log(delete_string);
-    pool.connect(function(err, client) {
-        pool.query(delete_string);
-        pool.query(update_string);
-        client.release();
-    });
+
+    client.release();
+
 });
 
 //Morgan's code
@@ -385,7 +390,7 @@ app.post('/delete_cal_task', function(request, response) {
     });
 });
 
-app.post('/edit_cal_task', function(request, response){
+app.post('/edit_cal_task', async function(request, response){
     let id = request.body.id;
     let newName = request.body.newName;
     let dury = request.body.newDury;
@@ -404,14 +409,17 @@ app.post('/edit_cal_task', function(request, response){
         "', num_hours='" + dury + "', category='" + cat +
         "', repeat='" + repeat + "' WHERE item_id=" + parent + " AND user_id=" + request.user.id + ";";
     console.log(task_query)
-    pool.connect(function(err, client) {
-        pool.query(query_string);
-        pool.query(task_query);
-        client.release();
-    })
+
+    let client = await pool.connect();
+
+    await pool.query(query_string);
+
+    await pool.query(task_string);
+
+    client.release();
 });
 
-app.post('/edit_task', function(request, response) {
+app.post('/edit_task', async function(request, response) {
     let id = request.body.id;
     let name = request.body.name;
     let dury = request.body.dury;
@@ -423,11 +431,12 @@ app.post('/edit_task', function(request, response) {
         "', num_hours='" + dury + "', category='" + cat +
         "', repeat='" + repeat + "', due_date='" + dueDate + "' WHERE item_id=" + id +
         " AND user_id=" + request.user.id + ";";
-    console.log(query_string)
-    pool.connect(function(err, client) {
-        pool.query(query_string);
-        client.release();
-    })
+
+    let client = await pool.connect();
+
+    await pool.query(query_string);
+
+    client.release();
 });
 
 app.post('/add_notes_files', function(request, response) {
@@ -477,18 +486,34 @@ app.post('/add_subtask', async function(request, response) {
 })
 
 
-app.post('/event_complete', function(request, response) {
+app.post('/event_complete', async function(request, response) {
     let id = request.body.id;
     let complete = request.body.complete;
 
     let query = "UPDATE calendar_item SET complete='" + complete + 
         "' WHERE item_id=" + id + ";";
 
-    console.log(query)
-    pool.connect(function(err, client) {
-        pool.query(query);
-        client.release();
-    })
+    let client = await pool.connect();
+
+    await pool.query(query);
+
+    client.release();
+})
+
+app.post('/modify_sub_tasks', async function(request, response) {
+    let id = request.body.id;
+    let completed = request.body.completed
+
+    let query = "UPDATE subtasks SET completed='" + completed +
+        "' WHERE task_id=" + id + ";";
+
+    let client = await pool.connect();
+
+    await pool.query(query);
+
+
+    console.log(query);
+    client.release();
 })
 
 

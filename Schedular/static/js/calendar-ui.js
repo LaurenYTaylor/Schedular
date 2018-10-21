@@ -226,7 +226,7 @@ $(document).ready(function() {
 
         var reader = new FileReader();
         file = reader.readAsText(e.target.files[0]).result;
-        alert(file);
+        //alert(file);
         $.ajax(
         {
             url: "http://localhost:3000/add_files",
@@ -321,7 +321,7 @@ $(document).ready(function() {
 
 
     $('.deleteCal').on('click', function () {
-        alert("drin1k");
+        //alert("drin1k");
     });
 
 
@@ -395,6 +395,32 @@ $(document).ready(function() {
         showHideCat('Other');
     })
 
+    $(document).on('click', '.sub-checkbox', function(e) {
+        console.log($(this).parent())
+
+        for (i = 0; i < subtasks.length; i++){
+            if (subtasks[i].id == e.target.id) {
+                if($(this).is(':checked')) {
+                    subtasks[i].completed = true;
+                }
+                else {
+                    subtasks[i].completed = false;
+                }
+                
+                $.ajax(
+                {
+                    url: "http://localhost:3000/modify_sub_tasks",
+                    async: true,
+                    type: "POST",
+                    data: subtasks[i],
+                    success: function (result) {
+                    }
+                });
+            }
+        }
+
+    })
+
 
 
     //eventlistener for when completing the task
@@ -456,45 +482,6 @@ $(document).ready(function() {
                             "</div>");
                    }
                 }
-                
-
-                // if (category == "University") {
-                //     $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + new_task.id + "><label style='width:50%'>" + taskName + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +
-                //         "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
-                //         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
-                //         getBadge(repeat) +
-                //         "</div>");
-                // } else if (category == "Work") {
-                //     $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + new_task.id + "><label style='width:50%'>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/>" +
-                //         "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
-                //         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>" +
-                //         getBadge(repeat) +
-                //         "</div>");
-                // } else if (category == "Fun") {
-                //     $("#list").append("<div class='task-drag' style='background: #ffc53f' data-taskid=" + new_task.id + "><label style='width:50%'>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/>" +
-                //         "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
-                //         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
-                //         getBadge(repeat) +
-                //         "</div>");
-                // } else if (category == "Chores") {
-                //     $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + new_task.id + "><label style='width:50%'>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/>" +
-                //         "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
-                //         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>" +
-                //         getBadge(repeat) +
-                //         "</div>");
-                // } else if (category == "Hobby") {
-                //     $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + new_task.id + "><label style='width:50%'>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                //         "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
-                //         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
-                //         getBadge(repeat) +
-                //         "</div>");
-                // } else if (category == "Other") {
-                //     $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + new_task.id + "><label style='width:50%'>" + taskName + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                //         "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
-                //         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
-                //         getBadge(repeat) +
-                //         "</div>");
-                // }
                 refreshModal();
                 //This sortable thing isn't working idk why
                 $("#list").sortable('refresh');
@@ -612,7 +599,7 @@ $(document).ready(function() {
                 due_date = curTask.dueDate;
             //    element.due_date = due_date;
             }
-            alert(due_date)
+            //alert(due_date)
 
             //hide edit modal
             $('#taskModal').modal("hide");
@@ -1174,12 +1161,30 @@ $(document).ready(function() {
 
             for (i = 0; i < subtasks.length; i++) {
                 if (subtasks[i].parent == element.id) {
-                    $(".subtasklist").append('<li class="subtask"><input type="checkbox" ' + 
-                        'id=' + subtasks[i].id + ' class="sub-checkbox"><div class="subtasklabel">'+ 
-                        subtasks[i].description +'</div></li>');
+                    //alert(subtasks[i].completed)
+                    if (subtasks[i].completed == true) {
+                        //alert(true)
+                        $(".subtasklist").append('<li class="subtask"><input type="checkbox" checked="checked"' + 
+                            'id=' + subtasks[i].id + ' class="sub-checkbox"  ><div class="subtasklabel" >'+ 
+                            subtasks[i].description +'</div></li>');
+                    } else {
+                        $(".subtasklist").append('<li class="subtask"><input type="checkbox" ' + 
+                            'id=' + subtasks[i].id + ' class="sub-checkbox"><div class="subtasklabel">'+ 
+                            subtasks[i].description +'</div></li>');
 
+                    }
+     
                 }
             }
+
+            // for (i = 0; i < subtasks.length; i++) {
+            //     if (subtasks[i].parent == element.id) {
+            //         $(".subtasklist").append('<li class="subtask"><input type="checkbox" ' + 
+            //             'id=' + subtasks[i].id + ' class="sub-checkbox"><div class="subtasklabel">'+ 
+            //             subtasks[i].description +'</div></li>');
+
+            //     }
+            // }
             console.log(subtasks)
 
             $('#notes').val(element.note);
@@ -1288,11 +1293,6 @@ $(document).ready(function() {
             offset.right = external_events.width() + offset.left;
             offset.bottom = external_events.height() + 200 + external_events.position().top;
 
-            // Compare
-            //console.log(external_events.height());
-            //console.log("The jsEvent.pageX is " + jsEvent.pageX + " The offset left is " + offset.left);
-            //console.log("The jsEvent.pageY is " + jsEvent.pageY + " The top is " + external_events.position().top);
-            //console.log("The offset right is " + offset.right + " The offset bottom is " + offset.bottom);
             if (jsEvent.pageX >= offset.left
                 && jsEvent.pageY >= external_events.position().top
                 && jsEvent.pageX <= offset.right
@@ -1344,45 +1344,7 @@ $(document).ready(function() {
                                         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
                                         "</div>");
                                 }
-                            }
-
-                            // if (category == "University") {
-                            //     $("#list").append("<div class='task-drag' style='background: #6578a0' data-taskid=" + newTask.id + "><label style='width:50%'>" + newTask.name + "</label>" + "<img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/> " +
-                            //         "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
-                            //         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
-                            //         getBadge(newTask.repeat) +
-                            //         "</div>");
-                            // } else if (category == "Work") {
-                            //     $("#list").append("<div class='task-drag' style='background: #84b79d' data-taskid=" + newTask.id + "><label style='width:50%'>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/>" +
-                            //         "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
-                            //         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>" +
-                            //         getBadge(newTask.repeat) +
-                            //         "</div>");
-                            // } else if (category == "Fun") {
-                            //     $("#list").append("<div class='task-drag' style='background: #ffc53f' data-taskid=" + newTask.id + "><label style='width:50%'>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/>" +
-                            //         "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
-                            //         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
-                            //         getBadge(newTask.repeat) +
-                            //         "</div>");
-                            // } else if (category == "Chores") {
-                            //     $("#list").append("<div class='task-drag' style='background: #e5a190' data-taskid=" + newTask.id + "><label style='width:50%'>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; visibility:hidden;' width='16'/>" +
-                            //         "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
-                            //         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>" +
-                            //         getBadge(newTask.repeat) +
-                            //         "</div>");
-                            // } else if (category == "Hobby") {
-                            //     $("#list").append("<div class='task-drag' style='background: #c18fe8' data-taskid=" + newTask.id + "><label style='width:50%'>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                            //         "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
-                            //         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
-                            //         getBadge(newTask.repeat) +
-                            //         "</div>");
-                            // } else if (category == "Other") {
-                            //     $("#list").append("<div class='task-drag' style='background: grey' data-taskid=" + newTask.id + "><label style='width:50%'>" + newTask.name + "</label><img id='removeBin1' src='../rubbish-bin.png'   style='float: right; display:none;' width='16'/>" +
-                            //         "\<img id='edit1' src='../gap.png'   style='float: right; visibility:hidden;' width='6'/>" +
-                            //         "<img id='edit1' src='../edit-icon.png'   style='float: right; visibility:hidden;' width='16'/>"+
-                            //         getBadge(newTask.repeat) +
-                            //         "</div>");
-                            // }   
+                            }  
 
                             firstrepeat = true;
                         }
@@ -1530,7 +1492,7 @@ function isEventOverDiv(x, y) {
         && y >= offset.top
         && x <= offset.right
         && y <= offset .bottom) {
-        alert("Inside");
+        //alert("Inside");
         return true; }
     else {
         return false;
@@ -2246,7 +2208,7 @@ function priorityOptimise(){
                    
                     $.ajax({
                         url: "http://localhost:3000/new_cal_task",
-                        async: false,
+                        async: true,
                         type: "POST",
                         data: newCalEvent,
                         success: function (result) {
@@ -2490,7 +2452,7 @@ function dueDateOptimise(){
                    
                     $.ajax({
                         url: "http://localhost:3000/new_cal_task",
-                        async: false,
+                        async: true,
                         type: "POST",
                         data: newCalEvent,
                         success: function (result) {
