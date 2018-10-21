@@ -1389,7 +1389,7 @@ var curTask;
 var categories = [
     {cat: 'University', color: '#6578a0'},
     {cat:'Work', color: '#84b79d'},
-    {cat:'Fun', color: '#c3c60b'},
+    {cat:'Fun', color: '#ffc53f'},
     {cat:'Chores', color: '#e5a190'},
     {cat:'Hobby', color: '#c18fe8' },
     {cat:'Other', color: 'grey'}
